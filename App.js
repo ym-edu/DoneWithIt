@@ -7,22 +7,18 @@ export default function App() {
   const { landscape } = useDeviceOrientation();
 
   return (
-    <SafeAreaView style={styles().container}>
-      <View style={styles(landscape).viewOne}></View>
-    </SafeAreaView>
+    <View style={styles({color: "dodgerblue", flex: 0.75}).section}>
+      <View style={styles({color: "gold", flex: 2}).section}/>
+      <View style={styles({color: "silver", flex: 1}).section}/>
+    </View>
   );
 }
 
 const styles = (props) => StyleSheet.create({
-  viewOne: {
-    backgroundColor: 'dodgerblue',
+  section: {
+    flex: props.flex,
     width: "100%",
-    height: props ? "100%" : "30%",
-  },
-  container: { 
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
+    height: "100%",
+    backgroundColor: props.color
+  }
 });
