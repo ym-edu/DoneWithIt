@@ -7,18 +7,25 @@ export default function App() {
   const { landscape } = useDeviceOrientation();
 
   return (
-    <View style={styles({color: "dodgerblue", flex: 0.75}).section}>
-      <View style={styles({color: "gold", flex: 2}).section}/>
-      <View style={styles({color: "silver", flex: 1}).section}/>
+    <View style={styles({color: "dodgerblue"}).container}>
+      <View style={styles({color: "gold", align: "flex-start"}).section}/>
+      <View style={styles({color: "silver"}).section}/>
+      <View style={styles({color: "tomato"}).section}/>
     </View>
   );
 }
 
 const styles = (props) => StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   section: {
-    flex: props.flex,
-    width: "100%",
-    height: "100%",
-    backgroundColor: props.color
+    alignSelf: props.align,
+    width: 100,
+    height: 100,
+    backgroundColor: props.color,
   }
 });
