@@ -8,9 +8,11 @@ export default function App() {
 
   return (
     <View style={styles({color: "dodgerblue"}).container}>
-      <View style={styles({color: "gold", align: "flex-start"}).section}/>
+      <View style={styles({color: "gold", width: 300}).section}/>
       <View style={styles({color: "silver"}).section}/>
+      <View style={styles({color: "violet"}).section}/>
       <View style={styles({color: "tomato"}).section}/>
+      <View style={styles({color: "green"}).section}/>
     </View>
   );
 }
@@ -19,13 +21,15 @@ const styles = (props) => StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
+    alignContent: 'center',
+    flexWrap: "wrap-reverse"
   },
   section: {
     alignSelf: props.align,
     width: 100,
-    height: 100,
+    height: props.width ? props.width : 100,
     backgroundColor: props.color,
   }
 });
