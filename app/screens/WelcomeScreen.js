@@ -9,10 +9,8 @@ function WelcomeScreen() {
           <Logo width={"100em"} height={"130em"} />
           <Text style={styles().title}>Rootine</Text>
       </View>
-      <View style={styles({color: "#C8C0B8"}).button}>
-      </View>
-      <View style={styles({color: "#D03050"}).button}>
-      </View>
+      <View style={styles({color: "#C8C0B8"}).button} />
+      <View style={styles({color: "#D03050"}).button} />
     </SafeAreaView>
   );
 }
