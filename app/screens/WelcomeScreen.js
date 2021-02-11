@@ -1,4 +1,6 @@
 import React from 'react';
+import Colors from '../config/colors'
+
 import { Platform, StatusBar, SafeAreaView, View, Text, StyleSheet } from 'react-native';
 import Logo from '../assets/Logo.svg'
 
@@ -9,8 +11,8 @@ function WelcomeScreen() {
           <Logo width={"100em"} height={"130em"} />
           <Text style={styles().title}>Rootine</Text>
       </View>
-      <View style={styles({color: "#C8C0B8"}).button} />
-      <View style={styles({color: "#D03050"}).button} />
+      <View style={styles({color: Colors.highlight}).button} />
+      <View style={styles({color: Colors.secondary}).button} />
     </SafeAreaView>
   );
 }
