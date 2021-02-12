@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faAtom } from '@fortawesome/free-solid-svg-icons'
 
 import Colors from '../config/colors'
+import CustomIcon from '../components/CustomIcon'
 
 function Sandbox(props) {
   return (
@@ -11,7 +12,8 @@ function Sandbox(props) {
       <View style={styles({width: 100}).borderBox} />
       <View style={styles({width: 50}).shadowBox} />
       <Text style={styles().textFont}>I love react, because I don't have to work twice as hard to make things on seperate platforms</Text>
-      <FontAwesomeIcon icon={ faAtom } color={Colors.highlight} size={'50em'}/>
+      <FontAwesomeIcon icon={ faAtom } color={Colors.highlight} size={50}/>
+        <CustomIcon name='close' size={80} color={'blue'} />
     </View>
   );
 }
