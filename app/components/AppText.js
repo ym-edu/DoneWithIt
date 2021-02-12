@@ -9,6 +9,8 @@ function AppText({children}) {
 
 const styles = StyleSheet.create({
   text: {
+    backgroundColor: 'black',
+    color: 'red',
     fontSize: 16,
     fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
     textAlign: 'center',

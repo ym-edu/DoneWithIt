@@ -1,10 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, Platform, Text } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faAtom } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesome } from '@expo/vector-icons';
 
 import Colors from '../config/colors'
-import CustomIcon from '../components/CustomIcon'
 
 function Sandbox(props) {
   return (
@@ -12,8 +10,7 @@ function Sandbox(props) {
       <View style={styles({width: 100}).borderBox} />
       <View style={styles({width: 50}).shadowBox} />
       <Text style={styles().textFont}>I love react, because I don't have to work twice as hard to make things on seperate platforms</Text>
-      <FontAwesomeIcon icon={ faAtom } color={Colors.highlight} size={50}/>
-        <CustomIcon name='close' size={80} color={'blue'} />
+      <FontAwesome name="database" size={32} color="green" />
     </View>
   );
 }
@@ -48,7 +45,8 @@ const styles = (props) => StyleSheet.create({
     shadowRadius: 10,
   },
   textFont: {
-    fontFamily: Platform.OS === 'android' ? 'monospace' : 'courier',
+    fontFamily: Platform.OS === 'android' ? 'monospace' : 'Courier',
+    // [WTF] https://stackoverflow.com/questions/53329578/react-native-expo-fontfamily-simplelineicons-is-not-a-system-font-and-has-n
     fontSize: 30,
     fontStyle: 'italic',
     fontWeight: 'bold', // or '600',
