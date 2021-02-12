@@ -10,6 +10,7 @@ import AppText from './app/components/AppText';
 export default function App() {
   return (
     <Fragment>
+      {/* <WelcomeScreen></WelcomeScreen> */}
       <Sandbox />
       <AppText>WhatSupp</AppText>
     </Fragment>

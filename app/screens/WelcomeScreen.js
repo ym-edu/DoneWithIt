@@ -12,7 +12,7 @@ function WelcomeScreen() {
           <Text style={styles().title}>Rootine</Text>
       </View>
       <View style={styles({color: Colors.highlight}).button} />
-      <View style={styles({color: Colors.secondary}).button} />
+      <View style={styles({color: Colors.secondaryDarker}).button} />
     </SafeAreaView>
   );
 }
@@ -23,7 +23,7 @@ const styles = (props) => StyleSheet.create({
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   logoContainer: {
-    backgroundColor: '#171818',
+    backgroundColor: Colors.primaryDarker,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -36,7 +36,7 @@ const styles = (props) => StyleSheet.create({
     textTransform: "uppercase",
   },
   button: {
-    backgroundColor: props ? props.color : '#171818',
+    backgroundColor: props ? props.color : Colors.primaryDarker,
     width: '100%',
     height: 50,
   },
