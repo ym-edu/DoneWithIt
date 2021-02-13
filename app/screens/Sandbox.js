@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Platform, Text } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import Colors from '../config/colors'
 
@@ -10,7 +10,7 @@ function Sandbox(props) {
       <View style={styles({width: 100}).borderBox} />
       <View style={styles({width: 50}).shadowBox} />
       <Text style={styles().textFont}>I love react, because I don't have to work twice as hard to make things on seperate platforms</Text>
-      <FontAwesome name="database" size={32} color="green" />
+      <Ionicons name="md-checkmark-circle" size={32} color="red" />
     </View>
   );
 }

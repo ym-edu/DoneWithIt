@@ -4,7 +4,7 @@ import Colors from '../config/colors'
 import { Platform, StatusBar, SafeAreaView, View, Text, StyleSheet } from 'react-native';
 // import Logo from '../assets/Logo.svg'
 
-function WelcomeScreen() {
+function WelcomeScreen({children}) {
   return (
     <SafeAreaView style={styles().screen}>
       <View style={styles().logoContainer}>
@@ -12,6 +12,11 @@ function WelcomeScreen() {
           // Loading problem with metro config file.
           // Using the file renders svgs but breaks icon fonts
           // Not using file renders correct icons but breaks svgs*/}
+          <View style={
+            {backgroundColor: 'white',}
+          }>
+            {children}
+          </View>
           
           <Text style={styles().title}>Rootine</Text>
       </View>
