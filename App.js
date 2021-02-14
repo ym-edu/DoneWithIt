@@ -1,9 +1,11 @@
-import React from 'react';
-import ViewImageScreen from './app/screens/ViewImageScreen';
-import WelcomeScreen from './app/screens/WelcomeScreen';
+import React, { Fragment } from 'react';
+import { WelcomeScreen, ViewImageScreen, Sandbox } from './app/screens/index'
 
 export default function App() {
   return (
-      <ViewImageScreen />
+    <Fragment>
+      <WelcomeScreen />
+      {/* <Sandbox /> */}
+    </Fragment>
   );
 }

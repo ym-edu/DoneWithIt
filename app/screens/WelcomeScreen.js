@@ -1,44 +1,40 @@
 import React from 'react';
-import Colors from '../config/colors'
+import { Platform, StatusBar, SafeAreaView, View, StyleSheet } from 'react-native';
 
-import { Platform, StatusBar, SafeAreaView, View, Text, StyleSheet } from 'react-native';
-import Logo from '../assets/Logo.svg'
+import Colors from '../config/colors'
+import TitleText from '../components/TitleText';
+import FullWidthButton from '../components/FullWidthButton';
+import IconButton from '../components/IconButton'
 
 function WelcomeScreen() {
   return (
-    <SafeAreaView style={styles().screen}>
-      <View style={styles().logoContainer}>
-          <Logo width={"100em"} height={"130em"} />
-          <Text style={styles().title}>Rootine</Text>
+    <SafeAreaView style={styles.screen}>
+      <View style={styles.logoContainer}>
+        <IconButton
+          icon={'media-empty'}
+          iconColor={Colors.secondary}
+          buttonColor={Colors.primaryLighter}
+          size={50}
+          halo={0}
+        />
+        <TitleText>Rootine</TitleText>
       </View>
-      <View style={styles({color: Colors.highlight}).button} />
-      <View style={styles({color: Colors.secondary}).button} />
+      <FullWidthButton color={Colors.secondary}/>
+      <FullWidthButton color={Colors.highlight}/>
     </SafeAreaView>
   );
 }
 
-const styles = (props) => StyleSheet.create({
+const styles = StyleSheet.create({
   screen: {
     flex: 1,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   logoContainer: {
-    backgroundColor: '#171818',
+    backgroundColor: Colors.primaryDarker,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  title: {
-    paddingTop: 16,
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-    textTransform: "uppercase",
-  },
-  button: {
-    backgroundColor: props ? props.color : '#171818',
-    width: '100%',
-    height: 50,
   },
 })
 
