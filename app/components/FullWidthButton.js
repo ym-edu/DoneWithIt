@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 function FullWidthButton(props) {
   return (
-    <View style={styles(props).button}>
+    <TouchableOpacity style={styles(props).button} onPress={() => console.log('tapped'
+    )}>
       <Text style={styles(props).text}>
         {props.children}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 
