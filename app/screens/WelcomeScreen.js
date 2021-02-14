@@ -2,9 +2,7 @@ import React from 'react';
 import { Platform, StatusBar, SafeAreaView, View, StyleSheet } from 'react-native';
 
 import Colors from '../config/colors'
-import TitleText from '../components/TitleText';
-import FullWidthButton from '../components/FullWidthButton';
-import IconButton from '../components/IconButton'
+import { FullWidthButton, IconButton, Spacer, TitleText } from '../components'
 
 function WelcomeScreen() {
   return (
@@ -15,11 +13,14 @@ function WelcomeScreen() {
           iconColor={Colors.secondary}
           buttonColor={Colors.primaryLighter}
           size={50}
-          halo={0}
+          halo={1}
         />
+        <Spacer space={16}/>
         <TitleText>Rootine</TitleText>
       </View>
-      <FullWidthButton color={Colors.secondary}/>
+      <FullWidthButton color={Colors.secondary}>
+        Title
+      </FullWidthButton>
       <FullWidthButton color={Colors.highlight}/>
     </SafeAreaView>
   );

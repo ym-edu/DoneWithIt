@@ -9,7 +9,6 @@ function TitleText({ children }) {
 
 const styles = StyleSheet.create({
   title: {
-    paddingTop: 16,
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
