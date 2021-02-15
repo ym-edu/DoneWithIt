@@ -1,29 +1,33 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-function TextDescription({title, subtitle}) {
+function TextDescription({title, subtitle, colors}) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title} numberOfLines={2}>{title}</Text>
-      <Text style={styles.subtitle}>{subtitle}</Text>
+    <View style={styles(colors).container}>
+      <Text style={styles(colors).main} numberOfLines={2}>{title}</Text>
+      <Text style={styles(colors).sub}>{subtitle}</Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = (colors) => StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'flex-start',
-    justifyContent: 'center',
-    backgroundColor: 'indigo',
-    marginLeft: 8
+    justifyContent: 'space-between',
+    paddingVertical: 4,
+    marginLeft: 8,
   },
-  title:{
-    color: 'white',
-    marginBottom: 8,
+  main:{
+    color: colors.secondary,
+    fontWeight: 'bold',
+    textTransform: 'capitalize',
+    fontSize: 16,
   },
-  subtitle:{
-    color: 'pink',
+  sub:{
+    color: colors.secondaryDarker,
+    fontWeight: '600',
+    fontSize: 12,
   },
 })
 

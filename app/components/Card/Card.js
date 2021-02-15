@@ -3,48 +3,35 @@ import { View, StyleSheet } from 'react-native';
 
 import { Thumbnail, Pressables, TextDescription } from './index'
 
-function Card(props) {
+function Card({media, title, subtitle, colors}) {
+  const handleLike = () => alert('Added to liked exercises')
+  const handleOptions = () => console.log('Open options')
+
   return (
-    <View style={styles(props).card}>
-      <View style={styles(props).thumbnail}>
-        <Thumbnail />
+    <View style={styles(colors).card}>
+      <View style={{aspectRatio: 16 /9}}>
+        <Thumbnail media={media} />
       </View>
 
-
-      <View style={styles(props).description}>
-        <TextDescription
-        title={'Balance Trainer Single leg kneeling good morning'}
-        subtitle={'8 reps'}
-        />
+      <View style={{flex: 1,}}>
+        <TextDescription title={title} subtitle={subtitle} colors={colors}/>
       </View>
 
-
-      <View style={styles(props).icons}>
-        <Pressables />
+      <View>
+        <Pressables onPress={{like: handleLike, options: handleOptions}} colors={colors}/>
       </View>
     </View>
   );
 }
 
-const styles = ({colors}) => StyleSheet.create({
+const styles = (colors) => StyleSheet.create({
   card: {
-    backgroundColor: colors.primaryLighter,
+    // backgroundColor: colors.primaryLighter,
     width: '100%',
     height: 72,
     borderRadius: 8,
     overflow: 'hidden',
     flexDirection: 'row',
-  },
-  thumbnail: {
-    backgroundColor: 'red',
-    aspectRatio: 16 /9,
-  },
-  description: {
-    backgroundColor: 'blue',
-    flex: 1,
-  },
-  icons: {
-    backgroundColor: 'yellow',
   },
 })
 

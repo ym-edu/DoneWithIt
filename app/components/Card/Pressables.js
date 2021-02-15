@@ -1,33 +1,36 @@
-import React, { Fragment } from 'react';
-import { StyleSheet, TouchableHighlight, TouchableOpacity, View } from 'react-native';
-import IconButton from '../IconButton'
+import React from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
+import IconButton from '../IconButton'
 import { SimpleLineIcons } from '@expo/vector-icons'; 
 
 
-function Pressables() {
+function Pressables({ onPress }) {
   return (
     <View style={styles.container}>
-      <TouchableHighlight
+      <TouchableOpacity
       activeOpacity={0.6}
       underlayColor="#DDDDDD"
-      onPress={() => alert('Added to liked exercises')}
+      onPress={onPress.like}
       >
         <IconButton
-          modStyle={styles.item}
+          // modStyle={styles.item}
           icon={'flex'}
           iconColor={'white'}
-          buttonColor={'black'}
-          size={20}
+          size={24}
           halo={1}
         />
-      </TouchableHighlight>
+      </TouchableOpacity>
       
-      <TouchableOpacity>
+      <TouchableOpacity
+      activeOpacity={0.6}
+      underlayColor="#DDDDDD"
+      onPress={onPress.options}
+      >
         <SimpleLineIcons
           style={styles.item}
           name="options-vertical" size={24}
-          color="black"
+          color="white"
         />
       </TouchableOpacity>
     </View>
@@ -39,10 +42,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'violet',
   },
   item: {
-    // marginLeft: 8,
+    marginLeft: 8,
   }
 })
 

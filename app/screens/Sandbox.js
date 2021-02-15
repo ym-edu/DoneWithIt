@@ -6,9 +6,20 @@ import Card from '../components/Card/Card'
 
 
 function Sandbox() {
+  const data = {
+    // title: `balance trainer single leg kneeling good morning`,
+    title: `high knees running in place`,
+    subtitle: `8 reps`
+  }
+
   return (
       <View style={styles().screen}>
-        <Card colors={colors}></Card>
+        <Card
+        media={'../../assets/thumbnail.jpg'}
+        title={data.title}
+        subtitle={data.subtitle}
+        colors={colors}
+        />
       </View>
   );
 }
