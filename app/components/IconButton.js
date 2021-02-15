@@ -30,7 +30,7 @@ function IconButton(props) {
   }
 
   return (
-    <View style={styles( props, constants ).button}>
+    <View style={[styles( props, constants ).button, props.modStyle]}>
       <RooIcons name={props.icon} size={props.size} color={props.iconColor} />
     </View>
   );

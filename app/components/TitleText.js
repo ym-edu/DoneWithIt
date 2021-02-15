@@ -1,15 +1,14 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 
-function TitleText({ children }) {
+function TitleText({ children, spacer }) {
   return (
-    <Text style={styles.title}>{children}</Text>
+    <Text style={[styles.title, {marginVertical: spacer}]}>{children}</Text>
   );
 }
 
 const styles = StyleSheet.create({
   title: {
-    paddingTop: 16,
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
