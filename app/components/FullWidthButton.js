@@ -19,6 +19,7 @@ const styles = (props) => StyleSheet.create({
     backgroundColor: props.color,
     width: '100%',
     height: 50,
+    borderRadius: 25,
   },
   text: {
     fontWeight: 'bold',

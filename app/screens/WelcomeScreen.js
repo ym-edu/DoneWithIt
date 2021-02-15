@@ -27,11 +27,12 @@ function WelcomeScreen() {
 
 const styles = StyleSheet.create({
   screen: {
+    backgroundColor: Colors.primaryDarker,
     flex: 1,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   logoContainer: {
-    backgroundColor: Colors.primaryDarker,
+    // backgroundColor: Colors.primaryDarker,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
