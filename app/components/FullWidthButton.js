@@ -3,8 +3,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 function FullWidthButton(props) {
   return (
-    <TouchableOpacity style={styles(props).button} onPress={() => console.log('tapped'
-    )}>
+    <TouchableOpacity style={styles(props).button} onPress={() => null}>
       <Text style={styles(props).text}>
         {props.children}
       </Text>
