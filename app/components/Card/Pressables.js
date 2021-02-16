@@ -5,7 +5,7 @@ import IconButton from '../IconButton'
 import { SimpleLineIcons } from '@expo/vector-icons'; 
 
 
-function Pressables({ onPress }) {
+function Pressables({ onPress, like, colors }) {
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -16,7 +16,7 @@ function Pressables({ onPress }) {
         <IconButton
           // modStyle={styles.item}
           icon={'flex'}
-          iconColor={'white'}
+          iconColor={ like ? 'white' : colors.highlight}
           size={24}
           halo={1}
         />
