@@ -4,6 +4,7 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import colors from '../config/colors'
 import data from '../config/data'
 import Card from '../components/Card/Card'
+import Spacer from '../components/Spacer';
 
 
 function Sandbox() {
@@ -34,20 +35,24 @@ function Sandbox() {
             subtitle={renderSwitch(data[itemNum])}
             colors={colors}
             liked={data[itemNum].liked}
+            onPress={() => alert('wow')}
           />
         </View>
         <FlatList style={styles().content}
           data={data}
           keyExtractor={data => data.id.toString()}
-          renderItem={({item}) => (
+          renderItem={({item, separators}) => (
             <Card
               media={require('../assets/thumbnail.jpg')}
               title={item.title}
               subtitle={renderSwitch(item)}
               colors={colors}
               liked={item.liked}
+              onPress={() => null}
             />
           )}
+          ItemSeparatorComponent={() => <Spacer space={8}/>}
+          showsVerticalScrollIndicator={false}
         />
       </View>
   );
@@ -59,6 +64,7 @@ const styles = () => StyleSheet.create({
     flex:1,
     backgroundColor: colors.primaryDarker,
     paddingHorizontal: 8,
+    // paddingBottom: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },
