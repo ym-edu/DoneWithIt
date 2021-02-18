@@ -3,8 +3,6 @@ import { StyleSheet, SafeAreaView, View } from 'react-native';
 import appConstants from '../../config';
 
 function Screen({children}) {
-  // console.log(appConstants)
-
   return (
     <SafeAreaView style={styles(appConstants).screen}>
       <View style={styles(appConstants).content}>
@@ -23,22 +21,6 @@ const styles = ({ sizes, colors }) => StyleSheet.create({
   content: {
     backgroundColor: colors.primaryDarker,
     flex: 1,
-
-    // alignSelf: 'center',
-    // width: sizes.screenWidth,
-    // height: sizes.screenHeight,
-
-    // position: 'absolute',
-    // top: 0,
-    // bottom: 0,
-    // left: 0,
-    // right: 0,
-    // marginTop: sizes.statusBar
-    // // paddingTop: sizes.statusBar
-
-    // ...StyleSheet.absoluteFillObject,
-    // marginTop: sizes.statusBar,
-    // // paddingTop: sizes.statusBar
   }
 })
 

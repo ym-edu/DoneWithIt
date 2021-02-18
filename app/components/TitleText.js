@@ -1,17 +1,18 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
-function TitleText({ children, spacer }) {
+function TitleText({ children, appConstants}) {
+
   return (
-    <Text style={[styles.title, {marginVertical: spacer}]}>{children}</Text>
+    <Text style={styles(appConstants).text}>{children}</Text>
   );
 }
 
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 24,
+const styles = ({colors, sizes}) => StyleSheet.create({
+  text: {
+    color: colors.highlight,
+    fontSize: sizes.spacerVertical,
     fontWeight: 'bold',
-    color: 'white',
     textTransform: "uppercase",
   },
 })
