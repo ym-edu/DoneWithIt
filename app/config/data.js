@@ -1,6 +1,6 @@
 export default [
   {
-    key: "0",
+    id: 0,
     title: "balance trainer single leg kneeling good morning",
     reps: 6,
     min: 0,
@@ -9,7 +9,7 @@ export default [
     mode: 'r1',
   },
   {
-    key: "1",
+    id: 1,
     title: "crunches",
     reps: 8,
     min: 1,
@@ -18,7 +18,7 @@ export default [
     mode: 't2',
   },
   {
-    key: "2",
+    id: 2,
     title: "deadlift",
     reps: 8,
     min: 0,
@@ -27,7 +27,7 @@ export default [
     mode: 'r2',
   },
   {
-    key: "3",
+    id: 3,
     title: "flutter kicks",
     reps: 0,
     min: 1,
@@ -36,7 +36,7 @@ export default [
     mode: 't1',
   },
   {
-    key: "4",
+    id: 4,
     title: "glute ham raise",
     reps: 16,
     min: 0,
@@ -45,7 +45,7 @@ export default [
     mode: 't2',
   },
   {
-    key: "5",
+    id: 5,
     title: "handstand push up",
     reps: 2,
     min: 0,
@@ -54,7 +54,7 @@ export default [
     mode: 'r1',
   },
   {
-    key: "6",
+    id: 6,
     title: "inverted row",
     reps: 12,
     min: 0,
@@ -62,7 +62,7 @@ export default [
     liked: false,
     mode: 'r2',
   },{
-    key: "7",
+    id: 7,
     title: "kettlebell front squat",
     reps: 0,
     min: 2,
@@ -70,7 +70,7 @@ export default [
     liked: true,
     mode: 't2',
   },{
-    key: "8",
+    id: 8,
     title: "pike push up",
     reps: 12,
     min: 1,
@@ -78,7 +78,7 @@ export default [
     liked: false,
     mode: 't1',
   },{
-    key: "9",
+    id: 9,
     title: "side bridge",
     reps: 0,
     min: 1,
