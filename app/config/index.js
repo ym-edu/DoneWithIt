@@ -1,2 +1,5 @@
-export { default as colors } from './colors'
-export { default as sizes } from './sizes'
+import colors from './colors'
+import sizes from './sizes'
+
+export { colors, sizes }
+export default { colors, sizes }

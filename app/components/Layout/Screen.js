@@ -1,13 +1,9 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, View } from 'react-native';
-import { sizes, colors } from '../../config/index';
+import appConstants from '../../config';
 
 function Screen({children}) {
-  const appConstants = {
-    sizes,
-    colors,
-  }
-  console.log(appConstants)
+  // console.log(appConstants)
 
   return (
     <SafeAreaView style={styles(appConstants).screen}>
@@ -22,11 +18,10 @@ const styles = ({ sizes, colors }) => StyleSheet.create({
   screen: {
     flex: 1,
     paddingTop: sizes.statusBar,
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.highlight,
   },
   content: {
     backgroundColor: colors.primaryDarker,
-
     flex: 1,
 
     // alignSelf: 'center',

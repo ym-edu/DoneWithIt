@@ -9,9 +9,10 @@ function Container({children, style, ...rest}) {
   );
 }
 
-const styles = ({m, mH, mB, mT}) => StyleSheet.create({
+const styles = ({m, mH, mB, mT, bgColor}) => StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: bgColor,
     margin: m,
     marginHorizontal: mH,
     marginBottom: mB,
