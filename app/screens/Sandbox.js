@@ -1,17 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import Item from '../components/Item/Item';
 import TitleText from '../components/TitleText';
 import Container from '../components/Layout/Container';
-import { ConfigConsumer } from '../config/configContext';
+import Context from '../config/configContext'
 
 function Sandbox() {
+  const { colors } = useContext(Context)
   return (
-    <ConfigConsumer>
-      {({colors, sizes}) => {
-      return <Text style={{color: colors.secondary}}>{sizes.fullWidth}</Text>
-      }}
-    </ConfigConsumer>
+    <Text style={{color: colors.highlight}}>Hello</Text>
   );
 }
 

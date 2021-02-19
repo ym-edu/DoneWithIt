@@ -1,17 +1,17 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, View } from 'react-native';
 import appConstants from '../../config';
-import { ConfigProvider } from '../../config/configContext'
+import { Provider } from '../../config/configContext'
 
 function Screen({children}) {
   return (
-    <ConfigProvider value={appConstants}>
+    <Provider value={appConstants}>
       <SafeAreaView style={styles(appConstants).screen}>
         <View style={styles(appConstants).content}>
           {children}
         </View>
       </SafeAreaView>
-    </ConfigProvider>
+    </Provider>
   );
 }
 

@@ -1,8 +1,9 @@
 import React from 'react';
 
-const ConfigContext = React.createContext('red')
+const Context = React.createContext()
 
-const ConfigProvider = ConfigContext.Provider
-const ConfigConsumer = ConfigContext.Consumer
+const Provider = Context.Provider
+const Consumer = Context.Consumer
 
-export { ConfigProvider, ConfigConsumer }
+export { Provider, Consumer }
+export default Context
