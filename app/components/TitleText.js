@@ -1,17 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 
-function TitleText({ children, appConstants}) {
+function TitleText({ children }) {
 
   return (
-    <Text style={styles(appConstants).text}>{children}</Text>
+    <Text style={styles.text}>{children}</Text>
   );
 }
 
-const styles = ({colors, sizes}) => StyleSheet.create({
+const styles = StyleSheet.create({
   text: {
-    color: colors.highlight,
-    fontSize: sizes.spacerVertical,
+    color: 'white',
+    fontSize: 24,
     fontWeight: 'bold',
     textTransform: "uppercase",
   },

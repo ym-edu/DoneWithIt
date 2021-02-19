@@ -3,25 +3,15 @@ import { StyleSheet, Text } from 'react-native';
 import Item from '../components/Item/Item';
 import TitleText from '../components/TitleText';
 import Container from '../components/Layout/Container';
-import appConstants, { sizes, colors } from '../config';
+import { ConfigConsumer } from '../config/configContext';
 
 function Sandbox() {
   return (
-    <>
-      <Container
-      style={styles().container}
-      // bgColor={'white'}
-      mB={sizes.spacerVertical}
-      mH={sizes.spacerHorizontal}
-      >
-        <Item appConstants={appConstants}><TitleText>Hello</TitleText></Item>
-      </Container>
-      {/* ===================================================== */}
-      <Container
-      >
-        <></>
-      </Container>
-    </>
+    <ConfigConsumer>
+      {({colors, sizes}) => {
+      return <Text style={{color: colors.secondary}}>{sizes.fullWidth}</Text>
+      }}
+    </ConfigConsumer>
   );
 }
 
