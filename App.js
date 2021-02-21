@@ -1,13 +1,9 @@
 import React from 'react';
-import Screen from './app/components/Layout/Screen';
-import { WelcomeScreen, ViewImageScreen, Sandbox } from './app/screens/index'
-
+import Layout from './app/layout';
 
 export default function App() {
   return (
-    <Screen>
-      {/* <WelcomeScreen /> */}
-      <Sandbox/>
-    </Screen>
+    <Layout>
+    </Layout>
   );
 }
