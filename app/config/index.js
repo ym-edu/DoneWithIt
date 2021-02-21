@@ -1,5 +1,6 @@
-import colors from './colors'
-import sizes from './sizes'
+import { colors, sizes } from './constants';
+import { exercises } from './data';
 
-export { colors, sizes }
-export default { colors, sizes }
+export const
+constants = { colors, sizes },
+data = { exercises };
