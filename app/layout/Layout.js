@@ -5,12 +5,9 @@ import { constants } from '../config';
 const { colors } = constants;
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
-import RooIcons from './shared/RooIcons';
+import { IconProvider } from './shared/IContext';
 
-export const ConfigContext = React.createContext();
-const Provider = ConfigContext.Provider;
-
-export default function Screen({children}) {
+export default function Layout({children}) {
   const fetchFonts = () => {
     return Font.loadAsync({
       'RooIcons': require('../assets/fonts/RooIcons.ttf')
@@ -28,26 +25,8 @@ export default function Screen({children}) {
     )
   }
 
-  function Icon({name,size,color,container}) {
-    const containerSize = size * 2;
-
-    const iconStyle = {
-      width: containerSize,
-      height: containerSize,
-      backgroundColor: container ? colors.primaryLighter : null,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: size,
-    }
-
-    return (
-      <View style={iconStyle}>
-        <RooIcons name={name} size={size} color={color}/>
-      </View>
-    )}
-
   return (
-    <Provider value={Icon}>
+    <IconProvider>
       <SafeAreaView style={styles.screenBar}>
         <StatusBar
           style={'light'}
@@ -58,7 +37,7 @@ export default function Screen({children}) {
           {children}
         </View>
       </SafeAreaView>
-    </Provider>
+    </IconProvider>
   );
 }
 

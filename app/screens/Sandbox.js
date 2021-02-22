@@ -1,14 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
-import { ConfigContext } from '../layout/Layout'
+import { useIcon } from '../layout';
 
 function Sandbox() {
-  const Icon = useContext(ConfigContext);
-
+  const Icon = useIcon()
   return (
     <>
-      <Icon name='close' size={64} color='white' container={1}/>
-      <Icon name='angle' size={16} color='pink' container={0}/>
+      <Icon name='media-empty' size={64} container={1}/>
+      <Icon name='angle'/>
     </>
   );
 }
