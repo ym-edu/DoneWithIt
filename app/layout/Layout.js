@@ -5,7 +5,7 @@ import { constants } from '../config';
 const { colors } = constants;
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
-import { IconProvider } from './shared/IContext';
+import { IconProvider } from './shared/IconContext';
 
 export default function Layout({children}) {
   const fetchFonts = () => {

@@ -4,10 +4,10 @@ import RooIcons from './RooIcons';
 import { constants } from '../../config';
 const { colors } = constants;
 
-const IContext = React.createContext()
+const IconContext = React.createContext()
 
 export default function useIcon() {
-  return useContext(IContext)
+  return useContext(IconContext)
 }
 
 export function IconProvider({ children }) {
@@ -31,8 +31,8 @@ export function IconProvider({ children }) {
   }
 
   return (
-    <IContext.Provider value={Icon}>
+    <IconContext.Provider value={Icon}>
       {children}
-    </IContext.Provider>
+    </IconContext.Provider>
   )
 }
