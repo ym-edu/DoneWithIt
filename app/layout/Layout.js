@@ -1,21 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, SafeAreaView, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { constants } from '../config'
+import { constants } from '../config';
 const { colors } = constants;
+import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import { IconProvider } from './shared/IconContext';
 
-export default function Screen({children}) {
+export default function Layout({children}) {
+  const fetchFonts = () => {
+    return Font.loadAsync({
+      'RooIcons': require('../assets/fonts/RooIcons.ttf')
+    });
+  };
+
+  const [ fontloaded, setfontloaded ] = useState(false);
+
+  if(!fontloaded) {
+    return(
+      <AppLoading
+      startAsync={fetchFonts}
+      onFinish={() => {setfontloaded(true)}}
+      onError={console.warn}/>
+    )
+  }
+
   return (
-    <SafeAreaView style={styles.screenBar}>
-      <StatusBar
-        style={'light'}
-        backgroundColor={colors.primaryLighter}
-        translucent={false}
-      />
-      <View style={styles.content}>
-        {children}
-      </View>
-    </SafeAreaView>
+    <IconProvider>
+      <SafeAreaView style={styles.screenBar}>
+        <StatusBar
+          style={'light'}
+          backgroundColor={colors.primaryLighter}
+          translucent={false}
+        />
+        <View style={styles.content}>
+          {children}
+        </View>
+      </SafeAreaView>
+    </IconProvider>
   );
 }
 
