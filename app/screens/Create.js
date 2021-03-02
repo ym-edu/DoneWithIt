@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TextInput, TextButton } from '../components';
+import { Read } from '../screens';
 
 function Create() {
-  const [exercise, setExercise] = useState(null);
+  const [exercise, setExercise] = useState('ok');
   const [tempInput, setTempInput] = useState(null);
 
   const handlePress = () => {
@@ -13,7 +14,8 @@ function Create() {
   return (
     <View style={styles.screen}>
 
-      { exercise ? <Text>{exercise}</Text> :
+      {/* { exercise ? <Text>{exercise}</Text> : */}
+      { exercise ? <Read/> :
       <>
         <TextInput label={'Title'} getValue={setTempInput}/>
         <TextButton onPress={handlePress}>Submit</TextButton>

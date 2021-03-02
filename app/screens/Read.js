@@ -1,10 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Counter } from '../components';
+import { data } from '../config'
+const item = data.exercises[0];
 
 function Read() {
   return (
     <View style={styles.screen}>
-      <Text style={styles.text}>Read</Text>
+      <Counter data={item}/>
     </View>
   );
 }
@@ -12,12 +15,8 @@ function Read() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
-    color: 'white',
-  }
 })
 
 export default Read;
