@@ -13,7 +13,7 @@ export default [
     title: "crunches",
     mode: 't2',
     reps: 8,
-    min: 1,
+    min: 10,
     sec: 0,
     liked: true,
   },
