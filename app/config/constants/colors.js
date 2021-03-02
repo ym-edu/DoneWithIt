@@ -5,7 +5,8 @@ export default {
   secondary: '#E5E5E5',
   secondaryDarker: '#C8C0B8',
   secondaryLighter: '#fff',
-  highlight: '#D03050',
+  // accent: '#D03050',
+  accent: '#C0C0B87F',
   Dark: '#000',
   Light: '#fff',
 }

@@ -1,11 +1,11 @@
 import React from 'react';
 import Layout from './app/layout';
-import Sandbox from './app/screens/Sandbox';
+import { Create } from './app/screens'
 
 export default function App() {
   return (
     <Layout>
-      <Sandbox />
+      <Create/>
     </Layout>
   );
 }
