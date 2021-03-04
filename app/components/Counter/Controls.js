@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { selector } from './'
 // const isPaused = false;
-import { useIcon } from '../../layout'
+import { Container, useIcon } from '../../layout'
 
 function Counter({data, id}) {
-  console.log(`DATA ID: ${id}|`, data)
+  // console.log(`DATA ID: ${id}|`, data)
 
   useEffect(() => {
     handleReset()
@@ -114,15 +114,46 @@ function Counter({data, id}) {
 
   return (
     <>
-      <TouchableOpacity onPress={handlePress} disabled={complete.current}>
-        { selector(counter) }
-      </TouchableOpacity>
-      <TouchableOpacity style={{alignSelf: 'center', marginTop: 16}}
-        onPress={handleReset} disabled={starting.current}>
-        <Icon name='close' color={starting.current ? '#383B3B' : 'white'}/>
-      </TouchableOpacity>
+      <Container style={styles.container}>
+        <View style={styles.controls}>
+          <TouchableOpacity style={{alignSelf: 'center'}}
+            onPress={handleReset} disabled={starting.current}>
+            <Icon name='angle' container={false} size={32} color={starting.current ? '#383B3B' : 'white'}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{marginHorizontal: 16}}
+          onPress={handlePress} disabled={complete.current}>
+            { selector(counter) }
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{alignSelf: 'center', transform: [{rotateY: '180deg'}]}}
+            onPress={handleReset} disabled={starting.current}>
+            <Icon name='angle' container={false} size={32} color={starting.current ? '#383B3B' : 'white'}/>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity style={{alignSelf: 'center', marginTop: 16}}
+          onPress={handleReset} disabled={starting.current}>
+          <Icon name='close' container={true} color={starting.current ? '#383B3B' : 'white'}/>
+        </TouchableOpacity>
+      </Container>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'yellow',
+    flex: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+  },
+  controls: {
+    backgroundColor: 'pink',
+    flexDirection: 'row',
+    alignItems: 'center'
+  }
+})
 
 export default Counter;

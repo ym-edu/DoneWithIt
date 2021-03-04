@@ -1,7 +1,7 @@
 export default [
   {
     id: 0,
-    url: '',
+    url: "balance trainer single leg kneeling good morning",
     title: "balance trainer single leg kneeling good morning",
     liked: false,
     data: {
@@ -13,7 +13,7 @@ export default [
   },
   {
     id: 1,
-    url: '',
+    url: "crunches",
     title: "crunches",
     liked: true,
     data: {
@@ -25,7 +25,7 @@ export default [
   },
   {
     id: 2,
-    url: '',
+    url: "deadlift",
     title: "deadlift",
     liked: true,
     data: {
@@ -37,7 +37,7 @@ export default [
   },
   {
     id: 3,
-    url: '',
+    url: "flutter kicks",
     title: "flutter kicks",
     liked: false,
     data: {
@@ -49,7 +49,7 @@ export default [
   },
   {
     id: 4,
-    url: '',
+    url: "glute ham raise",
     title: "glute ham raise",
     liked: false,
     data: {
@@ -61,7 +61,7 @@ export default [
   },
   {
     id: 5,
-    url: '',
+    url: "handstand push up",
     title: "handstand push up",
     liked: true,
     data: {
@@ -73,7 +73,7 @@ export default [
   },
   {
     id: 6,
-    url: '',
+    url: "inverted row",
     title: "inverted row",
     liked: false,
     data: {
@@ -85,7 +85,7 @@ export default [
   },
   {
     id: 7,
-    url: '',
+    url: "kettlebell front squat",
     title: "kettlebell front squat",
     liked: true,
     data: {
@@ -97,7 +97,7 @@ export default [
   },
   {
     id: 8,
-    url: '',
+    url: "pike push up",
     title: "pike push up",
     liked: false,
     data: {
@@ -109,7 +109,7 @@ export default [
   },
   {
     id: 9,
-    url: '',
+    url: "side bridge",
     title: "side bridge",
     liked: false,
     data: {

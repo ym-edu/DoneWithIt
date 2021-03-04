@@ -3,6 +3,6 @@ export { default as RepsTarget } from './RepsTarget'
 export { default as TimeSet } from './TimeSet'
 export { default as TimeTarget } from './TimeTarget'
 export { default as selector } from './selector'
-import Counter from './Counter';
+import Controls from './Controls';
 
-export default Counter;
+export default Controls;
