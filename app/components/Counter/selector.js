@@ -1,7 +1,7 @@
 import React from 'react';
 import { RepsSet, RepsTarget, TimeSet, TimeTarget } from './';
 
-export default selector = ({mode, reps}, count, time) => {
+export default selector = ({mode, reps, count, time}) => {
   switch(mode) {
     case 'r1':
       return <RepsSet reps={reps}/>;

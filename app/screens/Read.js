@@ -1,13 +1,15 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Counter } from '../components';
-import { data } from '../config'
-const item = data.exercises[1];
+
+import { exercises } from '../config'
+const item = exercises[0]
+const { data } = item
 
 function Read() {
   return (
     <View style={styles.screen}>
-      <Counter data={item} isPaused={false}/>
+      <Counter data={data}/>
     </View>
   );
 }
