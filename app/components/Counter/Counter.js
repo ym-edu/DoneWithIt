@@ -4,7 +4,13 @@ import { selector } from './'
 // const isPaused = false;
 import { useIcon } from '../../layout'
 
-function Counter({data}) {
+function Counter({data, id}) {
+  console.log(`DATA ID: ${id}|`, data)
+
+  useEffect(() => {
+    handleReset()
+  }, [id])
+
   // ===== countDown =====
   const [count, setCount] = useState(data.reps)
   const complete = useRef(false)

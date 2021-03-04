@@ -9,7 +9,7 @@ const { data } = item
 function Read() {
   return (
     <View style={styles.screen}>
-      <Counter data={data}/>
+      <Counter data={data} id={item.id}/>
     </View>
   );
 }
