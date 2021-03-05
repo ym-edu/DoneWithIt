@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
-import { selector } from './'
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import selector from './selector'
 // const isPaused = false;
 import { Container, useIcon } from '../../layout'
 
-function Counter({data, id}) {
+function Controls({data, id}) {
   // console.log(`DATA ID: ${id}|`, data)
 
   useEffect(() => {
@@ -150,10 +150,10 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   controls: {
-    backgroundColor: 'pink',
+    backgroundColor: 'blue',
     flexDirection: 'row',
     alignItems: 'center'
   }
 })
 
-export default Counter;
+export default Controls;
