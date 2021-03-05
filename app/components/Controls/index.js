@@ -1,4 +1,4 @@
-export { default as RepsSet } from './RepsSet';
-export { default as RepsTarget } from './RepsTarget';
-export { default as TimeSet } from './TimeSet';
-export { default as TimeTarget } from './TimeTarget';
+export { default as Previous } from './Previous'
+export { default as Next } from './Next'
+export { default as Reset } from './Reset'
+export { default as Counter } from './Counter/Counter'

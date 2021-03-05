@@ -9,7 +9,7 @@ function Train() {
   // const startingExercise = workout[0];
   // const endingExercise = workout[workout.length - 1];
   
-  const currentExercise = workout[0]
+  const currentExercise = workout[9]
 
   const { data } = currentExercise;
   const nextExercise = workout[currentExercise.id];

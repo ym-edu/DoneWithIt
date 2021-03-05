@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { constants } from '../../config'
+import { constants } from '../../../config'
 const { colors, sizes } = constants;
 
-function RepsSet({reps}) {
+function RepsSet({count}) {
   return (
     <View style={styles.container}>
-        <Text style={styles.text}>{reps}</Text>
+        <Text style={styles.text}>{count}</Text>
     </View>
   );
 }

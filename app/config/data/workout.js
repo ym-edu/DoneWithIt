@@ -115,8 +115,8 @@ export default [
     data: {
       mode: 't2',
       reps: 8,
-      min: 10,
-      sec: 0,
+      min: 2,
+      sec: 5,
     },
   },
 ];

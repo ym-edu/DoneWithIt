@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { constants } from '../../config'
+import { constants } from '../../../config'
 const { colors, sizes } = constants;
 
 function TimeSet({count}) {

@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { Previous, Next, Reset, Counter } from './'
 
 function Controls({data, id}) {
-
   function formatTime(min, sec) {
     return`${min > 10 ? min : `0${min}`}:${sec > 10 ? sec : `0${sec}`}`
   }
@@ -15,18 +14,17 @@ function Controls({data, id}) {
   }
   // ===== proccessedData =====
 
+  const onPress = (component) => {
+    console.log(`${component} Pressed |`, `DATA ID: ${id} |`, data)
+  }
 // #################################
-const onPress = (component) => {
-  console.log(`${component} Pressed`)
-}
-
   return (
     <View style={styles.container}>
       <View style={styles.controls}>
         <Previous
         onPress={() => onPress('Previous')} woStarting={false}/>
 
-        <Counter mode={data.mode} item={display} onPress={() => console.log(`DATA ID: ${id} |`, data)} />
+        <Counter mode={data.mode} item={display} onPress={() => onPress('Counter')} />
 
         <Next
         onPress={() => onPress('Next')} woEnding={false}/>

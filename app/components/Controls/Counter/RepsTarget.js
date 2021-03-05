@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { constants } from '../../config'
+import { constants } from '../../../config'
 const { colors, sizes } = constants;
 
-function RepsTarget({reps}) {
+function RepsTarget({count, reps}) {
   return (
     <View style={styles.container}>
       <View style={styles.span}>
-        <Text style={styles.text}>{reps}</Text>
+        <Text style={styles.text}>{count}</Text>
       </View>
 
       <View style={styles.separator} />
