@@ -16,20 +16,25 @@ function Preview({item}) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'magenta',
+    // backgroundColor: 'magenta',
     height: 96,
     justifyContent: 'space-between',
     paddingHorizontal: 8,
-    marginTop: 8,
+    marginTop: 16,
+    marginBottom: 8,
   },
   text: {
+    color: 'white',
     textAlign: 'center',
   },
   card: {
     height: 72,
     width: '100%',
-    backgroundColor: 'chartreuse',
+    backgroundColor: '#242626',
+    // backgroundColor: 'chartreuse',
     borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
 

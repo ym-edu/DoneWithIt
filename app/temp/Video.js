@@ -12,13 +12,14 @@ function Video({item}) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'azure',
+    backgroundColor: 'black',
     aspectRatio: 16/9,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center'
   },
   text: {
+    color: '#C0C0B87F',
     textTransform: 'capitalize'
   },
 })

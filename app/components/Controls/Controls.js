@@ -143,14 +143,14 @@ function Controls({data, id}) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'yellow',
+    // backgroundColor: 'yellow',
     flex: 0,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 16,
   },
   controls: {
-    backgroundColor: 'blue',
+    // backgroundColor: 'blue',
     flexDirection: 'row',
     alignItems: 'center'
   }

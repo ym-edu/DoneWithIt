@@ -16,8 +16,8 @@ function TimeTarget({count, time}) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primaryLighter,
-    width: 96,
-    height: 96,
+    width: 80,
+    height: 80,
     borderRadius: sizes.spacerHorizontal,
     alignItems: 'center',
     justifyContent: 'center',
