@@ -1,33 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Video, Description, Preview } from '../temp'
+import { Video } from '../temp'
 import Controls from '../components/Controls/Controls';
 
 import { workout } from '../config'
 
 function Train() {
-  workout.forEach(obj => obj.isDisabled = false)
-  // const startingExercise = workout[0];
-  // const endingExercise = workout[workout.length - 1];
+  workout.forEach(obj => obj.isDisabled = false);
 
-// start
-  const currentExercise = workout[9]
+  const [currentExercise, setCurrentExercise] = useState(workout[0]);
 
-//   // const { data } = currentExercise;
-//   // const nextExercise = allExercises[currentExercise.id];
+  const woStarting = currentExercise.id === 1;
+  const woEnding = currentExercise.id === workout.length;
+  const bounds = { woStarting, woEnding };
 
-//   // function RenderPreview() {
-//   //   return (
-//   //     currentExercise.id >= allExercises.length ? null : <Preview item={nextExercise}/>)
-//   // }
-// end
+  const handlePrev = () => {
+    const prevExercise = workout[currentExercise.id-2]
+    setCurrentExercise(prevExercise)
+  }
+  const handleNext = () => {
+    const nextExercise = workout[currentExercise.id]
+    setCurrentExercise(nextExercise)
+  }
+  const handlers = { handlePrev, handleNext }
 
   return (
     <View style={styles.screen}>
       <Video item={currentExercise}/>
-      <Controls exercises={workout} currentExercise={currentExercise}/>
-      {/* <Description item={currentExercise}/>
-      <RenderPreview/> */}
+
+      <Controls
+      exercises={workout}
+      currentExercise={currentExercise}
+      bounds={bounds}
+      handlers={handlers}
+      />
     </View>
   );
 }

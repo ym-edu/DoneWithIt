@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Previous, Next, Reset, Counter } from './'
 
-function Controls({exercises, currentExercise: {data, id}}) {
+function Controls({
+  exercises,
+  currentExercise: {data, id},
+  bounds: { woStarting, woEnding },
+  handlers: { handlePrev, handleNext }
+}) {
   const allExercises = exercises;
   const [touch, setTouch] = useState([]);
   useEffect(() => {
@@ -42,17 +47,19 @@ const onPress = (component) => {
   return (
     <View style={styles.container}>
       <View style={styles.controls}>
-        <Previous
-        onPress={() => onPress('Previous')} woStarting={false}/>
+        <Previous onPress={handlePrev} woStarting={woStarting}/>
 
-        <Counter mode={data.mode} item={display} onPress={() => console.log(`DATA ID: ${id} |`, data, touch[id-1])} />
+        <Counter mode={data.mode} item={display} onPress={()=>null} />
 
-        <Next
-        onPress={() => console.log(touch)} woEnding={false}/>
+        <Next onPress={handleNext} woEnding={woEnding}/>
       </View>
 
-      <Reset
-      onPress={handleReset} exStarting={false}/>
+      <Reset onPress={handleReset} exStarting={false}/>
+
+      {/* Log data object */}
+      <Reset onPress={() => console.log(`DATA ID: ${id} |`, data, touch[id-1])} exStarting={false}/>
+      {/* Log state array */}
+      <Reset onPress={() => console.log(touch)} exStarting={false}/>
     </View>
   );
 }
