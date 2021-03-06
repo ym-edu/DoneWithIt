@@ -1,65 +1,92 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Previous, Next, Reset, Counter } from './'
+import { Previous, Next, Reset, Counter } from './';
 
 function Controls({
   exercises,
   currentExercise: {data, id},
   bounds: { woStarting, woEnding },
-  handlers: { handlePrev, handleNext }
+  handlers: { handlePrev, handleNext },
 }) {
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< STATE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   const allExercises = exercises;
-  const [touch, setTouch] = useState([]);
+  const [session, setSession] = useState([]);
+  
   useEffect(() => {
     if(allExercises.length > 0) {
       const initialState = allExercises.map(exercise => exercise.isDisabled);
-      setTouch(initialState);
-      console.log(initialState)
+      setSession(initialState);
     }
   }, [allExercises])
 
-  const handleReset = () => {
-    const newArr = [...touch]; // avoid writing over state
-    newArr[id-1] = !newArr[id-1]; // find array item ID:currentExerciseId-1 (-1 to match index since index(0)=id(1)) and set to new value (flip boolean, in this case)
-    setTouch(newArr); // update state setting new array with updated state for selected index
+  const handleChange = () => {
+    const temp = [...session];
+    temp[id-1] = !temp[id-1];
+    setSession(temp);
+  }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< STATE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< COUNT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< COUNT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< RESET >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  const repsSetReset = () => {
+    console.log('repsSetReset')
+  }
+  const repsTargetReset = () => {
+    console.log('repsTargetReset')
+  }
+  const timeSetReset = () => {
+    console.log('timeSetReset')
+  }
+  const timeTargetReset = () => {
+    console.log('timeTargetReset')
   }
 
+  const selectResetHandler = (mode) => {
+    switch(mode) {
+      case 'r1':
+        return repsSetReset;
+      case 'r2':
+        return repsTargetReset;
+      case 't1':
+        return timeSetReset;
+      case 't2':
+        return timeTargetReset;
+    }
+  }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< RESET >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-
-
-
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<< ProcessData >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   function formatTime(min, sec) {
     return`${min > 10 ? min : `0${min}`}:${sec > 10 ? sec : `0${sec}`}`
   }
 
-  // ===== proccessedData =====
   const display = {
     reps: data.reps,
     time: formatTime(data.min,data.sec),
   }
-  // ===== proccessedData =====
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<< ProcessData >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-// #################################
-const onPress = (component) => {
-  console.log(`${component} Pressed`)
-}
-
+// ========================================================================
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< RETURN >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// ========================================================================
   return (
     <View style={styles.container}>
       <View style={styles.controls}>
         <Previous onPress={handlePrev} woStarting={woStarting}/>
 
-        <Counter mode={data.mode} item={display} onPress={()=>null} />
+        <Counter mode={data.mode} item={display} onPress={handleChange} />
 
         <Next onPress={handleNext} woEnding={woEnding}/>
       </View>
 
-      <Reset onPress={handleReset} exStarting={false}/>
+      <Reset onPress={selectResetHandler(data.mode)} exStarting={false}/>
 
       {/* Log data object */}
-      <Reset onPress={() => console.log(`DATA ID: ${id} |`, data, touch[id-1])} exStarting={false}/>
+      <Reset onPress={() => console.log(`DATA ID: ${id} |`, data, session[id-1])} exStarting={false}/>
       {/* Log state array */}
-      <Reset onPress={() => console.log(touch)} exStarting={false}/>
+      <Reset onPress={() => console.log(session)} exStarting={false}/>
     </View>
   );
 }
