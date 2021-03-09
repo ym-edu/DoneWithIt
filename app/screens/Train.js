@@ -31,18 +31,32 @@ function Train() {
           finished: false,
         }
       case 't1':
+        let min = data.min
+        let sec = data.sec
+        const minutesToMillis = (min) => min * 1000 * 60;
+        const secondsToMillis = (sec) => sec * 1000
+        const totalMillis = minutesToMillis(min) + secondsToMillis(sec)
+
         count = formatTime(data.min, data.sec)
         return exercise.session = {
+        timeLeft: totalMillis,
+        min,
+        sec,
+        mil: totalMillis,
         count: count,
         starting: true,
         finished: false,
+        isPaused: false,
       }
       case 't2':
         count = formatTime(0, 0)
         return exercise.session = {
+        min: data.min,
+        sec: data.sec,
         count: count,
         starting: true,
         finished: false,
+        isPaused: false,
       }
     }
   });
@@ -74,6 +88,7 @@ function Train() {
   }
   function handleCount({key, value, self}) {
     const temp = [...session];
+    // console.log(temp[id-1][key])
     temp[id-1][key] = self ? temp[id-1][key] + value : value;
     setSession(temp);
   }

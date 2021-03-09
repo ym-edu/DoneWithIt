@@ -1,14 +1,14 @@
 export default [
   {
     id: 1,
-    url: "balance trainer single leg kneeling good morning",
-    title: "balance trainer single leg kneeling good morning",
+    url: "flutter kicks",
+    title: "flutter kicks",
     liked: false,
     data: {
-      mode: 'r1',
-      reps: 6,
-      min: 0,
-      sec: 30,
+      mode: 't1',
+      reps: 0,
+      min: 1,
+      sec: 0,
     },
   },
   {
@@ -25,14 +25,14 @@ export default [
   },
   {
     id: 3,
-    url: "flutter kicks",
-    title: "flutter kicks",
+    url: "balance trainer single leg kneeling good morning",
+    title: "balance trainer single leg kneeling good morning",
     liked: false,
     data: {
-      mode: 't1',
-      reps: 0,
-      min: 1,
-      sec: 0,
+      mode: 'r1',
+      reps: 6,
+      min: 0,
+      sec: 30,
     },
   },
   {
