@@ -8,7 +8,7 @@ export default [
       mode: 't1',
       reps: 0,
       min: 1,
-      sec: 0,
+      sec: 30,
     },
   },
   {
@@ -20,7 +20,7 @@ export default [
       mode: 't2',
       reps: 8,
       min: 0,
-      sec: 0,
+      sec: 30,
     },
   },
 ];

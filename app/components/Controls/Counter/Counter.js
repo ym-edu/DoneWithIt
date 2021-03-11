@@ -3,8 +3,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { RepsSet, RepsTarget, TimeSet, TimeTarget } from './';
 
 export function Counter({
-  // display: { reps, repsCount, time, timeCount },
-  display,
+  display: { reps, repsCount, time, timeCount },
   mode,
   exFinished,
   onPress,
@@ -16,9 +15,9 @@ export function Counter({
       case 'r2':
         // return <RepsTarget count={repsCount} reps={reps}/>;
       case 't1':
-        return <TimeSet count={display}/>;
+        return <TimeSet count={timeCount}/>;
       case 't2':
-        return <TimeTarget count={display} time={'00:00'}/>;
+        return <TimeTarget count={timeCount} time={time}/>;
     }
   }
 

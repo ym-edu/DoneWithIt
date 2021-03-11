@@ -1,95 +1,69 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Previous, Next, Reset, Counter } from './';
-import { formatTime, milToMin, milToSec } from '../../temp/utils';
+import { formatTime, milToMin, milToSec, minToMil, secToMil } from '../../temp/utils';
 
-function Controls({
-  session,
-  workout,
-  // handleCount,
-  // exercise: {data, id},
-  // workoutBounds: { woStarting, woEnding },
-  // handlers: { handlePrev, handleNext, handleCount },
-}) {
-  const [currentExercise, setCurrentExercise] = useState(workout[0]);
-  const { id } = currentExercise;
+function Controls({state, workout}) {
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< INIT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const [exercise, setExercise] = useState(workout[0]);
+const { id } = exercise;
 
-  // const currentSession = session.current[id-1]
+  const session = state.current[id-1]
   
   const woStarting = id === 1;
   const woEnding = id === workout.length;
-  // const workoutBounds = { woStarting, woEnding };
   
   const handlePrev = () => {
-    const prevExercise = workout[id-2]
-    setCurrentExercise(prevExercise)
+    const prev = workout[id-2]
+    setExercise(prev)
   }
   const handleNext = () => {
-    const nextExercise = workout[id]
-    setCurrentExercise(nextExercise)
+    const next = workout[id]
+    setExercise(next)
   }
   function handleCount(key, value, {calc, toggle}) {
-    const temp = [...session.current];
+    const temp = [...state.current];
     if(calc || toggle) {
       const self = temp[id-1][key]
       temp[id-1][key] = calc ? self + value : !self
-      return session.current = temp
+      return state.current = temp
     }
     temp[id-1][key] = value
-    return session.current = temp
+    return state.current = temp
   }
-  
-  // console.log(currentExercise.data.mode)
-  
-  
-  
-  
-  
-  
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< INIT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< COUNT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   const [clicked, setClicked] = useState(false)
 
-  function handlePause() {
-    // console.log(session.isPaused)
-
-    const self = {toggle: true}
-    handleCount('isPaused', null, self)
-    console.log(session.current[id-1].isPaused)
+  function handlePress() {
+    handleCount('isPaused', null, {toggle: true})
     setClicked(!clicked)
   }
 
-
-
-  const [display, setDisplay] = useState({
-    timeCount: session.current[id-1].count,
-    time: formatTime(currentExercise.data.min,currentExercise.data.sec)
-  })
-  // console.log((session.current[id-1].isPaused || currentExercise.data.mode != 't2'))
+  const [count, setCount] = useState(session.count)
+  const target = formatTime(exercise.data.min,exercise.data.sec)
 
   useEffect(() => {
-    setDisplay(session.current[id-1].count)
+    setCount(session.count)
+    const mil = minToMil(exercise.data.min) + secToMil(exercise.data.sec)
 
-    console.log(session.current[id-1].isPaused)
-    if(session.current[id-1].isPaused) return;
-    console.log('in')
+    if(session.isPaused) return;
     const interval = setInterval(() => {
-      // if(session.current[id-1].timeLeft === 0) return
+      if(session.time === 0 && exercise.data.mode === 't1') return
+      else if(session.time === mil && exercise.data.mode === 't2') return
+      const value = exercise.data.mode === 't1' ? -1000 : 1000
+      handleCount('time', value, { calc: true })
 
-      handleCount('timeLeft', -1000, { calc: true })
-
-      const min = milToMin(session.current[id-1].timeLeft)
-      const sec = milToSec(session.current[id-1].timeLeft)
+      const min = milToMin(session.time)
+      const sec = milToSec(session.time)
       handleCount('count', formatTime(Math.abs(min), Math.abs(sec)), {})
 
-      // console.log(session.current[id-1].count)
-      setDisplay(session.current[id-1].count)
+      setCount(session.count)
     }, 1000);
     return () => clearInterval(interval);
   },[clicked, id])
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<< DisplayData >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  // const display = {
-  //   timeCount: session.current[id-1].count,
-  // }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<< DisplayData >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< COUNT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 // ========================================================================
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< RETURN >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -99,30 +73,22 @@ function Controls({
       <View style={styles.controls}>
         <Previous onPress={handlePrev} woStarting={woStarting}/>
 
-        <Counter mode={currentExercise.data.mode}
-        // display={session.current[id-1].count}
-        display={display}
+        <Counter mode={exercise.data.mode}
+        display={{timeCount: count, time: target}}
         exFinished={false}
-        onPress={() => null}/>
+        onPress={()=>handlePress()}/>
 
         <Next onPress={handleNext} woEnding={woEnding}/>
       </View>
-
-
-
-
-
-
-
+{/* ---------------------------------------------------------------------- */}
       {/* handleReset */}
-      {/* <Reset onPress={selector(data).reset} exStarting={starting}/> */}
-      <Reset onPress={()=>handlePause()} exStarting={false}/>
+      <Reset onPress={()=>null} exStarting={false}/>
 
       {/* Log data object */}
-      {/* <Reset onPress={() => console.log('DATA ID:', id , '|', data, session[id-1])} exStarting={false}/> */}
+      <Reset onPress={() => console.log(session)} exStarting={false}/>
 
       {/* Log state array */}
-      <Reset onPress={() => console.log(session.current[id-1])} exStarting={false}/>
+      <Reset onPress={() => console.log(state)} exStarting={false}/>
     </View>
   );
 }
