@@ -17,7 +17,6 @@ function Train() {
     state.current = initialState
   }
 
-
   return (
     <View style={styles.screen}>
       <Controls

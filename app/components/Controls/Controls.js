@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
+import Video from '../../temp/Video' //VIDEO
 import { Previous, Next, Reset, Counter } from './';
-import { formatTime, milToMin, milToSec, getMil } from '../../temp/utils';
+import { formatTime, milToMin, milToSec, getMil, initializeTime } from '../../temp/utils';
 
-function Controls({state, workout}) {
+function Controls({state, workout, currentExercise}) {
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< INIT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const [exercise, setExercise] = useState(workout[0]);
 const { id } = exercise;
@@ -31,11 +32,20 @@ const { id } = exercise;
     temp[id-1][key] = value
     return state.current = temp
   }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< INIT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< COUNT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< INIT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  
+  // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< COUNT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   const [clicked, setClicked] = useState(false)
 
+  function handleCount2(obj) {
+    const temp = [...state.current];
+    const target = temp[id-1]
+    const source = obj
+    const returnedTarget = Object.assign(target, source)
+    console.log(returnedTarget.time)
+    setClicked(!clicked)
+  }
+  
   function handlePress() {
     handleCount('isPaused', null, {toggle: true})
     setClicked(!clicked)
@@ -66,11 +76,22 @@ const { id } = exercise;
   },[clicked, id])
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< COUNT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< RESET >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  function handleReset() {
+    const reset = initializeTime(exercise)
+    handleCount2(reset)
+  }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< RESET >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
 // ========================================================================
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< RETURN >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // ========================================================================
   return (
     <View style={styles.container}>
+      <Video item={exercise}/>
+      {/* //VIDEO */}
+
       <View style={styles.controls}>
         <Previous onPress={handlePrev} woStarting={woStarting}/>
 
@@ -83,7 +104,7 @@ const { id } = exercise;
       </View>
 {/* ---------------------------------------------------------------------- */}
       {/* handleReset */}
-      <Reset onPress={()=>null} exStarting={false}/>
+      <Reset onPress={()=> handleReset()} exStarting={false}/>
 
       {/* Log data object */}
       <Reset onPress={() => console.log(session)} exStarting={false}/>
@@ -99,11 +120,12 @@ const styles = StyleSheet.create({
     flex: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
+    // paddingVertical: 16, //VIDEO
   },
   controls: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingVertical: 16, //VIDEO
   }
 })
 

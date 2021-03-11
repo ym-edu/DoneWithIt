@@ -1,4 +1,5 @@
 export { default as formatTime } from './formatTime';
+export { default as initializeTime } from './initializeTime';
 // export { default as minToMil } from './minToMil';
 // export { default as secToMil } from './secToMil';
 export { default as milToMin } from './milToMin';
