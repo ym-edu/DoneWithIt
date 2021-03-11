@@ -4,7 +4,7 @@ import Video from '../../temp/Video' //VIDEO
 import { Previous, Next, Reset, Counter } from './';
 import { formatTime, milToMin, milToSec, getMil, initializeTime } from '../../temp/utils';
 
-function Controls({state, workout, currentExercise}) {
+function Controls({state, workout}) {
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< INIT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const [exercise, setExercise] = useState(workout[0]);
 const { id } = exercise;
@@ -39,10 +39,7 @@ const { id } = exercise;
 
   function handleCount2(obj) {
     const temp = [...state.current];
-    const target = temp[id-1]
-    const source = obj
-    const returnedTarget = Object.assign(target, source)
-    console.log(returnedTarget.time)
+    Object.assign(temp[id-1], obj)
     setClicked(!clicked)
   }
   
