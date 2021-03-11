@@ -7,5 +7,5 @@ function secToMil(sec) {
 }
 
 export default function getMil(min, sec) {
-  minToMil(min) + secToMil(sec)
+  return minToMil(min) + secToMil(sec)
 }

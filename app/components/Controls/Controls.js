@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Previous, Next, Reset, Counter } from './';
-import { formatTime, milToMin, milToSec, minToMil, secToMil } from '../../temp/utils';
+import { formatTime, milToMin, milToSec, getMil } from '../../temp/utils';
 
 function Controls({state, workout}) {
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< INIT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -46,12 +46,13 @@ const { id } = exercise;
 
   useEffect(() => {
     setCount(session.count)
-    const mil = minToMil(exercise.data.min) + secToMil(exercise.data.sec)
+    const mil = getMil(exercise.data.min, exercise.data.sec)
 
     if(session.isPaused) return;
     const interval = setInterval(() => {
       if(session.time === 0 && exercise.data.mode === 't1') return
       else if(session.time === mil && exercise.data.mode === 't2') return
+
       const value = exercise.data.mode === 't1' ? -1000 : 1000
       handleCount('time', value, { calc: true })
 

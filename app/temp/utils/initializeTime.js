@@ -1,8 +1,8 @@
-import { formatTime, minToMil, secToMil } from './'
+import { formatTime, getMil } from './'
 
 export default function initialize(exercise) {
   const { data: {mode, min, sec} } = exercise
-  const mil = minToMil(min) + secToMil(sec)
+  const mil = getMil(min, sec)
   return (
     exercise.session = {
       isStarting: true,
