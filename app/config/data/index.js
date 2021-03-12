@@ -1,1 +1,2 @@
-export { default as exercises } from './exercises';
+import workout from './workout';
+export default workout;
