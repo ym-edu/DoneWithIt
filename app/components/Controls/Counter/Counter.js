@@ -11,9 +11,9 @@ export function Counter({
   function Select() {
     switch(mode) {
       case 'r1':
-        // return <RepsSet count={repsCount}/>;
+        return <RepsSet count={repsCount}/>;
       case 'r2':
-        // return <RepsTarget count={repsCount} reps={reps}/>;
+        return <RepsTarget count={repsCount} reps={reps}/>;
       case 't1':
         return <TimeSet count={timeCount}/>;
       case 't2':

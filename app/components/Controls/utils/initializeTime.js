@@ -1,6 +1,6 @@
 import { formatTime, getMil } from './'
 
-export default function initialize(exercise) {
+export default function initializeTime(exercise) {
   const { data: {mode, min, sec} } = exercise
   const mil = getMil(min, sec)
   return (

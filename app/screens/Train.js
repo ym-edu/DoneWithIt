@@ -3,11 +3,21 @@ import { StyleSheet, View } from 'react-native';
 import Controls from '../components/Controls/Controls';
 
 import { workout } from '../config'
-import initialize from '../temp/utils/initializeTime';
+import { initializeReps, initializeTime } from '../components/Controls/utils';
 
 function Train() {
   workout.forEach(exercise => {
-    return initialize(exercise);
+    const { data:{mode} } = exercise
+    switch(mode) {
+      case 'r1':
+        return initializeReps(exercise);
+      case 'r2':
+        return initializeReps(exercise);
+      case 't1':
+        return initializeTime(exercise);
+      case 't2':
+        return initializeTime(exercise);
+    }
   })
 
   const state = useRef([])
