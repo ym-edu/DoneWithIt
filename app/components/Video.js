@@ -4,21 +4,17 @@ import YoutubePlayer from "react-native-youtube-iframe";
 
 function Video({ item:{ video:{url, start, end} } }) {
   const playerRef = useRef();
-  // const ready = useRef(false) //READY
-  const [ready, setReady] = useState(false) //READY
+  const [ready, setReady] = useState(false)
 
   function onReady() {
-    // ready.current = !ready.current //READY
-    setReady(!ready) // READY
+    setReady(!ready)
   }
 
   const onStateChange = useCallback((state) => {
     if(state === 'ended') {
-      // ready.current = !ready.current //READY
-      setReady(!ready) //READY
+      setReady(!ready)
     }
-  // }, [ready.current]) //READY
-  }, [ready]) //READY
+  }, [ready])
 
   useEffect(() => {
     //TODO: Figure out how to play video (load) and seekTo when loaded; A conditional if possible: if(loaded) seekTo
@@ -26,8 +22,7 @@ function Video({ item:{ video:{url, start, end} } }) {
     setTimeout(() => {
       playerRef.current.seekTo(start+1, true) //After 1s seekTo()
     }, 1300); //300 + compensation to look more seemless
-  // }, [ready.current]) //READY
-  }, [ready]) //READY
+  }, [ready])
 
   return (
     <View style={styles.container}>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Video from '../../temp/Video' //VIDEO
+import Video from '../Video'
 import { Previous, Next, Reset, Counter } from './';
 import { formatTime, milToMin, milToSec, getMil, initializeTime, initializeReps } from './utils';
 
