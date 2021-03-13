@@ -2,42 +2,46 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { StyleSheet, View } from 'react-native'
 import YoutubePlayer from "react-native-youtube-iframe";
 
-function Video({item:{id}}) {
-  const data = {
-    url: "ZfawH9NsTtI",
-    start: 194,
-    end: 199,
+function Video({ item:{ video:{url, start, end} } }) {
+  const playerRef = useRef();
+  // const ready = useRef(false) //READY
+  const [ready, setReady] = useState(false) //READY
+
+  function onReady() {
+    // ready.current = !ready.current //READY
+    setReady(!ready) // READY
   }
 
-  const [play, setPlay] = useState(true)
-  const [change, setChange] = useState(false);
-  const playerRef = useRef()
+  const onStateChange = useCallback((state) => {
+    if(state === 'ended') {
+      // ready.current = !ready.current //READY
+      setReady(!ready) //READY
+    }
+  // }, [ready.current]) //READY
+  }, [ready]) //READY
 
   useEffect(() => {
-    playerRef.current.seekTo(194,true)
-  }, [id, change])
-
-  const onStateChange = useCallback((state) => {
-    setChange(change)
-
-    if (state === "ended") {
-      
-      setChange(!change)
-    }
-  }, []);
+    //TODO: Figure out how to play video (load) and seekTo when loaded; A conditional if possible: if(loaded) seekTo
+    playerRef.current.seekTo(start, true) //Play video
+    setTimeout(() => {
+      playerRef.current.seekTo(start+1, true) //After 1s seekTo()
+    }, 1300); //300 + compensation to look more seemless
+  // }, [ready.current]) //READY
+  }, [ready]) //READY
 
   return (
     <View style={styles.container}>
       <YoutubePlayer
-        videoId={data.url}
+        videoId={url}
         initialPlayerParams={{
-          start: data.start,
-          end: data.end,
+          start: start,
+          end: end,
         }}
         ref={playerRef}
         height={'100%'}
-        play={play}
+        play={true}
         onChangeState={onStateChange}
+        onReady={onReady}
       />
     </View>
   );
