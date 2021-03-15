@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Video from '../Video'
+import Preview from '../Preview'
 import { Previous, Next, Reset, Counter } from './';
 import { formatTime, milToMin, milToSec, getMil, initializeTime, initializeReps } from './utils';
 
@@ -24,6 +25,8 @@ function Controls({state, workout}) {
     const next = workout[id]
     setExercise(next)
   }
+
+  const preview = workout[id]
   
   function handleTimeCount(key, value, {calc, toggle}) {
     const temp = [...state.current];
@@ -163,6 +166,7 @@ function handleRepsReset() {
 
       {/* Log state array */}
       {/* <Reset onPress={() => console.log(state)} exStarting={false}/> */}
+      {preview ? <Preview item={preview}/> : null}
     </View>
   );
 }
