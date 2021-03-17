@@ -1,14 +1,31 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, Image } from 'react-native';
+import { getYoutubeMeta } from 'react-native-youtube-iframe'
 
-function Preview({item}) {
-  return (
-    <View style={styles.container}>
+function Preview({item: {id, video: {url}}}) {
+  const [thumbnail, setThumbnail] = useState(null);
+
+  useEffect(() => {
+    getYoutubeMeta(url).then(data => {
+      setThumbnail(data.thumbnail_url);
+    });
+  }, [id]);
+
+    return (
+      <View style={styles.container}>
       <Text style={styles.text}>Next Exercise</Text>
       <View style={styles.card}>
-        <Text style={styles.text}>
+        {/* <Text style={styles.text}>
           '{item.data.mode}' {item.title}
-        </Text>
+        </Text> */}
+          <View style={{aspectRatio: 16/9, backgroundColor: 'black', height: 72, alignSelf: 'flex-start'}}>
+            <Image style={{aspectRatio: 16/9}}
+              resizeMode={'cover'}
+              source={{
+                uri: thumbnail ? thumbnail : 'https://reactnative.dev/img/tiny_logo.png',
+              }}
+            />
+          </View>
       </View>
     </View>
   );
@@ -16,6 +33,8 @@ function Preview({item}) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    width: '100%',
     // backgroundColor: 'magenta',
     height: 96,
     justifyContent: 'space-between',
@@ -35,6 +54,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
 })
 

@@ -1,16 +1,19 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { useIcon } from '../../layout'
+// import { useIcon } from '../../layout'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 
 function Reset({onPress, exStarting}) {
-  const Icon = useIcon();
+  // const Icon = useIcon();
 
   return (
     <TouchableOpacity style={styles.container}
     onPress={onPress}
     disabled={exStarting}>
-      <Icon name='close' color={exStarting ? '#383B3B' : 'white'}/>
+      <MaterialCommunityIcons name="reload" size={24} color={exStarting ? '#383B3B' : 'white'} />
+      {/* <Icon name='close' color={exStarting ? '#383B3B' : 'white'}/> */}
     </TouchableOpacity>
   );
 }
