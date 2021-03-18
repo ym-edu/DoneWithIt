@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-function Library() {
+function LibraryTab() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Library Screen</Text>
+      <Text>Library Tab</Text>
     </View>
   );
 }
 
-export default Library;
+export default LibraryTab;

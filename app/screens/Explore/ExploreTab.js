@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-function Explore() {
+function ExploreTab() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Explore Screen</Text>
+      <Text>Explore Tab</Text>
     </View>
   );
 }
 
-export default Explore;
+export default ExploreTab;

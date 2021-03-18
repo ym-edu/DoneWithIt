@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-function Log() {
+function LogTab() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Log Screen</Text>
+      <Text>Log Tab</Text>
     </View>
   );
 }
 
-export default Log;
+export default LogTab;
