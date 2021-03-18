@@ -19,9 +19,11 @@ function Video({ item:{ video:{url, start, end} } }) {
   useEffect(() => {
     //TODO: Figure out how to play video (load) and seekTo when loaded; A conditional if possible: if(loaded) seekTo
     playerRef.current.seekTo(start, true) //Play video
-    setTimeout(() => {
+    const load = setTimeout(() => {
       playerRef.current.seekTo(start+1, true) //After 1s seekTo()
     }, 1300); //300 + compensation to look more seemless
+    
+    return () => clearTimeout(load)
   }, [ready])
 
   return (
