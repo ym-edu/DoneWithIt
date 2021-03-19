@@ -1,16 +1,16 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-function Spacer(props) {
+function Spacer({style, ...rest}) {
   return (
-    <View style={styles(props).space}/>
+    <View style={[styles(rest).space, style]}/>
   );
 }
 
 const styles = ({mV, mH}) => StyleSheet.create({
   space: {
-    marginTop: mV,
-    marginRight: mH,
+    paddingTop: mV,
+    paddingRight: mH,
   },
 })
 
