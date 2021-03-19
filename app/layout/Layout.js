@@ -29,7 +29,7 @@ export default function Layout({children}) {
     <IconProvider>
       <SafeAreaView style={styles.screenBar}>
         <StatusBar
-          style={'light'}
+          style={'light'} //TODO: Toggle dark mode through device system settings
           backgroundColor={colors.primaryLighter}
           translucent={false}
         />
@@ -48,6 +48,5 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    backgroundColor: colors.primaryDarker,
   },
 })

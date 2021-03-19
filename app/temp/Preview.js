@@ -22,7 +22,7 @@ function Preview({item: {id, video: {url}}}) {
             <Image style={{aspectRatio: 16/9}}
               resizeMode={'cover'}
               source={{
-                uri: thumbnail ? thumbnail : 'https://reactnative.dev/img/tiny_logo.png',
+                uri: thumbnail ? thumbnail : null,
               }}
             />
           </View>

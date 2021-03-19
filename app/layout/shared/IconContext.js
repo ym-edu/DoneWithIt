@@ -11,7 +11,7 @@ export default function useIcon() {
 }
 
 export function IconProvider({ children }) {
-  function Icon ({ name, size = 16, color = colors.Light, container = false }) {
+  function Icon ({ name, size = 16, color = colors.Light, container = false, style }) {
     const containerSize = size * 2;
 
     const iconStyle = {
@@ -24,7 +24,7 @@ export function IconProvider({ children }) {
     }
 
     return (
-      <View style={iconStyle}>
+      <View style={[iconStyle, style]}>
         <RooIcons name={name} size={size} color={color}/>
       </View>
     )
