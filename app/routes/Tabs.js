@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import { Explore, Library, Log } from '../screens';
@@ -7,11 +7,20 @@ import { useIcon } from '../layout';
 
 const Tab = createMaterialBottomTabNavigator();
 
+const Theme = { //TODO: Toggle dark mode through device system settings
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: '#171818', //Content area
+    primary: '#242626', //Navigation bar
+  }
+}
+
 export default function Tabs() {
   const Icon = useIcon();
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={Theme}>
       <Tab.Navigator
       initialRouteName="Explore"
       backBehavior="none"
@@ -19,7 +28,6 @@ export default function Tabs() {
       labeled={true}
       activeColor={'#FFF'}
       inactiveColor={'#C0C0B87F'}
-      barStyle={{ backgroundColor: '#242626' }}
       >
         <Tab.Screen
         name="Explore"
