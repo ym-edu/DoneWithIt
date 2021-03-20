@@ -5,14 +5,18 @@ import CreateButton from '../../components/CreateButton';
 import Spacer from '../../components/Spacer'
 import data from '../../config/data/workout'
 
-function LibraryTab() {
+function LibraryTab({navigation}) {
   const user = {
     exercises: data
   }
   return (
     <>
       <View style={styles.header}>
-        <WorkoutCard title={'my exercises'} subTitle={user.exercises.length}/>
+        <WorkoutCard
+        title={'my exercises'}
+        subTitle={user.exercises.length}
+        onPress={() => navigation.navigate('Exercises')}
+        />
         <Spacer mV={32}/>
         <CreateButton icon="plus" title="new workout"/>
       </View>

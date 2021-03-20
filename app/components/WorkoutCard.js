@@ -4,13 +4,13 @@ import Media from './Media'
 import Details from './Details'
 import Spacer from './Spacer'
 
-function WorkoutCard({url, title='my workout', subTitle = 0}) {
+function WorkoutCard({url, title='my workout', subTitle = 0, onPress}) {
   function formatSubtitle(data) {
     return `${data} exercises`
   }
 
   return (
-    <TouchableOpacity style={{borderRadius: 8}} onPress={null}>
+    <TouchableOpacity style={{borderRadius: 8}} onPress={onPress}>
       <View style={styles.container}>
         <Media source={url} square={true}/>
         <Spacer mH={8}/>
