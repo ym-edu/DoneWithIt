@@ -11,15 +11,16 @@ function LibraryTab({navigation}) {
   }
   return (
     <>
-      <View style={styles.header}>
+    <View style={styles.header}>
         <WorkoutCard
         title={'my exercises'}
         subTitle={user.exercises.length}
         onPress={() => navigation.navigate('Exercises')}
         />
         <Spacer mV={32}/>
-        <CreateButton icon="plus" title="new workout"/>
-      </View>
+        <CreateButton icon={'plus'} title='create workout'/>
+    </View>
+
       <View style={styles.content}>
       <FlatList
           data={data}
@@ -41,11 +42,9 @@ function LibraryTab({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  text: {
-    color: 'white'
-  },
   header: {
-    // flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-end',
     padding: 16,
     paddingTop: 32,
     borderBottomWidth: 1,

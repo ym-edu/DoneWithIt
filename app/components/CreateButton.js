@@ -2,23 +2,25 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { useIcon } from '../layout'
 import Spacer from '../components/Spacer'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-function CreateButton({icon, title}) {
+function CreateButton({icon, title, style, onPress}) {
   const Icon = useIcon()
 
   return (
-    <View style={styles.container}>
-      <Icon name={icon} container={true} style={{borderRadius: 4}}/>
-      <Spacer mH={8}/>
-      <Text style={styles.title}>{title}</Text>
-    </View>
+    <TouchableOpacity onPress={() => onPress}>
+      <View style={[styles.container, style]}>
+        <Icon name={icon} container={true} style={{borderRadius: 4}}/>
+        <Spacer mH={8}/>
+        <Text style={styles.title}>{title}</Text>
+      </View>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     height: 32, 
-    width: '100%', 
     // backgroundColor: 'cyan',
     flexDirection: 'row', 
     alignItems: 'center',
