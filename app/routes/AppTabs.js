@@ -13,7 +13,7 @@ export default function AppTabs() {
 
   return (
       <Tab.Navigator
-      initialRouteName="Explore"
+      initialRouteName="Library"
       backBehavior="none"
       shifting={true}
       labeled={true}

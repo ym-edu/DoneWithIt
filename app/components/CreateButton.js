@@ -8,7 +8,7 @@ function CreateButton({icon, title, style, onPress}) {
   const Icon = useIcon()
 
   return (
-    <TouchableOpacity onPress={() => onPress}>
+    <TouchableOpacity onPress={onPress}>
       <View style={[styles.container, style]}>
         <Icon name={icon} container={true} style={{borderRadius: 4}}/>
         <Spacer mH={8}/>
