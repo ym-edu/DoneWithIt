@@ -1,11 +1,11 @@
 import React from 'react';
 import Layout from './app/layout';
-import Routes from './app/routes/Tabs';
+import Navigation from './app/routes/Navigation';
 
 export default function App() {
   return (
     <Layout>
-      <Routes/>
+      <Navigation/>
     </Layout>
   );
 }

@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
-import WorkoutCard from '../../components/WorkoutCard'
-import CreateButton from '../../components/CreateButton';
-import Spacer from '../../components/Spacer'
-import data from '../../config/data/workout'
+import WorkoutCard from '../components/WorkoutCard'
+import CreateButton from '../components/CreateButton';
+import Spacer from '../components/Spacer'
+import data from '../config/data/workout'
 
 function LibraryTab({navigation}) {
   const user = {

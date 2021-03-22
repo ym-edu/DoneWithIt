@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Library from '../screens/Library/LibraryTab'
-import Exercises from '../screens/Library/MyExercises'
+import Library from '../screens/LibraryTab';
+import Exercises from '../screens/MyExercises';
 
 const Stack = createStackNavigator();
 
