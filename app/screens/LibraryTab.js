@@ -18,7 +18,9 @@ function LibraryTab({navigation}) {
         onPress={() => navigation.navigate('Exercises')}
         />
         <Spacer mV={32}/>
-        <CreateButton icon={'plus'} title='create workout'/>
+        <CreateButton icon={'plus'} title='create workout' onPress={
+          () => navigation.navigate('Alert')
+        }/>
     </View>
 
       <View style={styles.content}>
