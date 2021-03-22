@@ -2,8 +2,10 @@ import React from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
-import { Explore, Library, Log } from '../screens';
 import { useIcon } from '../layout';
+import { Explore, Log } from '../screens';
+import LibraryStack from './LibraryStack'
+
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -12,7 +14,7 @@ const Theme = { //TODO: Toggle dark mode through device system settings
   colors: {
     ...DefaultTheme.colors,
     background: '#171818', //Content area
-    primary: '#242626', //Navigation bar
+    primary: '#242626', //Navigation bar & Back button :(
   }
 }
 
@@ -57,7 +59,8 @@ export default function Tabs() {
 
         <Tab.Screen
         name="Library"
-        component={Library}
+        // component={Library}
+        children={LibraryStack}
         options={{
           tabBarLabel: 'Library',
           tabBarIcon: ({color}) => (
