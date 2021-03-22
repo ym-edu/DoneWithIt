@@ -13,13 +13,18 @@ export default function RootStack() {
   React.useEffect(() => {
     setTimeout(() => {
       setIsLoading(!isLoading) //Toggles Loading vs AuthStack per render
-      setUser({}) //TODO: Figure out how to set user
+      // setUser({}) //TODO: Figure out how to set user
       // After LogIn || SignUp
     }, 500)
   }, [])
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+    headerMode="none"
+    screenOptions={{
+      animationEnabled: false,
+    }}
+    >
       {isLoading
       ? <Stack.Screen name="Loading" component={Loading} />
       : user
