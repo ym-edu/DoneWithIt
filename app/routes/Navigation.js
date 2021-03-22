@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import AppTabs from './AppTabs';
+// import AppTabs from './AppTabs';
+import AuthStack from './AuthStack'
 
 const Theme = { //TODO: Toggle dark mode through device system settings
   ...DefaultTheme,
@@ -15,7 +16,7 @@ export default function Navigation() {
 
   return (
     <NavigationContainer theme={Theme}>
-      <AppTabs/>
+      <AuthStack/>
     </NavigationContainer>
   );
 }
