@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
-import WorkoutCard from '../../components/WorkoutCard'
-import CreateButton from '../../components/CreateButton';
-import Spacer from '../../components/Spacer'
-import data from '../../config/data/workout'
+import WorkoutCard from '../components/WorkoutCard'
+import CreateButton from '../components/CreateButton';
+import Spacer from '../components/Spacer'
+import data from '../config/data/workout'
 
 function LibraryTab({navigation}) {
   const user = {
@@ -18,7 +18,9 @@ function LibraryTab({navigation}) {
         onPress={() => navigation.navigate('Exercises')}
         />
         <Spacer mV={32}/>
-        <CreateButton icon={'plus'} title='create workout'/>
+        <CreateButton icon={'plus'} title='create workout' onPress={
+          () => navigation.navigate('Alert')
+        }/>
     </View>
 
       <View style={styles.content}>
