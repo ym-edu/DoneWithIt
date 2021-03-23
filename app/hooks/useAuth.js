@@ -12,7 +12,7 @@ export function useAuthUpdate() {
   return useContext(AuthUpdateContext);
 }
 
-export default function AuthProvider({ children, navigation }) {
+export default function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [userToken, setUserToken] = React.useState(null);
 
@@ -38,12 +38,12 @@ export default function AuthProvider({ children, navigation }) {
         setIsLoading(false);
         setUserToken(null);
       },
-      resetPassword: (nav) => Alert.alert(
+      resetPassword: (navigation) => Alert.alert(
         "Simulating Password Reset",
         "//TODO resetPassword( )",
         [{
           text: 'Return to previous screen',
-          onPress: () => nav.pop()
+          onPress: () => navigation.pop()
         }],
         {cancelable: false},
       ),
