@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Alert } from 'react-native';
 
 const AuthContext = React.createContext();
 const AuthUpdateContext = React.createContext();
@@ -11,7 +12,7 @@ export function useAuthUpdate() {
   return useContext(AuthUpdateContext);
 }
 
-export default function AuthProvider({ children }) {
+export default function AuthProvider({ children, navigation }) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [userToken, setUserToken] = React.useState(null);
 
@@ -37,7 +38,15 @@ export default function AuthProvider({ children }) {
         setIsLoading(false);
         setUserToken(null);
       },
-      resetPassword: () => null,
+      resetPassword: (nav) => Alert.alert(
+        "Simulating Password Reset",
+        "//TODO resetPassword( )",
+        [{
+          text: 'Return to previous screen',
+          onPress: () => nav.pop()
+        }],
+        {cancelable: false},
+      ),
     }
   }, []);
 

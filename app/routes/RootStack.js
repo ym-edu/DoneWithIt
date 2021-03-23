@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import AppTabs from './AppTabs';
-import Loading from '../screens/Loading';
+import Splash from '../screens/Splash';
 import AuthStack from './AuthStack';
 import Modal from '../screens/Modal';
 import Alert from '../screens/Alert';
@@ -17,7 +17,7 @@ export default function RootStack() {
 
   React.useEffect(() => {
     setTimeout(() => {
-      setAuth.load() //Toggles Loading per render
+      setAuth.load()
     }, 3000)
   }, [])
 
@@ -30,7 +30,7 @@ export default function RootStack() {
     >
       {
       auth.loading
-      ? <Stack.Screen name="Loading" component={Loading} />
+      ? <Stack.Screen name="Splash" component={Splash} />
       : auth.user
         ? <Stack.Screen name="AppTabs" component={AppTabs} />
         : <Stack.Screen name="AuthStack" component={AuthStack} />
