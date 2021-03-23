@@ -1,23 +1,24 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+
 import AppTabs from './AppTabs';
 import Loading from '../screens/Loading';
 import AuthStack from './AuthStack';
 import Modal from '../screens/Modal';
 import Alert from '../screens/Alert';
 
+import { useAuth, useAuthUpdate } from '../hooks/useAuth';
+
 const Stack = createStackNavigator();
 
 export default function RootStack() {
-  const [isLoading, setIsLoading] = React.useState(true)
-  const [user, setUser] = React.useState(null);
+  const auth = useAuth();
+  const setAuth = useAuthUpdate();
 
   React.useEffect(() => {
     setTimeout(() => {
-      setIsLoading(!isLoading) //Toggles Loading vs AuthStack per render
-      setUser({}) //TODO: Figure out how to set user
-      // After LogIn || SignUp
-    }, 500)
+      setAuth.load() //Toggles Loading per render
+    }, 3000)
   }, [])
 
   return (
@@ -28,9 +29,9 @@ export default function RootStack() {
     }}
     >
       {
-      isLoading
+      auth.loading
       ? <Stack.Screen name="Loading" component={Loading} />
-      : user
+      : auth.user
         ? <Stack.Screen name="AppTabs" component={AppTabs} />
         : <Stack.Screen name="AuthStack" component={AuthStack} />
       }
