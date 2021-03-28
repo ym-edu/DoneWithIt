@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "664851097747",
+    "project_id": "rt-test1-dev",
+    "storage_bucket": "rt-test1-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664851097747:android:b8d9eec727ec892d330566",
+        "android_client_info": {
+          "package_name": "rt.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664851097747-2uatod2epu6tkvgksfkknhictqdp6t8h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHdcf10XwWfVQzudYI5FMaZJ7Bb3t2760"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664851097747-2uatod2epu6tkvgksfkknhictqdp6t8h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
