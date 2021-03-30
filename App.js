@@ -1,24 +1,53 @@
 import React from 'react';
 import Layout from './app/layout';
 import Navigation from './app/routes/Navigation';
-import admob, { MaxAdContentRating } from '@react-native-firebase/admob';
+import admob, {
+  MaxAdContentRating,
+  AdsConsent,
+  AdsConsentDebugGeography,
+  AdsConsentStatus,
+} from '@react-native-firebase/admob';
+
+// ============================================================================
+async function requestConsent() {
+  //For physical device use a VPN to set Geography
+  await AdsConsent.setDebugGeography(AdsConsentDebugGeography.EEA); //For AVD
+
+  const consentInfo = await AdsConsent.requestInfoUpdate(['pub-2742026173933447']);
+  console.log(consentInfo) //TESTING
+  if (
+    consentInfo.isRequestLocationInEeaOrUnknown &&
+    consentInfo.status === AdsConsentStatus.UNKNOWN
+  ) {
+    const formResult = await AdsConsent.showForm({
+      privacyPolicy: 'https://invertase.io/privacy-policy',
+      withPersonalizedAds: true,
+      withNonPersonalizedAds: true,
+      withAdFree: true,
+    });
+    
+    if (formResult.userPrefersAdFree) {
+      // Handle the users request, e.g. redirect to a paid for version of the app
+    }
+    
+    // The user requested non-personalized or personalized ads
+    const status = formResult.status;
+  }
+
+}
+// ============================================================================
 
 export default function App() {
   React.useEffect(() => {
+  requestConsent()
+
   admob()
     .setRequestConfiguration({
-      // Update all future requests suitable for parental guidance
       maxAdContentRating: MaxAdContentRating.PG,
-  
-      // Indicates that you want your content treated as child-directed for purposes of COPPA.
       tagForChildDirectedTreatment: true,
-  
-      // Indicates that you want the ad request to be handled in a
-      // manner suitable for users under the age of consent.
       tagForUnderAgeOfConsent: true,
     })
     .then(() => {
-      // Request config successfully set!
     });
   }, [])
   
