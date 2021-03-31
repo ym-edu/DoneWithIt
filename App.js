@@ -7,6 +7,7 @@ import admob, {
   AdsConsentDebugGeography,
   AdsConsentStatus,
 } from '@react-native-firebase/admob';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 // ============================================================================
 async function requestConsent() {
@@ -39,7 +40,9 @@ async function requestConsent() {
 
 export default function App() {
   React.useEffect(() => {
-  requestConsent()
+  crashlytics().log('App mounted.');
+
+  requestConsent();
 
   admob()
     .setRequestConfiguration({

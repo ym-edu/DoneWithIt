@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from 'react-native';
 import analytics from '@react-native-firebase/analytics';
 import { InterstitialAd, TestIds, AdEventType } from '@react-native-firebase/admob';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 import { useAuthUpdate } from '../hooks/useAuth'
 
@@ -19,6 +20,8 @@ function LogIn({ navigation }) {
   const [loaded, setLoaded] = React.useState(false);
 
   React.useEffect(() => {
+    crashlytics().log('LogIn mounted.');
+    
     const eventListener = interstitial.onAdEvent(type => {
       if (type === AdEventType.LOADED) {
         setLoaded(true);
@@ -55,6 +58,7 @@ function LogIn({ navigation }) {
           })
         }
       />
+      <Button title="Test Crash" onPress={() => crashlytics().crash()} />
     </>
   );
 }
