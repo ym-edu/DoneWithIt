@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "DoneWithIt.app"
+               BuildableName = "ios.app"
                BlueprintName = "DoneWithIt"
                ReferencedContainer = "container:DoneWithIt.xcodeproj">
             </BuildableReference>
@@ -55,11 +55,25 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "DoneWithIt.app"
+            BuildableName = "ios.app"
             BlueprintName = "DoneWithIt"
             ReferencedContainer = "container:DoneWithIt.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "-FIRAnalyticsDebugEnabled"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-FIRDebugDisabled"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-FIRDebugEnabled"
+            isEnabled = "NO">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -72,7 +86,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "DoneWithIt.app"
+            BuildableName = "ios.app"
             BlueprintName = "DoneWithIt"
             ReferencedContainer = "container:DoneWithIt.xcodeproj">
          </BuildableReference>
