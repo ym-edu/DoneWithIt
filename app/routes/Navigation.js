@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import RootStack from './RootStack';
 import AuthProvider from '../hooks/useAuth';
+import analytics from '@react-native-firebase/analytics';
 
 const Theme = { //TODO: Toggle dark mode through device system settings
   ...DefaultTheme,
@@ -13,8 +14,28 @@ const Theme = { //TODO: Toggle dark mode through device system settings
 }
 
 export default function Navigation() {
+  const navigationRef = React.useRef();
+  const routeNameRef = React.useRef();
+
   return (
-    <NavigationContainer theme={Theme}>
+    <NavigationContainer
+    theme={Theme}
+    ref={navigationRef}
+    onReady={() =>
+      (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
+    }
+    onStateChange={async () => {
+      const previousRouteName = routeNameRef.current
+      const currentRouteName = navigationRef.current.getCurrentRoute().name
+
+      if(previousRouteName !== currentRouteName) {
+        await analytics().logScreenView({
+          screen_name: currentRouteName,
+          screen_class: currentRouteName,
+        })
+      }
+    }}
+    >
       <AuthProvider>
         <RootStack/>
       </AuthProvider>
