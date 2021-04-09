@@ -6,6 +6,7 @@ import Splash from '../screens/Splash';
 import AuthStack from './AuthStack';
 import Modal from '../screens/Modal';
 import Alert from '../screens/Alert';
+import CreateWorkout from '../screens/CreateWorkout';
 
 import { useAuth, useAuthUpdate } from '../hooks/useAuth';
 
@@ -44,7 +45,7 @@ export default function RootStack() {
       />
       <Stack.Screen
       name="Alert"
-      component={Alert}
+      component={CreateWorkout}
       options={{
         animationEnabled: false,
         cardStyle: { backgroundColor: '#0000001A' },
