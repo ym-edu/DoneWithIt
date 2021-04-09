@@ -62,7 +62,7 @@ function LogIn({ navigation }) {
           id: doc.id,
           ...doc.data(),
         }))
-        console.log("GET |", userDocs)
+        // console.log("GET |", userDocs)
       })
     }
     readFunc3()
@@ -74,7 +74,7 @@ function LogIn({ navigation }) {
           id: doc.id,
           ...doc.data(),
         }))
-        console.log("SNAPSHOT |", userDocs)
+        // console.log("SNAPSHOT |", userDocs)
       })
     }
 // ############################################################################

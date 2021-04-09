@@ -1,20 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import WorkoutCard from '../components/WorkoutCard'
 import CreateButton from '../components/CreateButton';
 import Spacer from '../components/Spacer'
-import data from '../config/data/workout'
+import firestore from '@react-native-firebase/firestore'
 
 function LibraryTab({navigation}) {
-  const user = {
-    exercises: data
-  }
+  const userId = 'user-1';
+  const [workouts, setWorkouts] = useState('')
+
+  useEffect(() => {
+    const fetchWorkouts = async () => {
+      await firestore().collection("users").doc(userId).collection("workouts")
+      .get()
+      .then(snapshot => {
+        const workoutDocs = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        // console.log(workoutDocs)
+        setWorkouts(workoutDocs)
+      })
+    }
+    fetchWorkouts()
+  }, [])
+
   return (
     <>
     <View style={styles.header}>
         <WorkoutCard
         title={'my exercises'}
-        subTitle={user.exercises.length}
+        // subTitle={user.exercises.length} //TODO: FieldValue.increment(1) per exercise
         onPress={() => navigation.navigate('Exercises')}
         />
         <Spacer mV={32}/>
@@ -25,13 +41,14 @@ function LibraryTab({navigation}) {
 
       <View style={styles.content}>
       <FlatList
-          data={data}
+          data={workouts}
           keyExtractor={data => data.id.toString()}
           renderItem={({item}) => (
             <WorkoutCard
-            url={item.video.url}
-            title={item.title}
-            subTitle={item.data.reps}/>
+            // url={item.video.url} //TODO: cloud function
+            title={item.woName}
+            subTitle={item.exCount}
+            />
           )}
           ItemSeparatorComponent={() => <Spacer mV={8}/>}
           ListFooterComponent={() =>
