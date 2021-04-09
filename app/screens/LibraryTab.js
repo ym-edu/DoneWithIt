@@ -10,10 +10,9 @@ function LibraryTab({navigation}) {
   const [workouts, setWorkouts] = useState('')
 
   useEffect(() => {
-    const fetchWorkouts = async () => {
-      await firestore().collection("users").doc(userId).collection("workouts")
-      .get()
-      .then(snapshot => {
+    const fetchWorkouts = () => {
+      firestore().collection("users").doc(userId).collection("workouts")
+      .onSnapshot(snapshot => {
         const workoutDocs = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
@@ -22,7 +21,9 @@ function LibraryTab({navigation}) {
         setWorkouts(workoutDocs)
       })
     }
-    fetchWorkouts()
+    return () => {
+      fetchWorkouts()
+    }
   }, [])
 
   return (

@@ -2,9 +2,21 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import TextInput from '../components/TextInput'
 import TextButton from '../components/TextButton'
+import firestore from '@react-native-firebase/firestore'
 
 function CreateWorkout({ navigation }) {
+  const userId = 'user-1';
   const [input, setInput] = useState(null)
+
+  const handleSubmit = (title) => {
+    firestore().collection("users").doc(userId).collection("workouts").add({
+      woName: title,
+      woCount: 0,
+    }).then(ref => {
+      console.log("Added doc with ID:", ref.id)
+      navigation.pop()
+    })
+  }
 
   return (
     <>
@@ -16,7 +28,7 @@ function CreateWorkout({ navigation }) {
             <TextButton onPress={() => navigation.pop()}>
               Cancel
             </TextButton>
-            <TextButton onPress={() => navigation.pop()}>
+            <TextButton onPress={() => handleSubmit(input)}>
               Create
             </TextButton>
           </View>
