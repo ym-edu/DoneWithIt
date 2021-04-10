@@ -9,11 +9,19 @@ function CreateWorkout({ navigation }) {
   const [input, setInput] = useState(null)
 
   const handleSubmit = (title) => {
+    const countWorkouts = async () => {
+      const increment = firestore.FieldValue.increment(1)
+      await firestore().collection("users").doc(userId).update({
+        workoutCount: increment,
+      });
+    }
+
     firestore().collection("users").doc(userId).collection("workouts").add({
       woName: title,
       woCount: 0,
     }).then(ref => {
-      console.log("Added doc with ID:", ref.id)
+      // console.log("Added doc with ID:", ref.id)
+      countWorkouts()
       navigation.pop()
     })
   }
