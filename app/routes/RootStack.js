@@ -44,7 +44,7 @@ export default function RootStack() {
       }}
       />
       <Stack.Screen
-      name="Alert"
+      name="CreateWorkout"
       component={CreateWorkout}
       options={{
         animationEnabled: false,

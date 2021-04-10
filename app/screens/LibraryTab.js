@@ -17,10 +17,11 @@ function LibraryTab({navigation}) {
           id: doc.id,
           ...doc.data(),
         }));
-        // console.log(workoutDocs)
+        // console.log(workoutDocs[3].id)
         setWorkouts(workoutDocs)
       })
-    }
+    };
+    fetchWorkouts()
     return () => {
       fetchWorkouts()
     }
@@ -28,25 +29,26 @@ function LibraryTab({navigation}) {
 
   return (
     <>
-    <View style={styles.header}>
-        <WorkoutCard
-        title={'my exercises'}
-        // subTitle={user.exercises.length} //TODO: FieldValue.increment(1) per exercise
-        onPress={() => navigation.navigate('Exercises')}
-        />
-        <Spacer mV={32}/>
-        <CreateButton icon={'plus'} title='create workout' onPress={
-          () => navigation.navigate('Alert')
-        }/>
-    </View>
+      <View style={styles.header}>
+          <WorkoutCard
+          title={'my exercises'}
+          // subTitle={user.exercises.length} //TODO: FieldValue.increment(1) per exercise
+          onPress={() => navigation.navigate('Exercises')}
+          />
+          <Spacer mV={32}/>
+          <CreateButton icon={'plus'} title='create workout' onPress={
+            () => navigation.navigate('CreateWorkout')
+          }/>
+      </View>
 
       <View style={styles.content}>
-      <FlatList
+        <FlatList
           data={workouts}
           keyExtractor={data => data.id.toString()}
           renderItem={({item}) => (
             <WorkoutCard
             // url={item.video.url} //TODO: cloud function
+            onPress={() => navigation.navigate('Workout', {id: item.id, title: item.woName})}
             title={item.woName}
             subTitle={item.exCount}
             />
