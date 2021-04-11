@@ -9,10 +9,13 @@ function Media({ source, square = false }) {
 
   const [thumbnail, setThumbnail] = useState(null);
 
-  useEffect(() => { //TODO: Clean up function
-    getYoutubeMeta(source).then(data => {
-      setThumbnail(data.thumbnail_url);
-    });
+  useEffect(() => {
+    const fetchMedia = async () => {
+      getYoutubeMeta(source).then(data => {
+        setThumbnail(data.thumbnail_url);
+      });
+    }
+    fetchMedia()
   }, []);
 
   function Thumbnail() {
@@ -29,7 +32,9 @@ function Media({ source, square = false }) {
 
   return (
     <View style={square && styles.container}>
-      {source ? <Thumbnail/> : square && <Icon name='media-empty' size={40}/>}
+      {source ? <Thumbnail/>
+      : square ? <Icon name='media-empty' size={40}/>
+        : <Thumbnail/>}
     </View>
   );
 }

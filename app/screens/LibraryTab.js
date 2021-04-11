@@ -7,7 +7,7 @@ import firestore from '@react-native-firebase/firestore'
 
 function LibraryTab({navigation}) {
   const userId = 'user-1';
-  const [workouts, setWorkouts] = useState('')
+  const [workouts, setWorkouts] = useState(null)
 
   useEffect(() => {
     const fetchWorkouts = () => {
