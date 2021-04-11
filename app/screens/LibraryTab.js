@@ -8,6 +8,7 @@ import firestore from '@react-native-firebase/firestore'
 function LibraryTab({navigation}) {
   const userId = 'user-1';
   const [workouts, setWorkouts] = useState(null)
+  const [exerciseCount, setExerciseCount] = useState(null)
 
   useEffect(() => {
     const fetchWorkouts = () => {
@@ -22,8 +23,13 @@ function LibraryTab({navigation}) {
       })
     };
     fetchWorkouts()
+
+    const getExerciseCount = firestore().collection("users").doc(userId).onSnapshot(userDoc => {
+      setExerciseCount(userDoc.data().exerciseCount)
+    })
     return () => {
       fetchWorkouts()
+      getExerciseCount()
     }
   }, [])
 
@@ -32,7 +38,7 @@ function LibraryTab({navigation}) {
       <View style={styles.header}>
           <WorkoutCard
           title={'my exercises'}
-          // subTitle={user.exercises.length} //TODO: FieldValue.increment(1) per exercise
+          subTitle={exerciseCount}
           onPress={() => navigation.navigate('Exercises')}
           />
           <Spacer mV={32}/>

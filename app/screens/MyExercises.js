@@ -32,7 +32,7 @@ function MyExercises({ navigation }) {
           id: doc.id,
           ...doc.data(),
         }));
-        console.log(exerciseDocs)
+        // console.log(exerciseDocs)
         setExercises(exerciseDocs)
       })
     };
