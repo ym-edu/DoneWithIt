@@ -94,7 +94,7 @@ function LogIn({ navigation }) {
   return (
     <>
       <Button title="Log In" onPress={() => {
-        interstitial.show();
+        // interstitial.show();
         logIn()
       }} />
       <Button title="Sign Up" onPress={() => navigation.navigate("SignUp")} />

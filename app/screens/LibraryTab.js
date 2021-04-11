@@ -11,25 +11,34 @@ function LibraryTab({navigation}) {
   const [exerciseCount, setExerciseCount] = useState(null)
 
   useEffect(() => {
+    let unsubscribeFromWorkouts;
+    let unsubscribeFromExerciseCount;
+    
     const fetchWorkouts = () => {
-      firestore().collection("users").doc(userId).collection("workouts")
+      unsubscribeFromWorkouts = firestore().collection("users").doc(userId).collection("workouts")
       .onSnapshot(snapshot => {
         const workoutDocs = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
         }));
-        // console.log(workoutDocs[3].id)
+        // console.log("WorkoutCount", workoutDocs.length)
         setWorkouts(workoutDocs)
       })
     };
     fetchWorkouts()
 
-    const getExerciseCount = firestore().collection("users").doc(userId).onSnapshot(userDoc => {
-      setExerciseCount(userDoc.data().exerciseCount)
-    })
+    const getExerciseCount = () => {
+      unsubscribeFromExerciseCount = firestore().collection("users").doc(userId).onSnapshot(snapshot => {
+        const userDoc = snapshot.data().exerciseCount
+        setExerciseCount(userDoc)
+        // console.log("Count", userDoc)
+      });
+    }
+    getExerciseCount()
+
     return () => {
-      fetchWorkouts()
-      getExerciseCount()
+      unsubscribeFromWorkouts()
+      unsubscribeFromExerciseCount()
     }
   }, [])
 

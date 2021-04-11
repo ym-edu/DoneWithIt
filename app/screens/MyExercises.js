@@ -25,20 +25,23 @@ function MyExercises({ navigation }) {
   }
 
   useEffect(() => {
+    let unsubscribeFromExercises;
+
     const fetchExercises = () => {
-      firestore().collection("users").doc(userId).collection("exercises").orderBy("exName")
+      unsubscribeFromExercises = firestore().collection("users").doc(userId).collection("exercises").orderBy("exName")
       .onSnapshot(snapshot => {
         const exerciseDocs = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
         }));
-        // console.log(exerciseDocs)
+        // console.log("ExerciseCount", exerciseDocs.length)
         setExercises(exerciseDocs)
       })
     };
     fetchExercises()
+
     return () => {
-      fetchExercises()
+      unsubscribeFromExercises()
     }
   }, [])
 

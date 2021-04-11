@@ -27,21 +27,24 @@ function Workout({ navigation, route }) {
   }
 
   useEffect(() => {
+    let unsubscribeFromExercises;
+
     const fetchExercises = () => {
-      firestore().collection("users").doc(userId).collection("exercises")
+      unsubscribeFromExercises = firestore().collection("users").doc(userId).collection("exercises")
       .orderBy(`workouts.${routeData}`)
       .onSnapshot(snapshot => {
         const exerciseDocs = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
         }));
-        console.log(exerciseDocs.length) //TODO: Save state for parent to determine count
+        // console.log(exerciseDocs.length) //TODO: Save state for parent to determine count
         setExercises(exerciseDocs)
       })
     };
     fetchExercises()
+
     return () => {
-      fetchExercises()
+      unsubscribeFromExercises()
     }
   }, [])
   

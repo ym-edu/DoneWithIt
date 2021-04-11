@@ -10,6 +10,7 @@ function Media({ source, square = false }) {
   const [thumbnail, setThumbnail] = useState(null);
 
   useEffect(() => {
+    if(!source) return;
     const fetchMedia = async () => {
       getYoutubeMeta(source).then(data => {
         setThumbnail(data.thumbnail_url);
