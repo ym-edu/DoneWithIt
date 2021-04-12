@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import CreateButton from '../components/CreateButton'
 import Spacer from '../components/Spacer';
@@ -10,6 +10,7 @@ function Workout({ navigation, route }) {
 
   const userId = 'user-1';
   const [exercises, setExercises] = useState(null)
+  const exArray = useRef()
 
   const selectSubtitle = (data) => {
     switch(data.mode) {
@@ -37,8 +38,14 @@ function Workout({ navigation, route }) {
           id: doc.id,
           ...doc.data(),
         }));
-        // console.log(exerciseDocs.length) //TODO: Save state for parent to determine count
+        // console.log(exerciseDocs[0].id) //TODO: Save state for parent to determine count
         setExercises(exerciseDocs)
+        
+        exArray.current = exerciseDocs.map(item => {
+          // console.log(item.id)
+          return item.id
+        });
+        // console.log(exArray.current)
       })
     };
     fetchExercises()
@@ -67,7 +74,7 @@ function Workout({ navigation, route }) {
       {/* <Text style={styles.text}>{routeData}</Text> */}
       <Spacer mV={16}
       style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-      <CreateButton icon={'plus'} title='add exercises' onPress={() => navigation.navigate("Modal")}/>
+      <CreateButton icon={'plus'} title='add exercises' onPress={() => navigation.navigate("Modal", {list: exArray.current, woId: routeData })}/>
       <Spacer mV={16}/>
     </View>
   );
