@@ -16,13 +16,14 @@ function MyExercises({ navigation, route }) {
   const handleAdd = () => {
     const increment = firestore.FieldValue.increment(1)
     // console.log('added')
+    let currentIndex = exerciseCount
     selection.forEach(item => {
       if(exArray.includes(item)) return;
       // console.log(item)
       firestore().collection("users").doc(userId).collection("exercises").doc(item)
       .set({
         workouts: {
-          [currentWorkout]: exerciseCount
+          [currentWorkout]: currentIndex,
         }
       }, { merge: true });
 
@@ -30,6 +31,8 @@ function MyExercises({ navigation, route }) {
       firestore().collection("users").doc(userId).collection("workouts").doc(currentWorkout).update({
         exCount: increment,
       })
+
+      currentIndex += 1;
     })
 
   }
@@ -72,7 +75,7 @@ function MyExercises({ navigation, route }) {
       .onSnapshot(snapshot => {
         const workoutDoc = snapshot.data().exCount
         setExerciseCount(workoutDoc)
-        // console.log("Count", userDoc)
+        // console.log("Count", workoutDoc)
       });
     }
     getExerciseCount()
