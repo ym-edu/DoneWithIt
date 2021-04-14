@@ -6,7 +6,7 @@ import firestore from '@react-native-firebase/firestore'
 import ExerciseCard from '../components/ExerciseCard'
 
 function MyExercises({ navigation }) {
-  const userId = 'user-1';
+  const userId = 'user-';
   const [exercises, setExercises] = useState(null)
 
   const selectSubtitle = (data) => {

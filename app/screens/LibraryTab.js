@@ -6,7 +6,7 @@ import Spacer from '../components/Spacer'
 import firestore from '@react-native-firebase/firestore'
 
 function LibraryTab({navigation}) {
-  const userId = 'user-1';
+  const userId = 'user-';
   const [workouts, setWorkouts] = useState(null)
   const [exerciseCount, setExerciseCount] = useState(null)
 

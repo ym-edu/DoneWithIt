@@ -5,7 +5,7 @@ import TextButton from '../components/TextButton'
 import firestore from '@react-native-firebase/firestore'
 
 function CreateWorkout({ navigation }) {
-  const userId = 'user-1';
+  const userId = 'user-';
   const [input, setInput] = useState(null)
 
   const handleSubmit = (title) => {

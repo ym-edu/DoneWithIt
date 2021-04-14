@@ -8,7 +8,7 @@ import ExerciseCard from '../components/ExerciseCard'
 function Workout({ navigation, route }) {
   const routeData = route.params.id
 
-  const userId = 'user-1';
+  const userId = 'user-';
   const [exercises, setExercises] = useState(null)
   const exArray = useRef()
 

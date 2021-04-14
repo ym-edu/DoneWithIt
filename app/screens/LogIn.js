@@ -43,7 +43,7 @@ function LogIn({ navigation }) {
 // ############################################################################
     // Single Doc | One time call
     const readFunc1 = async () => {
-      const userDoc = await docRef.doc("user-1").get()
+      const userDoc = await docRef.doc("user-").get()
       // console.log(userDoc.data().userName)
       setFunc1(userDoc.data().userName)
     }

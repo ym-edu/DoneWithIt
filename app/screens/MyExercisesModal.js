@@ -7,7 +7,7 @@ import TextButton from '../components/TextButton'
 
 function MyExercises({ navigation, route }) {
   const exArray = route.params.list
-  const userId = 'user-1';
+  const userId = 'user-';
   const currentWorkout = route.params.woId
   const [exercises, setExercises] = useState(null);
   const [selection, setSelection] = useState([]);
