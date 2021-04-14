@@ -50,7 +50,7 @@ function LogIn({ navigation }) {
     readFunc1()
 // ----------------------------------------------------------------------------
     // Single Doc | Real time listener
-    const readFunc2 = docRef.doc("user-2").onSnapshot(userDoc => {
+    const readFunc2 = docRef.doc("user-").onSnapshot(userDoc => {
       // console.log(userDoc.data().userName)
       setFunc2(userDoc.data().userName)
     })
