@@ -6,7 +6,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 // ----------------------------------------------------------------------------
 import { useAuthUpdate } from '../hooks/useAuth'
 // ----------------------------------------------------------------------------
-import firestore from "@react-native-firebase/firestore"
+// import firestore from "@react-native-firebase/firestore"
 
 
 

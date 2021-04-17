@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import CreateButton from '../components/CreateButton'
 import Spacer from '../components/Spacer';
-import firestore from '@react-native-firebase/firestore'
+// import firestore from '@react-native-firebase/firestore'
 import ExerciseCard from '../components/ExerciseCard'
 
 function Workout({ navigation, route }) {

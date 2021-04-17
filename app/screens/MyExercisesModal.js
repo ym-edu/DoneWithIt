@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import Spacer from '../components/Spacer';
-import firestore from '@react-native-firebase/firestore'
+// import firestore from '@react-native-firebase/firestore'
 import ExerciseCard from '../components/ExerciseCard'
 import TextButton from '../components/TextButton'
 

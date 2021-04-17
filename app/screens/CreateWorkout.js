@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import TextInput from '../components/TextInput'
 import TextButton from '../components/TextButton'
-import firestore from '@react-native-firebase/firestore'
+// import firestore from '@react-native-firebase/firestore'
 
 function CreateWorkout({ navigation }) {
   const userId = 'user-';
