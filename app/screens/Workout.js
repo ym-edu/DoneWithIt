@@ -1,60 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Text, FlatList } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, FlatList } from 'react-native';
 import CreateButton from '../components/CreateButton'
 import Spacer from '../components/Spacer';
-// import firestore from '@react-native-firebase/firestore'
 import ExerciseCard from '../components/ExerciseCard'
 
-function Workout({ navigation, route }) {
-  const routeData = route.params.id
-
-  const userId = 'user-';
-  const [exercises, setExercises] = useState(null)
-  const exArray = useRef()
-
-  const selectSubtitle = (data) => {
-    switch(data.mode) {
-      case 'r1':
-      case 'r2':
-        return `${data.reps} reps`;
-      case 't1':
-      case 't2':
-        return (
-          `${data.min === 0 ? '' : `${data.min} min `}${data.sec === 0 ? '' : `${data.sec} sec`}`
-        )
-      default:
-        alert('NAN');
-    }
-  }
-
-  useEffect(() => {
-    let unsubscribeFromExercises;
-
-    const fetchExercises = () => {
-      unsubscribeFromExercises = firestore().collection("users").doc(userId).collection("exercises")
-      .orderBy(`workouts.${routeData}`)
-      .onSnapshot(snapshot => {
-        const exerciseDocs = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        // console.log(exerciseDocs[0].id) //TODO: Save state for parent to determine count
-        setExercises(exerciseDocs)
-        
-        exArray.current = exerciseDocs.map(item => {
-          // console.log(item.id)
-          return item.id
-        });
-        // console.log(exArray.current)
-      })
-    };
-    fetchExercises()
-
-    return () => {
-      unsubscribeFromExercises()
-    }
-  }, [])
-  
+function Workout({ navigation }) {
   return (
     <View style={styles.container}>
       <FlatList style={styles.content}

@@ -1,53 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import WorkoutCard from '../components/WorkoutCard'
 import CreateButton from '../components/CreateButton';
 import Spacer from '../components/Spacer'
-// import firestore from '@react-native-firebase/firestore'
 
 function LibraryTab({navigation}) {
-  const userId = 'user-';
-  const [workouts, setWorkouts] = useState(null)
-  const [exerciseCount, setExerciseCount] = useState(null)
-
-  useEffect(() => {
-    let unsubscribeFromWorkouts;
-    let unsubscribeFromExerciseCount;
-    
-    const fetchWorkouts = () => {
-      unsubscribeFromWorkouts = firestore().collection("users").doc(userId).collection("workouts")
-      .onSnapshot(snapshot => {
-        const workoutDocs = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        // console.log("WorkoutCount", workoutDocs.length)
-        setWorkouts(workoutDocs)
-      })
-    };
-    fetchWorkouts()
-
-    const getExerciseCount = () => {
-      unsubscribeFromExerciseCount = firestore().collection("users").doc(userId).onSnapshot(snapshot => {
-        const userDoc = snapshot.data().exerciseCount
-        setExerciseCount(userDoc)
-        // console.log("Count", userDoc)
-      });
-    }
-    getExerciseCount()
-
-    return () => {
-      unsubscribeFromWorkouts()
-      unsubscribeFromExerciseCount()
-    }
-  }, [])
-
   return (
     <>
       <View style={styles.header}>
           <WorkoutCard
           title={'my exercises'}
-          subTitle={exerciseCount}
           onPress={() => navigation.navigate('Exercises')}
           />
           <Spacer mV={32}/>
@@ -58,7 +20,7 @@ function LibraryTab({navigation}) {
 
       <View style={styles.content}>
         <FlatList
-          data={workouts}
+          data={null}
           keyExtractor={data => data.id.toString()}
           renderItem={({item}) => (
             <WorkoutCard
