@@ -34,10 +34,11 @@ export default function Navigation() {
           screen_class: currentRouteName,
         })
       }
+      // console.log(currentRouteName)
     }}
     >
       <AuthProvider>
-        <RootStack/>
+          <RootStack/>
       </AuthProvider>
     </NavigationContainer>
   );

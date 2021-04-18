@@ -27,7 +27,7 @@ function LogIn({ navigation }) {
 
 
   React.useEffect(() => {
-    crashlytics().log('LogIn mounted.');
+    crashlytics().log('LogIn mounted');
 // ############################################################################
     const eventListener = interstitial.onAdEvent(type => {
       if (type === AdEventType.LOADED) {
@@ -43,10 +43,10 @@ function LogIn({ navigation }) {
     };
   }, []);
 
-  // No advert ready to show yet
-  if (!loaded) {
-    return null;
-  }
+  // No advert ready to show yet //Warning: Causes content to not render when logging out
+  // if (!loaded) {
+  //   return null;
+  // }
 
   return (
     <>
