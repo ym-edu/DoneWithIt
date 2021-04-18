@@ -2,35 +2,19 @@ import React, { useContext } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import { useAuth } from './useAuth';
 
-const FirestoreContext = React.createContext();
-const FirestoreUpdateContext = React.createContext();
+const DBContext = React.createContext();
 
 export function useDB() {
-  return useContext(FirestoreContext);
-}
-
-export function useDBUpdate() {
-  return useContext(FirestoreUpdateContext);
+  return useContext(DBContext);
 }
 
 export default function DBProvider({ children }) {
   const { user } = useAuth()
-
-  const getDB = {
-    userRef: firestore().collection("users").doc(user),
-  }
-
-  const setDB = React.useMemo(() => {
-    return {
-      nothing: () => null,
-    }
-  }, []);
+  const userRef = firestore().collection("users").doc(user)
 
   return (
-    <FirestoreContext.Provider value={getDB}>
-      <FirestoreUpdateContext.Provider value={setDB}>
+    <DBContext.Provider value={userRef}>
         {children}
-      </FirestoreUpdateContext.Provider>
-    </FirestoreContext.Provider>
+    </DBContext.Provider>
   )
 }

@@ -1,15 +1,53 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
-import WorkoutCard from '../components/WorkoutCard'
+import WorkoutCard from '../components/WorkoutCard';
 import CreateButton from '../components/CreateButton';
-import Spacer from '../components/Spacer'
+import Spacer from '../components/Spacer';
+import { useDB } from '../hooks/useDB';
 
 function LibraryTab({navigation}) {
+  const db = useDB();
+  const [workouts, setWorkouts] = useState([]);
+  const [exerciseCount, setExerciseCount] = useState(0);
+  const [workoutCount, setWorkoutCount] = useState(0);
+
+  useEffect(() => {
+    let unsubscribeFromWorkouts;
+    let unsubscribeFromCounts;
+    
+    const fetchWorkouts = () => {
+      unsubscribeFromWorkouts = db.collection("workouts")
+      .onSnapshot(snapshot => {
+        const workoutDocs = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setWorkouts(workoutDocs)
+      });
+    };
+    fetchWorkouts();
+
+    const getCounts = () => {
+      unsubscribeFromCounts = db.onSnapshot(snapshot => {
+        const userDoc = snapshot.data()
+        setExerciseCount(userDoc.parentExerciseCount)
+        setWorkoutCount(userDoc.workoutCount) //TODO: Pass count to CreateWorkout as next workout index (spotify like default naming)
+      });
+    };
+    getCounts();
+
+    return () => {
+      unsubscribeFromWorkouts()
+      unsubscribeFromCounts()
+    };
+  }, []);
+
   return (
     <>
       <View style={styles.header}>
           <WorkoutCard
-          title={'my exercises'}
+          title={'Exercises'}
+          subTitle={exerciseCount}
           onPress={() => navigation.navigate('Exercises')}
           />
           <Spacer mV={32}/>
@@ -20,14 +58,17 @@ function LibraryTab({navigation}) {
 
       <View style={styles.content}>
         <FlatList
-          data={null}
+          data={workouts}
           keyExtractor={data => data.id.toString()}
           renderItem={({item}) => (
             <WorkoutCard
             // url={item.video.url} //TODO: cloud function
-            onPress={() => navigation.navigate('Workout', {id: item.id, title: item.woName})}
-            title={item.woName}
-            subTitle={item.exCount}
+            onPress={
+              // () => navigation.navigate('Workout', {id: item.id, title: item.workoutName})
+              () => null
+            }
+            title={item.workoutName}
+            subTitle={item.parentExerciseCount}
             />
           )}
           ItemSeparatorComponent={() => <Spacer mV={8}/>}
