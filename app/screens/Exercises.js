@@ -4,7 +4,7 @@ import CreateButton from '../components/CreateButton';
 import Spacer from '../components/Spacer';
 import ExerciseList from '../components/ExerciseList';
 
-function MyExercises({ navigation }) {
+function Exercises({ navigation }) {
   return (
     <>
       <ExerciseList/>
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default MyExercises;
+export default Exercises;
