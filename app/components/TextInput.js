@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { constants } from '../config';
-const { colors, sizes } = constants;
+const { colors } = constants;
 
 function Input({ label, getValue, focus }) {
   const inputRef = useRef()

@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { constants } from '../config';
 const { colors } = constants;
 
-function SearchBar({ onPress, placeholder, flat = false }) {
+function SearchBar({ onPress, placeholder, flat = false, focus = true}) {
+  const inputRef = useRef()
+
+  useEffect(() => {
+    if(focus) {
+      inputRef.current.focus()
+    }
+  }, [])
+
   const theme = {
     colors: {
       placeholder: colors.secondaryDarker,
@@ -20,6 +28,7 @@ function SearchBar({ onPress, placeholder, flat = false }) {
     placeholder={placeholder}
     onIconPress={onPress}
     icon={true}
+    ref={inputRef}
     />
   );
 }
