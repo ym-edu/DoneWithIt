@@ -11,7 +11,7 @@ function Exercises({ navigation }) {
       <View style={styles.footer}>
         <Spacer mV={16}
         style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-        <CreateButton icon={'plus'} title='create exercise' onPress={() => navigation.navigate("Modal")}/>
+        <CreateButton icon={'plus'} title='create exercise' onPress={() => navigation.navigate("CreateExercise")}/>
         <Spacer mV={16}/>
       </View>
     </>
