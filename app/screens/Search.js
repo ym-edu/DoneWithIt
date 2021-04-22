@@ -7,7 +7,7 @@ import VideoCard from '../components/VideoCard';
 import { useVideoIdUpdate } from '../hooks/useVideoId'
 
 function Search({ navigation }) {
-  const getVideo = useVideoIdUpdate();
+  const { setVideoId } = useVideoIdUpdate();
   const [searchResults, setSearchResults] = useState([]);
 
   const fetchVideos = async (query) => {
@@ -45,7 +45,7 @@ function Search({ navigation }) {
                 title={item.snippet.title}
                 subtitle={item.snippet.channelTitle}
                 onPress={() => {
-                  getVideo(item.id.videoId)
+                  setVideoId(item.id.videoId)
                   navigation.pop()
                 }}
               />

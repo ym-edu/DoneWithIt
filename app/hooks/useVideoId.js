@@ -11,11 +11,18 @@ export function useVideoIdUpdate() {
 }
 
 export default function VideoIdProvider({ children }) {
-  const [url, setURL] = React.useState('');
+  const [videoId, setVideoId] = React.useState('');
+
+  const setValue = React.useMemo(() => {
+    return {
+      setVideoId: setVideoId,
+      clearVideoIdState: () => setVideoId('')
+    }
+  })
 
   return (
-    <VideoId.Provider value={url}>
-      <VideoIdUpdate.Provider value={setURL}>
+    <VideoId.Provider value={videoId}>
+      <VideoIdUpdate.Provider value={setValue}>
         {children}
       </VideoIdUpdate.Provider>
     </VideoId.Provider>
