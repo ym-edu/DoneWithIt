@@ -1,20 +1,23 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import Spacer from '../components/Spacer';
 import TextButton from '../components/TextButton'
 import { MaterialIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 function CreateExercise({ navigation }) {
+  const [url, setUrl] = useState('');
+
   return (
     <>
       <View style={styles.container}>
         <TouchableOpacity style={styles.url} onPress={() => {
-          navigation.navigate("Search")
+          navigation.navigate("Search", {getVideo: setUrl})
         }}>
             {/* //TEMP: just to navigate to search screen */}
           <MaterialIcons name="search" size={24} color="white" />
         </TouchableOpacity>
+        <Text style={{color: 'white', fontSize: 32}}>Url: {url}</Text>
       </View>
       <View style={styles.footer}>
         <Spacer mV={16}
