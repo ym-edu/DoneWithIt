@@ -4,7 +4,7 @@ import { Searchbar } from 'react-native-paper';
 import { constants } from '../config';
 const { colors } = constants;
 
-function SearchBar({ onPress, placeholder, flat = false, focus = true}) {
+function SearchBar({ onPress, placeholder, fill = true, focus = true, onSubmit}) {
   const inputRef = useRef()
 
   useEffect(() => {
@@ -24,11 +24,17 @@ function SearchBar({ onPress, placeholder, flat = false, focus = true}) {
   return (
     <Searchbar
     theme={theme}
-    style={[styles.searchBar, flat && {backgroundColor: 'transparent'}]}
+    style={[styles.searchBar, !fill && {backgroundColor: 'transparent'}]}
     placeholder={placeholder}
     onIconPress={onPress}
     icon={true}
     ref={inputRef}
+    onSubmitEditing={({ nativeEvent }) => {
+      onSubmit(nativeEvent.text)
+    }}
+    multiline={false} //Not working
+    numberOfLines={1} //Not working
+    blurOnSubmit={false} //TEMP: temporary workaround untill i figure out how to make number of lines work on this component
     />
   );
 }
@@ -36,6 +42,8 @@ function SearchBar({ onPress, placeholder, flat = false, focus = true}) {
 const styles = StyleSheet.create({
   searchBar: {
     flex: 1,
+    // Next two props necessary for preventing searchbox from expanding with longer text
+    height: 32,
     backgroundColor: '#242626',
   },
 })

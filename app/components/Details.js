@@ -4,7 +4,7 @@ import { StyleSheet, View, Text } from 'react-native';
 function Details({title, subTitle}) {
   return (
     <View style={styles.container}>
-      <Text style={styles.primaryText}>{title}</Text>
+      <Text style={styles.primaryText} numberOfLines={2}>{title}</Text>
       <Text style={styles.secondaryText}>{subTitle}</Text>
     </View>
   );
