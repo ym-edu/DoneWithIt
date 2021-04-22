@@ -4,9 +4,10 @@ import SearchBar from '../components/SearchBar';
 import { Ionicons } from '@expo/vector-icons';
 import Spacer from '../components/Spacer';
 import VideoCard from '../components/VideoCard';
+import { useVideoIdUpdate } from '../hooks/useVideoId'
 
-function Search({ navigation, route }) {
-  const {getVideo} = route.params
+function Search({ navigation }) {
+  const getVideo = useVideoIdUpdate();
   const [searchResults, setSearchResults] = useState([]);
 
   const fetchVideos = async (query) => {
