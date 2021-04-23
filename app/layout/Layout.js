@@ -29,7 +29,7 @@ export default function Layout({children}) {
     <IconProvider>
       <SafeAreaView style={styles.screenBar}>
         <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "height" : null}
         style={{flex: 1}}
         >
           <StatusBar
