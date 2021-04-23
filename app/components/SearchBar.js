@@ -34,7 +34,7 @@ function SearchBar({ onPress, placeholder, fill = true, focus = true, onSubmit})
     }}
     multiline={false} //Not working
     numberOfLines={1} //Not working
-    blurOnSubmit={false} //TEMP: temporary workaround untill i figure out how to make number of lines work on this component
+    // blurOnSubmit={false} //TEMP: temporary workaround untill i figure out how to make number of lines work on this component
     />
   );
 }
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   searchBar: {
     flex: 1,
     // Next two props necessary for preventing searchbox from expanding with longer text
-    height: 32,
+    height: 40,
     backgroundColor: '#242626',
   },
 })
