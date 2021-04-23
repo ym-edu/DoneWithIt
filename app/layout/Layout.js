@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { constants } from '../config';
 const { colors } = constants;
@@ -29,7 +29,7 @@ export default function Layout({children}) {
     <IconProvider>
       <SafeAreaView style={styles.screenBar}>
         <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "height" : null}
+        behavior={Platform.OS === "ios" ? "padding" : null}
         style={{flex: 1}}
         >
           <StatusBar
@@ -37,9 +37,7 @@ export default function Layout({children}) {
             backgroundColor={colors.primaryLighter}
             translucent={false}
             />
-          <TouchableWithoutFeedback style={styles.content}>
             {children}
-          </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
       </SafeAreaView>
     </IconProvider>

@@ -2,14 +2,18 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import TextInput from '../components/TextInput'
 import TextButton from '../components/TextButton'
+import Spacer from '../components/Spacer';
 
 function CreateWorkout({ navigation }) {
   return (
     <>
       <View style={styles.container}>
+
         <View style={styles.modal}>
           <Text style={styles.title}>New workout</Text>
+          <Spacer mV={8} />
           <TextInput label={'Title'} focus={true} getValue={null}/>
+          <Spacer mV={16} />
           <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
             <TextButton onPress={() => navigation.pop()}>
               Cancel
@@ -19,6 +23,7 @@ function CreateWorkout({ navigation }) {
             </TextButton>
           </View>
         </View>
+
       </View>
     </>
   );
@@ -31,9 +36,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
   },
   modal: {
-    flex: 1/4,
     padding: 16,
-    // justifyContent: 'space-between',
     backgroundColor: '#242626',
     width: '100%',
     borderRadius: 2,
@@ -47,10 +50,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
-  button: {
-    color: 'white',
-    fontSize: 16,
-  }
 })
 
 export default CreateWorkout;

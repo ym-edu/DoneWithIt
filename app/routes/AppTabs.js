@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import { useIcon } from '../layout';
@@ -19,6 +20,7 @@ export default function AppTabs() {
       labeled={true}
       activeColor={'#FFF'}
       inactiveColor={'#C0C0B87F'}
+      sceneAnimationEnabled={Platform.OS === 'android' ? false : true}
       >
         <Tab.Screen
         name="Explore"
