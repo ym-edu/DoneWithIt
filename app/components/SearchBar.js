@@ -29,9 +29,7 @@ function SearchBar({ onPress, placeholder, fill = true, focus = true, onSubmit})
     onIconPress={onPress}
     icon={true}
     ref={inputRef}
-    onSubmitEditing={({ nativeEvent }) => {
-      onSubmit(nativeEvent.text)
-    }}
+    onSubmitEditing={({ nativeEvent }) => onSubmit(nativeEvent.text)}
     multiline={false} //Not working
     numberOfLines={1} //Not working
     // blurOnSubmit={false} //TEMP: temporary workaround untill i figure out how to make number of lines work on this component
