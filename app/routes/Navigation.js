@@ -3,7 +3,7 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import RootStack from './RootStack';
 import AuthProvider from '../hooks/useAuth';
 import DBProvider from '../hooks/useDB';
-import VideoIdProvider from '../hooks/useVideoId';
+import SearchProvider from '../hooks/useSearch';
 import analytics from '@react-native-firebase/analytics';
 
 const Theme = { //TODO: Toggle dark mode through device system settings
@@ -41,9 +41,9 @@ export default function Navigation() {
     >
       <AuthProvider>
         <DBProvider>
-          <VideoIdProvider>
+          <SearchProvider>
             <RootStack/>
-          </VideoIdProvider>
+          </SearchProvider>
         </DBProvider>
       </AuthProvider>
     </NavigationContainer>

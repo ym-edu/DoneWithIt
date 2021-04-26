@@ -4,11 +4,11 @@ import Spacer from '../components/Spacer';
 import TextButton from '../components/TextButton'
 import { MaterialIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useVideoId, useVideoIdUpdate } from '../hooks/useVideoId'
+import { useSearch, useSearchUpdate } from '../hooks/useSearch'
 
 function CreateExercise({ navigation }) {
-  const videoId = useVideoId();
-  const { clearVideoIdState } = useVideoIdUpdate();
+  const { videoId } = useSearch();
+  const { clearState } = useSearchUpdate();
 
   return (
     <>
@@ -26,7 +26,7 @@ function CreateExercise({ navigation }) {
         style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
         <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between', paddingHorizontal: 32}}>
           <TextButton onPress={() => {
-            clearVideoIdState()
+            clearState()
             navigation.pop()
           }}>
             Cancel
