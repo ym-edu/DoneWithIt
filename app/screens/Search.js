@@ -4,15 +4,15 @@ import SearchBar from '../components/SearchBar';
 import { Ionicons } from '@expo/vector-icons';
 import Spacer from '../components/Spacer';
 import VideoCard from '../components/VideoCard';
-import { useSearch, useSearchUpdate } from '../hooks/useSearch'
+import { useSearch, useSearchUpdate } from '../hooks/useSearch';
 
 function Search({ navigation }) {
-  const { query, searchResults, loading } = useSearch();
-  const { setVideoId, setQuery, fetchVideos, resetResults } = useSearchUpdate();
+  const { searchResults, loading } = useSearch();
+  const { onSubmit, onEndReached, setLoading, setVideoId } = useSearchUpdate();
 
-  const handleEnd = (query) => {
-    fetchVideos(query)
-  }
+  React.useEffect(() => {
+    setLoading(false)
+  }, [searchResults])
 
   return (
     <>
@@ -27,9 +27,7 @@ function Search({ navigation }) {
           fill={false}
           placeholder="Search Youtube"
           onSubmit={(event) => {
-            setQuery(event)
-            resetResults()
-            fetchVideos(event)
+            onSubmit(event)
           }}
           />
           <Spacer mH={32}/>
@@ -41,8 +39,8 @@ function Search({ navigation }) {
             data={searchResults}
             // This helps in case video instances repeat accross multiple pages
             keyExtractor={(item, index) => item.id.videoId + index}
-            onEndReached={() => handleEnd(query)}
-            onEndReachedThreshold={1}
+            onEndReached={() => onEndReached()} //WARNING: If items.length <≈ 2 (amount of items that fit on screen), onEndReached will automatically trigger
+            onEndReachedThreshold={.5}
             renderItem={({ item }) => (
               <VideoCard
                 thumbnail={item.snippet.thumbnails.high.url}

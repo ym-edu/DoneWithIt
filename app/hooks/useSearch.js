@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 const Search = React.createContext();
 const SearchUpdate = React.createContext();
@@ -12,79 +12,79 @@ export function useSearchUpdate() {
 
 export default function SearchProvider({ children }) {
   const [query, setQuery] = React.useState('');
-  const [searchResults, setSearchResults] = React.useState([]);
-  const [videoId, setVideoId] = React.useState('');
-  const [pageToken, setPageToken] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const [searchResults, setSearchResults] = React.useState([]);
+  const [pageToken, setPageToken] = React.useState('');
   const [requestCap, setRequestCap] = React.useState(0);
+  const [videoId, setVideoId] = React.useState('');
 
   const getValue = {
-    videoId: videoId,
     query: query,
-    pageToken: pageToken,
-    searchResults: searchResults,
     loading: loading,
+    searchResults: searchResults,
+    pageToken: pageToken,
     requestCap: requestCap,
+    videoId: videoId,
   }
 
-// ======================================================================================
-
-const fetchVideos = async (query) => {
-  console.log("IN FUNCTION", requestCap)
-
-  if(requestCap >= 2) return
-  
-  console.log("Fetching: ", query)
-
-  setLoading(true)
-
-  const token = `&pageToken=${pageToken}`
-  const url = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${query}&type=video&key=AIzaSyCedwcitDUV0CLExJpuGf269YAzaInjgkA${pageToken && token}`
-
-  console.log("URL", url)
-
-  const response = await fetch(url);
-  const json = await response.json();
-
-  setSearchResults(prevState => {
-    return [...prevState, ...json.items]
-  });
-
-  setRequestCap(prevState => prevState + 1)
-
-
-  if(json.nextPageToken) setPageToken(json.nextPageToken)
-
-
-  console.log('END', json.nextPageToken)
-}
-
-  useEffect(() => {
-    setLoading(false)
-  }, [searchResults])
-
   const setValue = React.useMemo(() => {
-    return {
-      setVideoId: setVideoId,
-      setQuery: setQuery,
-      fetchVideos: (query) => {
-        fetchVideos(query)
+    return ({
+      onSubmit: (query) => {
+        setQuery(query)
+        setRequestCap(0)
+        setPageToken('')
+        setSearchResults([])
+        fetchVideos({query: query, requestCap: 0, pageToken: ''}).then(result => {
+          // console.log("onSubmit: ", result.items)
+          setSearchResults(result.items)
+          setPageToken(result.nextPageToken)
+          setRequestCap(prevState => prevState + 1)
+        })
       },
+      onEndReached: () => {
+        console.log(requestCap)
+        if(requestCap >= 2) return
+        fetchVideos().then(result => {
+          // console.log("onEndReached: ", result.items)
+          setSearchResults(prevState => [...prevState, ...result.items])
+          setPageToken(result.nextPageToken)
+          setRequestCap(prevState => prevState + 1)
+        })
+      },
+      setLoading: setLoading,
+      setVideoId: setVideoId,
       clearState: () => {
         setQuery('')
-        setSearchResults([])
-        setVideoId('')
-        setPageToken('')
         setLoading(false)
-        setRequestCap(0)
-      },
-      resetResults: () => {
-        setSearchResults([])
-        setRequestCap(0)
+        // setSearchResults([])
         setPageToken('')
-      }
-    }
+        // setRequestCap(0)
+        setVideoId('')
+      },
+    })
   })
+  
+// ======================================================================================
+
+  const fetchVideos = async (props) => {
+    setLoading(true)
+    // console.log("QUERY: ",  props ? props.query : query)
+    // console.log("REQUEST CAP", props ? props.requestCap : requestCap)
+    // console.log("PAGE TOKEN", props ? props.pageToken : pageToken)
+    const token = !props ? `&pageToken=${pageToken}` : ''
+    const url = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${props ? props.query : query}&type=video&key=AIzaSyCedwcitDUV0CLExJpuGf269YAzaInjgkA${pageToken && token}`
+    console.log(url)
+
+    const response = await fetch(url);
+
+    const json = await response.json();
+
+    return json
+  }
+
+  // React.useEffect(() => {
+  //   setLoading(false)
+  // }, [searchResults])
 
   return (
     <Search.Provider value={getValue}>
