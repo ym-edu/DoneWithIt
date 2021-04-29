@@ -54,11 +54,6 @@ export default function SearchProvider({ children }) {
       setLoading: setLoading,
       setVideoId: setVideoId,
       clearState: () => {
-        setQuery('')
-        setLoading(false)
-        // setSearchResults([])
-        setPageToken('')
-        // setRequestCap(0)
         setVideoId('')
       },
     })
