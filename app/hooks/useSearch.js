@@ -35,9 +35,9 @@ export default function SearchProvider({ children }) {
         setPageToken('')
         setSearchResults([])
         fetchVideos({query: query, requestCap: 0, pageToken: ''}).then(result => {
-          // console.log("onSubmit: ", result.items)
+          console.log("onSubmit: ", result.nextPageToken)
           setSearchResults(result.items)
-          setPageToken(result.nextPageToken)
+          setPageToken(result.nextPageToken === undefined ? '' : result.nextPageToken)
           setRequestCap(prevState => prevState + 1)
         })
       },
@@ -47,7 +47,7 @@ export default function SearchProvider({ children }) {
         fetchVideos().then(result => {
           // console.log("onEndReached: ", result.items)
           setSearchResults(prevState => [...prevState, ...result.items])
-          setPageToken(result.nextPageToken)
+          setPageToken(result.nextPageToken === undefined ? '' : result.nextPageToken)
           setRequestCap(prevState => prevState + 1)
         })
       },
@@ -63,6 +63,7 @@ export default function SearchProvider({ children }) {
 
   const fetchVideos = async (props) => {
     setLoading(true)
+    console.log(props && 'Have Props')
     // console.log("QUERY: ",  props ? props.query : query)
     // console.log("REQUEST CAP", props ? props.requestCap : requestCap)
     // console.log("PAGE TOKEN", props ? props.pageToken : pageToken)
