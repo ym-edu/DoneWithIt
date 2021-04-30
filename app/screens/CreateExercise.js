@@ -1,42 +1,28 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import Spacer from '../components/Spacer';
 import TextButton from '../components/TextButton'
-import { MaterialIcons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSearch, useSearchUpdate } from '../hooks/useSearch'
+import SetVideo from '../components/SetVideo'
 
 function CreateExercise({ navigation }) {
   const { videoId } = useSearch();
   const { clearState } = useSearchUpdate();
+  // console.log("WTF",videoId && <SetVideo url={videoId}/>) //BUGGY
 
+// onPress={() => navigation.navigate("Search")}
   return (
     <>
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.url} onPress={() => {
-          navigation.navigate("Search")
-        }}>
-            {/* //TEMP: just to navigate to search screen */}
-          <MaterialIcons name="search" size={24} color="white" />
-        </TouchableOpacity>
-        <Text style={{color: 'white', fontSize: 32}}>Url: {videoId}</Text>
-      </View>
+      <SetVideo/>
       <View style={styles.footer}>
-        <Spacer mV={16}
-        style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-        <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between', paddingHorizontal: 32}}>
+        <Spacer mV={16} style={styles.line}/>
+        <View style={styles.buttons}>
           <TextButton onPress={() => {
             clearState()
             navigation.pop()
-          }}>
-            Cancel
+          }}>Cancel
           </TextButton>
-          <TextButton onPress={() => {
-            // handleAdd()
-            navigation.pop()
-          }}>
-            Create
-          </TextButton>
+          <TextButton onPress={() => navigation.pop()}>Create</TextButton>
         </View>
         <Spacer mV={16}/>
       </View>
@@ -57,6 +43,17 @@ const styles = StyleSheet.create({
   url: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  line: {
+    width: '100%',
+    borderTopWidth: 1,
+    borderTopColor: '#383B3B',
+  },
+  buttons: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    paddingHorizontal: 32,
   }
 })
 
