@@ -4,7 +4,7 @@ import { StyleSheet, View, Button, Text } from 'react-native'
 import { ScrollView } from "react-native-gesture-handler";
 import YoutubePlayer from "react-native-youtube-iframe";
 import MultiSlider from '@ptomasroos/react-native-multi-slider'
-import { setEnabled } from "react-native/Libraries/Performance/Systrace";
+import formatTime from '../temp/formatTime'
 
 function Video({url='ZfawH9NsTtI', start, end}) {
   const scrollEnabled = React.useRef(false)
@@ -23,11 +23,15 @@ function Video({url='ZfawH9NsTtI', start, end}) {
   const [endState, setEndState] = useState(duration)
   
   function onReady() {
-    console.log("onReady")
+    setReady(!ready)
   }
   
   
   const onStateChange = useCallback((state) => {
+    console.log(state)
+    if(state === 'ended') {
+      setReady(!ready)
+    }
     //WARNING: without the duration dependancy, BEFORE & AFTER will continue to log duration as 0
     // console.log("BEFORE",duration)
     // if(duration > 0) return
@@ -39,15 +43,27 @@ function Video({url='ZfawH9NsTtI', start, end}) {
       playerRef.current?.getDuration()
       .then(duration => {
         // console.log("Duration", duration)
-        setDuration(duration)
-        setEndState(duration)
+        setDuration(Math.floor(duration))
+        setEndState(Math.floor(duration))
       });
     }
   }, [ready, duration])
 
   useEffect(() => {
-    //TODO: change start at end at | onStateChange?
-  }, [duration])
+    playerRef.current.seekTo(startState, true) //Play video
+    const load = setTimeout(() => {
+      playerRef.current.seekTo(startState+1, true) //After 1s seekTo()
+    }, 1300); //300 + compensation to look more seemless
+    
+    return () => clearTimeout(load)
+  }, [ready])
+
+  const onValuesChange = useCallback((state) => {
+    playerRef.current.seekTo(state[0], true)
+    setStartState(state[0])
+    setEndState(state[1])
+    setReady(!ready)
+  }, [])
 
   return (
     <>
@@ -56,26 +72,29 @@ function Video({url='ZfawH9NsTtI', start, end}) {
         videoId={url}
         initialPlayerParams={{
           start: start,
-          end: end,
+          end: endState,
         }}
         ref={playerRef}
         height={'100%'}
         play={true}
         onChangeState={onStateChange}
         onReady={onReady}
+        loop={true}
       />
     </View>
     <ScrollView style={styles.scroll}
       scrollEnabled={scrollEnabled.current}
       contentContainerStyle={styles.content}
     >
+      <Text style={{color: 'white'}}>{formatTime(startState)}</Text>
       <MultiSlider
       min={0}
       max={duration}
-      enableLabel={true}
       values={[startState, endState]}
-      valuePrefix={'time'}
-      minMarkerOverlapDistance={5}
+      onValuesChange={onValuesChange}
+      // enableLabel={true}
+      // valuePrefix={'time'}
+      minMarkerOverlapDistance={1}
       markerOffsetX={0}
       markerOffsetY={15}
       onValuesChangeStart={() => disableScroll()}
@@ -89,10 +108,14 @@ function Video({url='ZfawH9NsTtI', start, end}) {
       markerStyle={{backgroundColor: 'red'}}
       selectedStyle={{backgroundColor: 'blue'}}
       />
+      <Text style={{color: 'white'}}>{formatTime(endState)}</Text>
+    
       <Button
         title="log details"
         onPress={() => {
-          console.log(duration)
+          console.log("Duration", duration)
+          console.log("startState", startState)
+          console.log("endState", endState)
         }}
       />
     </ScrollView>
