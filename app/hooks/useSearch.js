@@ -16,7 +16,6 @@ export default function SearchProvider({ children }) {
   const [searchResults, setSearchResults] = React.useState([]);
   const [pageToken, setPageToken] = React.useState('');
   const [requestCap, setRequestCap] = React.useState(0);
-  const [videoId, setVideoId] = React.useState('');
 
   const getValue = {
     query: query,
@@ -24,7 +23,6 @@ export default function SearchProvider({ children }) {
     searchResults: searchResults,
     pageToken: pageToken,
     requestCap: requestCap,
-    videoId: videoId,
   }
 
   const setValue = React.useMemo(() => {
@@ -52,10 +50,6 @@ export default function SearchProvider({ children }) {
         })
       },
       setLoading: setLoading,
-      setVideoId: setVideoId,
-      clearState: () => {
-        setVideoId('')
-      },
     })
   })
   
@@ -77,10 +71,6 @@ export default function SearchProvider({ children }) {
 
     return json
   }
-
-  // React.useEffect(() => {
-  //   setLoading(false)
-  // }, [searchResults])
 
   return (
     <Search.Provider value={getValue}>
