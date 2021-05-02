@@ -2,13 +2,12 @@ import React from 'react';
 import { StyleSheet, View, ScrollView, Text} from 'react-native';
 import Spacer from '../components/Spacer';
 import TextButton from '../components/TextButton';
-import { useSearch, useSearchUpdate } from '../hooks/useSearch';
 import { useLoop, useLoopUpdate } from '../hooks/useLoop';
 import SetVideo from '../components/SetVideo'
 
 function CreateExercise({ navigation }) {
   const { videoId } = useLoop()
-  const { clearVideoId } = useLoopUpdate()
+  const { clearLoopState } = useLoopUpdate()
 
   function Footer() {
     return(
@@ -16,7 +15,7 @@ function CreateExercise({ navigation }) {
         <Spacer mV={8} style={styles.line}/>
         <View style={styles.buttons}>
           <TextButton onPress={() => {
-            // clearVideoId()
+            clearLoopState()
             navigation.pop()
           }}>Cancel
           </TextButton>
@@ -34,11 +33,7 @@ function CreateExercise({ navigation }) {
         ? <SetVideo url={videoId}/>
         : <TextButton onPress={() => navigation.navigate("Search")}>Search</TextButton>}
         <ScrollView style={styles.scroll}>
-          {/* <Text style={{fontSize: 100}}>ok</Text>
-          <Text style={{fontSize: 100}}>ok</Text>
-          <Text style={{fontSize: 100}}>ok</Text>
-          <Text style={{fontSize: 100}}>ok</Text>
-          <Text style={{fontSize: 100}}>ok</Text> */}
+          
         </ScrollView>
         <Footer/>
       </View>

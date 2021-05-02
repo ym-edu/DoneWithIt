@@ -1,19 +1,11 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import { View } from 'react-native'
+import React, { useCallback, useEffect } from "react";
+import { Button, View } from 'react-native'
 import YoutubePlayer from "react-native-youtube-iframe";
-import moment from "moment";
-import momentDurationFormatSetup from "moment-duration-format"; //Required
-
-const formatDurationToS = (duration) => moment.duration(duration).format("s", {
-  groupingSeparator: "",
-});
+import { useLoop, useLoopUpdate } from '../hooks/useLoop';
 
 function Video({url}) {
-  const [duration, setDuration] = useState(null);
-
-  const playerRef = useRef();
-  const [start, setStart] = useState(0);
-  const [end, setEnd] = useState(duration);
+  const { playerRef, duration, start, end } = useLoop();
+  const { PTtoSeconds, setInitialParams } = useLoopUpdate();
 
   const fetchVideo = async () => {
     const api = `https://youtube.googleapis.com/youtube/v3/videos?part=contentDetails&id=${url}&key=AIzaSyCedwcitDUV0CLExJpuGf269YAzaInjgkA`
@@ -26,9 +18,8 @@ function Video({url}) {
     console.log('Fetching...')
     fetchVideo().then(result => {
       const PT = result.items[0].contentDetails.duration
-      const duration = parseInt(formatDurationToS(PT), 10)
-      setDuration(duration)
-      setEnd(duration)
+      const videoDuration = parseInt(PTtoSeconds(PT), 10)
+      setInitialParams(videoDuration)
     })
 
     const interval = setInterval(() => {
@@ -52,6 +43,7 @@ function Video({url}) {
   }, [])
 
   return (
+    <>
     <View style={{aspectRatio: 16/9, width: '100%'}}>
       {duration && <YoutubePlayer
       videoId={url}
@@ -61,6 +53,19 @@ function Video({url}) {
       onChangeState={onStateChange}
       />}
     </View>
+      <Button
+        title="log details"
+        onPress={() => {
+          playerRef.current?.getDuration().then(
+            getDuration => {
+              console.log("duration", {getDuration})
+              console.log("end", end)
+              console.log("start", start)
+            }
+          );
+        }}
+      />
+    </>
   );
 }
 
