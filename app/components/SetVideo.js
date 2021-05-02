@@ -12,8 +12,8 @@ function Video({url = 'ZfawH9NsTtI'}) {
   const [duration, setDuration] = useState(null);
 
   const playerRef = useRef();
-  const [start, setStart] = useState(148);
-  const [end, setEnd] = useState(152);
+  const [start, setStart] = useState(0);
+  const [end, setEnd] = useState(duration);
 
   const fetchVideo = async () => {
     const api = `https://youtube.googleapis.com/youtube/v3/videos?part=contentDetails&id=${url}&key=AIzaSyCedwcitDUV0CLExJpuGf269YAzaInjgkA`
@@ -28,13 +28,14 @@ function Video({url = 'ZfawH9NsTtI'}) {
       const PT = result.items[0].contentDetails.duration
       const duration = parseInt(formatDurationToS(PT), 10)
       setDuration(duration)
+      setEnd(duration)
     })
 
     const interval = setInterval(() => {
       playerRef.current?.getCurrentTime()
       .then(currentTime => {
         const time = Math.floor(currentTime)
-        if(time >= end || time < start) {
+        if((time >= end || time < start) && duration > 0) {
           playerRef.current?.seekTo(start, true)
         }
       })
