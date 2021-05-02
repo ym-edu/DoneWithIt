@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import { StyleSheet, Text, View } from 'react-native'
+import { View } from 'react-native'
 import YoutubePlayer from "react-native-youtube-iframe";
 import moment from "moment";
 import momentDurationFormatSetup from "moment-duration-format"; //Required
@@ -8,7 +8,7 @@ const formatDurationToS = (duration) => moment.duration(duration).format("s", {
   groupingSeparator: "",
 });
 
-function Video({url = 'ZfawH9NsTtI'}) {
+function Video({url}) {
   const [duration, setDuration] = useState(null);
 
   const playerRef = useRef();
@@ -39,7 +39,7 @@ function Video({url = 'ZfawH9NsTtI'}) {
           playerRef.current?.seekTo(start, true)
         }
       })
-    }, 200); //WARNING: a low enough value will return [MaxListenersExceededWarning] - e.g. for 100, 11 getCurrentTime listeners added
+    }, 250); //WARNING: a low enough value will return [MaxListenersExceededWarning] - e.g. for 100, 11 getCurrentTime listeners added
 
     return () => clearInterval(interval);
   }, [])
@@ -52,8 +52,7 @@ function Video({url = 'ZfawH9NsTtI'}) {
   }, [])
 
   return (
-    <>
-    <View style={styles.container}>
+    <View style={{aspectRatio: 16/9, width: '100%'}}>
       {duration && <YoutubePlayer
       videoId={url}
       height={'100%'}
@@ -62,30 +61,7 @@ function Video({url = 'ZfawH9NsTtI'}) {
       onChangeState={onStateChange}
       />}
     </View>
-    <View style={{flex: 1}}>
-      <Text style={{color: 'white', alignSelf: 'center'}}>
-        {duration && duration}
-      </Text>
-    </View>
-    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    aspectRatio: 16/9,
-    width: '100%',
-  },
-  text: {
-    color: '#C0C0B87F',
-    textTransform: 'capitalize'
-  },
-  scroll: {
-    flex: 1,
-  },
-  content: {
-    alignItems: 'center'
-  },
-})
 
 export default Video;
