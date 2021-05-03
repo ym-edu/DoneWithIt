@@ -41,7 +41,7 @@ export default function SearchProvider({ children }) {
       },
       onEndReached: () => {
         console.log(requestCap)
-        if(requestCap >= 2) return
+        if(requestCap >= 2 || pageToken === '') return
         fetchVideos().then(result => {
           // console.log("onEndReached: ", result.items)
           setSearchResults(prevState => [...prevState, ...result.items])
