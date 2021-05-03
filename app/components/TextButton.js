@@ -4,7 +4,7 @@ import { Button } from 'react-native-paper';
 
 function TextButton({children, onPress}) {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} style={{flexDirection: 'row', alignSelf: 'center'}}>
       <Button mode={'text'} compact={true} color={'white'}>
         {children}
       </ Button>
