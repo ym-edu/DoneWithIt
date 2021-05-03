@@ -3,10 +3,11 @@ import { StyleSheet, View, ScrollView, Text} from 'react-native';
 import Spacer from '../components/Spacer';
 import TextButton from '../components/TextButton';
 import { useLoop, useLoopUpdate } from '../hooks/useLoop';
-import SetVideo from '../components/SetVideo'
+import SetVideo from '../components/SetVideo';
+import Slider from '../components/Slider';
 
 function CreateExercise({ navigation }) {
-  const { videoId } = useLoop()
+  const { videoId, scrollEnabled } = useLoop()
   const { clearLoopState } = useLoopUpdate()
 
   function Footer() {
@@ -32,8 +33,11 @@ function CreateExercise({ navigation }) {
         {videoId
         ? <SetVideo url={videoId}/>
         : <TextButton onPress={() => navigation.navigate("Search")}>Search</TextButton>}
-        <ScrollView style={styles.scroll}>
-          
+        <ScrollView style={styles.scroll} scrollEnabled={scrollEnabled.current}>
+        {videoId
+        ? <Slider/>
+        : null}
+        {/* <Text style={{fontSize: 100}}>ok</Text> */}
         </ScrollView>
         <Footer/>
       </View>
@@ -57,7 +61,6 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: 'row',
-    width: '100%',
     justifyContent: 'space-between',
     paddingHorizontal: 32,
   },

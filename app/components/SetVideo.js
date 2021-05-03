@@ -4,10 +4,12 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import { useLoop, useLoopUpdate } from '../hooks/useLoop';
 
 function Video({url}) {
-  const { playerRef, duration, start, end } = useLoop();
-  const { PTtoSeconds, setInitialParams } = useLoopUpdate();
+  const { playerRef, duration, values } = useLoop();
+  const { PTtoSeconds, setDuration } = useLoopUpdate();
 
   const fetchVideo = async () => {
+    console.log('Fetching...')
+
     const api = `https://youtube.googleapis.com/youtube/v3/videos?part=contentDetails&id=${url}&key=AIzaSyCedwcitDUV0CLExJpuGf269YAzaInjgkA`
     const response = await fetch(api);
     const json = await response.json();
@@ -15,30 +17,34 @@ function Video({url}) {
   }
 
   useEffect(() => {
-    console.log('Fetching...')
     fetchVideo().then(result => {
       const PT = result.items[0].contentDetails.duration
       const videoDuration = parseInt(PTtoSeconds(PT), 10)
-      setInitialParams(videoDuration)
-    })
+      setDuration(videoDuration)
 
+      console.log("Duration", videoDuration)
+    })
+  }, [])
+
+  useEffect(() => {
     const interval = setInterval(() => {
       playerRef.current?.getCurrentTime()
       .then(currentTime => {
+        // console.log("Values from listener", values) // Only logs when slider has detected changes
         const time = Math.floor(currentTime)
-        if((time >= end || time < start) && duration > 0) {
-          playerRef.current?.seekTo(start, true)
+        if((time < values[0] || time >= values[1]) && duration > 0) {
+          playerRef.current?.seekTo(values[0], true)
         }
       })
-    }, 250); //WARNING: a low enough value will return [MaxListenersExceededWarning] - e.g. for 100, 11 getCurrentTime listeners added
+    }, 500); //WARNING: a low enough value will return [MaxListenersExceededWarning] - e.g. for 100, 11 getCurrentTime listeners added
 
     return () => clearInterval(interval);
-  }, [])
+  }, [values])
 
   const onStateChange = useCallback((state) => {
     if(state === "ended") {
-      console.log(state)
-      playerRef.current?.seekTo(start, true)
+      console.log("Player state", state)
+      playerRef.current?.seekTo(values[0], true)
     }
   }, [])
 
@@ -58,9 +64,8 @@ function Video({url}) {
         onPress={() => {
           playerRef.current?.getDuration().then(
             getDuration => {
-              console.log("duration", {getDuration})
-              console.log("end", end)
-              console.log("start", start)
+              console.log("Duration", {getDuration})
+              console.log("Values", values)
             }
           );
         }}

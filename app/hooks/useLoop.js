@@ -13,40 +13,35 @@ export function useLoopUpdate() {
 }
 
 export default function LoopProvider({children}) {
-  // const url = 'ZfawH9NsTtI'
-  const [videoId, setVideoId] = useState(null)
+  const [videoId, setVideoId] = useState(null);
   const [duration, setDuration] = useState(null);
-  const [start, setStart] = useState(0);
-  const [end, setEnd] = useState(null);
-  const playerRef = useRef()
+
+  const playerRef = useRef();
+  const scrollEnabled = useRef(true);
+
+  const [values, setValues] = useState([]);
   
   const getValue = {
+    values: values,
     duration: duration,
-    start: start,
-    end: end,
     videoId: videoId,
-    playerRef: playerRef
+    playerRef: playerRef,
+    scrollEnabled: scrollEnabled,
   }
 
   const setValue = useMemo(() => {
     return({
-      // setDuration: setDuration,
-      // setStart: setStart,
-      // setEnd: setEnd,
       setVideoId: setVideoId,
       clearLoopState: () => {
         setVideoId('')
-        setEnd(null)
         setDuration(null)
-        setStart(0)
+        setValues([])
       },
-      setInitialParams: (videoDuration) => {
-        setDuration(videoDuration)
-        setEnd(videoDuration)
-      },
+      setDuration: setDuration,
       PTtoSeconds: (duration) => moment.duration(duration).format("s", {
         groupingSeparator: "",
       }),
+      setValues: setValues,
     })
   })
 
