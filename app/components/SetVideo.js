@@ -2,10 +2,11 @@ import React, { useCallback, useEffect } from "react";
 import { Button, View } from 'react-native'
 import YoutubePlayer from "react-native-youtube-iframe";
 import { useLoop, useLoopUpdate } from '../hooks/useLoop';
+import TextButton from '../components/TextButton';
 
-function Video({url}) {
-  const { playerRef, duration, values } = useLoop();
-  const { PTtoSeconds, setDuration, setValues } = useLoopUpdate();
+function Video({url, navigation}) {
+  const { playerRef, duration, values, playing } = useLoop();
+  const { PTtoSeconds, setDuration, setValues, setPlaying } = useLoopUpdate();
 
   const fetchVideo = async () => {
     console.log('Fetching...')
@@ -25,7 +26,7 @@ function Video({url}) {
 
       console.log("Duration", videoDuration)
     })
-  }, [])
+  }, [url])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -49,6 +50,10 @@ function Video({url}) {
     }
   }, [])
 
+  const onReady = useCallback(() => {
+    setPlaying(true)
+  }, [])
+
   return (
     <>
     <View style={{aspectRatio: 16/9, width: '100%'}}>
@@ -56,10 +61,15 @@ function Video({url}) {
       videoId={url}
       height={'100%'}
       ref={playerRef}
-      play={true}
+      play={playing}
       onChangeState={onStateChange}
+      onReady={onReady}
       />}
     </View>
+      <TextButton onPress={() => {
+        navigation.navigate("Search")
+        setPlaying(false)
+      }}>Change Video</TextButton>
       <Button
         title="log details"
         onPress={() => {
@@ -67,6 +77,7 @@ function Video({url}) {
             getDuration => {
               console.log("Duration", {getDuration})
               console.log("Values", values)
+              console.log("Playing", playing)
             }
           );
         }}

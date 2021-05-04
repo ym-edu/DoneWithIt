@@ -31,7 +31,7 @@ function CreateExercise({ navigation }) {
     <>
       <View style={styles.container}>
         {videoId
-        ? <SetVideo url={videoId}/>
+        ? <SetVideo url={videoId} navigation={navigation}/>
         : <TextButton onPress={() => navigation.navigate("Search")}>Search</TextButton>}
         <ScrollView style={styles.scroll} scrollEnabled={scrollEnabled.current}>
         {videoId

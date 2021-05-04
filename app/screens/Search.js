@@ -10,7 +10,7 @@ import { useLoopUpdate } from '../hooks/useLoop';
 function Search({ navigation }) {
   const { searchResults, loading } = useSearch();
   const { onSubmit, onEndReached, setLoading } = useSearchUpdate();
-  const { setVideoId } = useLoopUpdate();
+  const { setVideoId, setPlaying } = useLoopUpdate();
 
   React.useEffect(() => {
     setLoading(false)
@@ -21,7 +21,10 @@ function Search({ navigation }) {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity style={styles.headerIcon}
-          onPress={() => navigation.pop()}
+          onPress={() => {
+            navigation.pop()
+            setPlaying(true)
+          }}
           >
             <Ionicons name="chevron-back" size={32} color="white" />
           </TouchableOpacity>

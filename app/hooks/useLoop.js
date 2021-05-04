@@ -20,6 +20,8 @@ export default function LoopProvider({children}) {
   const scrollEnabled = useRef(true);
 
   const [values, setValues] = useState([]);
+
+  const [playing, setPlaying] = useState(true);
   
   const getValue = {
     values: values,
@@ -27,6 +29,7 @@ export default function LoopProvider({children}) {
     videoId: videoId,
     playerRef: playerRef,
     scrollEnabled: scrollEnabled,
+    playing: playing,
   }
 
   const setValue = useMemo(() => {
@@ -42,6 +45,7 @@ export default function LoopProvider({children}) {
         groupingSeparator: "",
       }),
       setValues: setValues,
+      setPlaying: setPlaying,
     })
   })
 
