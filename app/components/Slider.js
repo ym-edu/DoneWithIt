@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import { useLoop, useLoopUpdate } from '../hooks/useLoop';
+import sizes from '../config/constants/sizes';
+import CustomLabel from '../components/CustomLabel'
 
 function Slider() {
   const { duration, scrollEnabled } = useLoop();
@@ -20,28 +22,64 @@ function Slider() {
     setValues(state)
   }, [])
 
+  const width = sizes.fullWidth - 64
+
+  function MarkerLeft() {
+    return(
+      <View style={[styles.marker, {marginRight: 10}]}>
+        {/* <View style={styles.grip}/> */}
+        {/* <Text style={{alignSelf: 'center'}}>]</Text> */}
+      </View>
+    )
+  }
+
+  function MarkerRight() {
+    return(
+      <View style={[styles.marker, {transform: [{ rotateZ: "180deg" }], marginLeft: 10}]}>
+        {/* <View style={styles.grip}/> */}
+        {/* <Text style={{alignSelf: 'center'}}>]</Text> */}
+      </View>
+    )
+  }
+
   return (
-    <View style={{alignSelf: 'center'}}>
+    <View style={{alignSelf: 'center', paddingTop: 20, marginTop: 16}}>
       {duration && <MultiSlider
       min={0}
       max={duration}
       values={[0, duration]}
-      minMarkerOverlapDistance={1}
-      markerOffsetX={0}
-      markerOffsetY={15}
+      sliderLength={width}
       onValuesChangeStart={disableScroll}
       onValuesChangeFinish={onValuesChangeFinish}
       enabledTwo={true}
-      allowOverlap={false}
-      customMarkerLeft={() => (<View style={{width: 20, height: 20, backgroundColor: 'red'}}/>)}
-      customMarkerRight={() => (<View style={{width: 20, height: 20, backgroundColor: 'yellow'}}/>)}
       isMarkersSeparated={true}
-      trackStyle={{backgroundColor: 'pink'}}
-      markerStyle={{backgroundColor: 'red'}}
-      selectedStyle={{backgroundColor: 'blue'}}
+      customMarkerLeft={() => <MarkerLeft/>}
+      customMarkerRight={() => <MarkerRight/>}
+      selectedStyle={{backgroundColor: '#D03050'}}
+      trackStyle={{backgroundColor: '#242626', height: 4}}
+      markerOffsetY={2}
+      enableLabel={true}
+      customLabel={CustomLabel}
       />}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  marker: {
+    width: 10,
+    height: 20,
+    overflow: 'hidden',
+    borderRadius: 2,
+    backgroundColor: '#f1f1f1' //Comment out to reveal View.grip
+  },
+  grip: {
+    width: '200%',
+    height: '100%',
+    backgroundColor: '#f1f1f1',
+    position: 'absolute',
+    borderRadius: 10,
+  },
+})
 
 export default Slider;

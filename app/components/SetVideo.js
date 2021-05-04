@@ -5,7 +5,7 @@ import { useLoop, useLoopUpdate } from '../hooks/useLoop';
 
 function Video({url}) {
   const { playerRef, duration, values } = useLoop();
-  const { PTtoSeconds, setDuration } = useLoopUpdate();
+  const { PTtoSeconds, setDuration, setValues } = useLoopUpdate();
 
   const fetchVideo = async () => {
     console.log('Fetching...')
@@ -19,8 +19,9 @@ function Video({url}) {
   useEffect(() => {
     fetchVideo().then(result => {
       const PT = result.items[0].contentDetails.duration
-      const videoDuration = parseInt(PTtoSeconds(PT), 10)
+      const videoDuration = parseInt(PTtoSeconds(PT), 10) - 1 // API vs OEmbed differs by 1; This 1 second can prevent video from ever reaching end as slider range will not include the end second.
       setDuration(videoDuration)
+      setValues([0, videoDuration])
 
       console.log("Duration", videoDuration)
     })
