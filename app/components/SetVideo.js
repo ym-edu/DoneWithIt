@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View } from 'react-native'
 import YoutubePlayer from "react-native-youtube-iframe";
 import { useLoop, useLoopUpdate } from '../hooks/useLoop';
@@ -7,6 +7,8 @@ import TextButton from '../components/TextButton';
 function Video({url, navigation}) {
   const { playerRef, duration, values, playing } = useLoop();
   const { PTtoSeconds, setDuration, setValues, setPlaying, setCurrentTime } = useLoopUpdate();
+
+  const [playerReady, setPlayerReady] = useState(false)
   
   const fetchVideo = async () => {
     console.log('Fetching...')
@@ -29,20 +31,24 @@ function Video({url, navigation}) {
   }, [url])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      playerRef.current?.getCurrentTime()
-      .then(currentTime => {
-        // console.log("Values from listener", values) // Only logs when slider has detected changes
-        const time = Math.floor(currentTime)
-        setCurrentTime(time)
-        if((time < values[0] || time >= values[1]) && duration > 0) {
-          playerRef.current?.seekTo(values[0], true)
-        }
-      })
-    }, 200); //WARNING: a low enough value will return [MaxListenersExceededWarning] - e.g. for 100, 11 getCurrentTime listeners added
+    let interval;
+
+    if(playerReady) { //Fixes MaxListenersWarning
+      interval = setInterval(() => {
+        playerRef.current?.getCurrentTime()
+        .then(currentTime => {
+          // console.log("Values from listener", values) // Only logs when slider has detected changes
+          const time = Math.floor(currentTime)
+          setCurrentTime(time)
+          if((time < values[0] || time >= values[1]) && duration > 0) {
+            playerRef.current?.seekTo(values[0], true)
+          }
+        })
+      }, 200); //WARNING: a low enough value will return [MaxListenersExceededWarning] - e.g. for 100, 11 getCurrentTime listeners added
+    }
 
     return () => clearInterval(interval);
-  }, [values])
+  }, [values, playerReady])
 
   const onStateChange = useCallback((state) => {
     if(state === "ended") {
@@ -53,6 +59,7 @@ function Video({url, navigation}) {
 
   const onReady = useCallback(() => {
     setPlaying(true)
+    setPlayerReady(true)
   }, [])
 
   return (
