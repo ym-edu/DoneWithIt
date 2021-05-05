@@ -23,6 +23,8 @@ export default function LoopProvider({children}) {
 
   const [playing, setPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
+
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
   
   const getValue = {
     values: values,
@@ -32,6 +34,7 @@ export default function LoopProvider({children}) {
     scrollEnabled: scrollEnabled,
     playing: playing,
     currentTime: currentTime,
+    keyboardVisible: keyboardVisible,
   }
 
   const setValue = useMemo(() => {
@@ -54,6 +57,7 @@ export default function LoopProvider({children}) {
         const formatedTime = moment.duration(time, "seconds").format("hh:mm:ss").padStart(4, "0:0");
         return formatedTime
       },
+      setKeyboardVisible: setKeyboardVisible,
     })
   })
 

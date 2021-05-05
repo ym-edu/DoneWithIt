@@ -1,19 +1,21 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, Text} from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import Spacer from '../components/Spacer';
 import TextButton from '../components/TextButton';
 import { useLoop, useLoopUpdate } from '../hooks/useLoop';
 import SetVideo from '../components/SetVideo';
 import Slider from '../components/Slider';
+import TextInput from '../components/TextInput';
+import sizes from '../config/constants/sizes';
 
 function CreateExercise({ navigation }) {
-  const { videoId, scrollEnabled } = useLoop()
+  const { videoId, scrollEnabled, keyboardVisible } = useLoop()
   const { clearLoopState } = useLoopUpdate()
 
   function Footer() {
     return(
       <View style={styles.footer}>
-        <Spacer mV={8} style={styles.line}/>
+        <Spacer mV={4} style={styles.line}/>
         <View style={styles.buttons}>
           <TextButton onPress={() => {
             clearLoopState()
@@ -22,7 +24,7 @@ function CreateExercise({ navigation }) {
           </TextButton>
           <TextButton onPress={() => navigation.pop()}>Create</TextButton>
         </View>
-        <Spacer mV={8}/>
+        <Spacer mV={4}/>
       </View>
     )
   }
@@ -32,14 +34,23 @@ function CreateExercise({ navigation }) {
       <View style={styles.container}>
         {videoId
         ? <SetVideo url={videoId} navigation={navigation}/>
-        : <TextButton onPress={() => navigation.navigate("Search")}>Search</TextButton>}
-        <ScrollView style={styles.scroll} scrollEnabled={scrollEnabled.current}>
+        : null}
+        <ScrollView
+         style={styles.scroll}
+         scrollEnabled={scrollEnabled.current}
+         >
         {videoId
         ? <Slider/>
         : null}
         {/* <Text style={{fontSize: 100}}>ok</Text> */}
+        <View style={{paddingHorizontal: 16, marginBottom: 8}}>
+          <TextInput label="Exercise name" focus={false}></TextInput>
+        </View>
+        {videoId
+        ? null
+        : <TextButton onPress={() => navigation.navigate("Search")}>Search</TextButton>}
         </ScrollView>
-        <Footer/>
+        {!keyboardVisible && <Footer/>}
       </View>
       
     </>
@@ -49,6 +60,8 @@ function CreateExercise({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // height: sizes.screenHeight,
+    // width: sizes.screenWidth,
     justifyContent: 'space-between',
   },
   line: {

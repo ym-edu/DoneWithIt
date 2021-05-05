@@ -1,16 +1,39 @@
 import React, { useRef, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Keyboard } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { constants } from '../config';
+import { useLoopUpdate } from '../hooks/useLoop';
 const { colors } = constants;
 
 function Input({ label, getValue, focus }) {
+  const { setKeyboardVisible } = useLoopUpdate();
   const inputRef = useRef()
 
   useEffect(() => {
     if(focus) {
       inputRef.current.focus()
     }
+  }, [])
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        inputRef.current.blur()
+        setKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
   }, [])
 
   const theme = {
@@ -31,7 +54,11 @@ function Input({ label, getValue, focus }) {
       // onChangeText={(input) => getValue(input)} // Value is set everytime user types and is sent on submit
       onChangeText={(input) => null} 
       ref={inputRef}
-    />
+      onFocus={() => setKeyboardVisible(true)}
+      onBlur={() => setKeyboardVisible(false)} //On 'keyboardDidHide' from form Screen's useEffect
+      autoCorrect={false}
+      keyboardType="visible-password"
+      />
   );
 }
 

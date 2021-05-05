@@ -74,7 +74,7 @@ function Video({url, navigation}) {
         onReady={onReady}
         />}
       </View>
-      <TextButton style={{backgroundColor: '#1D1E1E'}}
+      <TextButton style={{backgroundColor: '#1D1E1EDD', position: 'absolute', top: 0, right: 0, padding: 4}}
         onPress={() => {
           navigation.navigate("Search")
           setPlaying(false)
