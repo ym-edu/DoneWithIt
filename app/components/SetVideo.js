@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect } from "react";
-import { Button, View } from 'react-native'
+import { View } from 'react-native'
 import YoutubePlayer from "react-native-youtube-iframe";
 import { useLoop, useLoopUpdate } from '../hooks/useLoop';
 import TextButton from '../components/TextButton';
 
 function Video({url, navigation}) {
   const { playerRef, duration, values, playing } = useLoop();
-  const { PTtoSeconds, setDuration, setValues, setPlaying } = useLoopUpdate();
-
+  const { PTtoSeconds, setDuration, setValues, setPlaying, setCurrentTime } = useLoopUpdate();
+  
   const fetchVideo = async () => {
     console.log('Fetching...')
 
@@ -34,11 +34,12 @@ function Video({url, navigation}) {
       .then(currentTime => {
         // console.log("Values from listener", values) // Only logs when slider has detected changes
         const time = Math.floor(currentTime)
+        setCurrentTime(time)
         if((time < values[0] || time >= values[1]) && duration > 0) {
           playerRef.current?.seekTo(values[0], true)
         }
       })
-    }, 500); //WARNING: a low enough value will return [MaxListenersExceededWarning] - e.g. for 100, 11 getCurrentTime listeners added
+    }, 200); //WARNING: a low enough value will return [MaxListenersExceededWarning] - e.g. for 100, 11 getCurrentTime listeners added
 
     return () => clearInterval(interval);
   }, [values])
@@ -56,32 +57,23 @@ function Video({url, navigation}) {
 
   return (
     <>
-    <View style={{aspectRatio: 16/9, width: '100%'}}>
-      {duration && <YoutubePlayer
-      videoId={url}
-      height={'100%'}
-      ref={playerRef}
-      play={playing}
-      onChangeState={onStateChange}
-      onReady={onReady}
-      />}
-    </View>
-      <TextButton onPress={() => {
-        navigation.navigate("Search")
-        setPlaying(false)
-      }}>Change Video</TextButton>
-      <Button
-        title="log details"
+      <View style={{aspectRatio: 16/9, width: '100%'}}>
+        {duration && <YoutubePlayer
+        videoId={url}
+        height={'100%'}
+        ref={playerRef}
+        play={playing}
+        onChangeState={onStateChange}
+        onReady={onReady}
+        />}
+      </View>
+      <TextButton style={{backgroundColor: '#1D1E1E'}}
         onPress={() => {
-          playerRef.current?.getDuration().then(
-            getDuration => {
-              console.log("Duration", {getDuration})
-              console.log("Values", values)
-              console.log("Playing", playing)
-            }
-          );
-        }}
-      />
+          navigation.navigate("Search")
+          setPlaying(false)
+        }}>
+        Change Video
+      </TextButton>
     </>
   );
 }

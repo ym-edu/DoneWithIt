@@ -22,6 +22,7 @@ export default function LoopProvider({children}) {
   const [values, setValues] = useState([]);
 
   const [playing, setPlaying] = useState(true);
+  const [currentTime, setCurrentTime] = useState(0);
   
   const getValue = {
     values: values,
@@ -30,6 +31,7 @@ export default function LoopProvider({children}) {
     playerRef: playerRef,
     scrollEnabled: scrollEnabled,
     playing: playing,
+    currentTime: currentTime,
   }
 
   const setValue = useMemo(() => {
@@ -39,6 +41,7 @@ export default function LoopProvider({children}) {
         setVideoId('')
         setDuration(null)
         setValues([])
+        setCurrentTime(0)
       },
       setDuration: setDuration,
       PTtoSeconds: (duration) => moment.duration(duration).format("s", {
@@ -46,6 +49,11 @@ export default function LoopProvider({children}) {
       }),
       setValues: setValues,
       setPlaying: setPlaying,
+      setCurrentTime: setCurrentTime,
+      formatSeconds: (time) => {
+        const formatedTime = moment.duration(time, "seconds").format("hh:mm:ss").padStart(4, "0:0");
+        return formatedTime
+      },
     })
   })
 
