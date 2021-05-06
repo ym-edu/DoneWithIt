@@ -38,6 +38,7 @@ function CreateExercise({ navigation }) {
         <ScrollView
          style={styles.scroll}
          scrollEnabled={scrollEnabled.current}
+         alwaysBounceVertical={false}
          >
         {videoId
         ? <Slider/>

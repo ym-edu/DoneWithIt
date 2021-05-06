@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { StyleSheet, Keyboard } from 'react-native';
+import { StyleSheet, Keyboard, Platform } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { constants } from '../config';
 import { useLoopUpdate } from '../hooks/useLoop';
@@ -31,8 +31,8 @@ function Input({ label, getValue, focus }) {
     );
 
     return () => {
-      keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
     };
   }, [])
 
@@ -57,7 +57,7 @@ function Input({ label, getValue, focus }) {
       onFocus={() => setKeyboardVisible(true)}
       onBlur={() => setKeyboardVisible(false)} //On 'keyboardDidHide' from form Screen's useEffect
       autoCorrect={false}
-      keyboardType="visible-password"
+      keyboardType={Platform.OS === 'android' ? "visible-password" : "default"}
       />
   );
 }
