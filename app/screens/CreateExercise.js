@@ -7,6 +7,7 @@ import SetVideo from '../components/SetVideo';
 import Slider from '../components/Slider';
 import TextInput from '../components/TextInput';
 import sizes from '../config/constants/sizes';
+import Grid from '../components/Grid';
 
 function CreateExercise({ navigation }) {
   const { videoId, scrollEnabled, keyboardVisible } = useLoop()
@@ -31,6 +32,7 @@ function CreateExercise({ navigation }) {
 
   return (
     <>
+    
       <View style={styles.container}>
         {videoId
         ? <SetVideo url={videoId} navigation={navigation}/>
@@ -50,6 +52,7 @@ function CreateExercise({ navigation }) {
         {videoId
         ? null
         : <TextButton onPress={() => navigation.navigate("Search")}>Search</TextButton>}
+        <Grid/>
         </ScrollView>
         {!keyboardVisible && <Footer/>}
       </View>
