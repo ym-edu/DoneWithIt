@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { useKeyboard } from '@react-native-community/hooks';
+import { StyleSheet, View, ScrollView, Platform } from 'react-native';
 import Spacer from '../components/Spacer';
 import TextButton from '../components/TextButton';
 import { useLoop, useLoopUpdate } from '../hooks/useLoop';
@@ -10,13 +11,15 @@ import sizes from '../config/constants/sizes';
 import Grid from '../components/Grid';
 
 function CreateExercise({ navigation }) {
-  const { videoId, scrollEnabled, keyboardVisible } = useLoop()
+  const keyboard = useKeyboard()
+  
+  const { videoId, scrollEnabled } = useLoop()
   const { clearLoopState } = useLoopUpdate()
-
+  
   function Footer() {
     return(
       <View style={styles.footer}>
-        <Spacer mV={4} style={styles.line}/>
+        <Spacer mV={2} style={styles.line}/>
         <View style={styles.buttons}>
           <TextButton onPress={() => {
             clearLoopState()
@@ -25,7 +28,6 @@ function CreateExercise({ navigation }) {
           </TextButton>
           <TextButton onPress={() => navigation.pop()}>Create</TextButton>
         </View>
-        <Spacer mV={4}/>
       </View>
     )
   }
@@ -33,12 +35,18 @@ function CreateExercise({ navigation }) {
   return (
     <>
     
-      <View style={styles.container}>
+      <View style={[
+        styles.container,
+        keyboard.keyboardShown
+        ? Platform.OS === 'ios' 
+          ? {height: sizes.screenHeight - keyboard.keyboardHeight - 16}
+          : {height: sizes.windowHeight - keyboard.keyboardHeight - 16}
+        : Platform.OS === 'ios' && {height: '100%'},
+        ]}>
         {videoId
         ? <SetVideo url={videoId} navigation={navigation}/>
         : null}
         <ScrollView
-         style={styles.scroll}
          scrollEnabled={scrollEnabled.current}
          alwaysBounceVertical={false}
          >
@@ -54,18 +62,17 @@ function CreateExercise({ navigation }) {
         : <TextButton onPress={() => navigation.navigate("Search")}>Search</TextButton>}
         <Grid/>
         </ScrollView>
-        {!keyboardVisible && <Footer/>}
+        {!keyboard.keyboardShown && <Footer/>}
       </View>
-      
+
     </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // height: sizes.screenHeight,
-    // width: sizes.screenWidth,
+    height: sizes.screenHeight,
+    width: sizes.screenWidth,
     justifyContent: 'space-between',
   },
   line: {
@@ -80,10 +87,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 32,
+    paddingVertical: 8
   },
-  scroll: {
-
-  }
 })
 
 export default CreateExercise;

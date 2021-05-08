@@ -40,8 +40,8 @@ export default function Flex() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#171818',
+    padding: 16,
+    // backgroundColor: '#171818',
   },
   row: {
     flex: 1,

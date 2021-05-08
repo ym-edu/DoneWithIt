@@ -29,7 +29,7 @@ export default function Layout({children}) {
     <IconProvider>
       <SafeAreaView style={styles.screenBar}>
         <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : null}
+        // behavior={Platform.OS === "ios" ? "padding" : null} //Works for createWorkout but not good for createExercise (hiding bottom submit bar)
         style={{flex: 1}}
         >
           <StatusBar

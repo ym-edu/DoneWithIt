@@ -11,12 +11,11 @@ function TimeInput({mode, getValue}) {
           textAlign='center'
           keyboardType="numeric"
           maxLength={2}
-          placeholder={mode === 'reps' ? '0' : '00'}
+          placeholder={'00'}
           placeholderTextColor='#C0C0B87F'
           clearTextOnFocus={true}
           onChangeText={() => {
             null
-            // mode === 'reps' ? handleRepsChange() : handleTimeChange()
           }}
           />
           <Text style={styles.text}>min</Text>
@@ -30,7 +29,7 @@ function TimeInput({mode, getValue}) {
           textAlign='center'
           keyboardType="numeric"
           maxLength={2}
-          placeholder={mode === 'reps' ? '0' : '00'}
+          placeholder={'00'}
           placeholderTextColor='#C0C0B87F'
           clearTextOnFocus={true}
           onChangeText={() => {
@@ -47,8 +46,8 @@ function TimeInput({mode, getValue}) {
 
 const styles = StyleSheet.create({
   input: {
-    width: 48,
-    height: 48,
+    width: 40,
+    height: 40,
     // backgroundColor: 'white',
     alignSelf: 'center',
     fontSize: 24,
