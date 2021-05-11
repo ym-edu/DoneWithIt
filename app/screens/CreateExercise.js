@@ -8,13 +8,12 @@ import SetVideo from '../components/SetVideo';
 import Slider from '../components/Slider';
 import TextInput from '../components/TextInput';
 import sizes from '../config/constants/sizes';
-import Grid from '../components/Grid';
 
 function CreateExercise({ navigation }) {
   const keyboard = useKeyboard()
   
-  const { videoId, scrollEnabled } = useLoop()
-  const { clearLoopState } = useLoopUpdate()
+  const { exerciseName, videoId, scrollEnabled, values } = useLoop()
+  const { setExerciseName, clearLoopState } = useLoopUpdate()
   
   function Footer() {
     return(
@@ -26,7 +25,13 @@ function CreateExercise({ navigation }) {
             navigation.pop()
           }}>Cancel
           </TextButton>
-          <TextButton onPress={() => navigation.pop()}>Create</TextButton>
+          <TextButton
+          disabled={(values.length > 0 && videoId && exerciseName) ? false : true }
+          onPress={() => {
+            console.log("values: ", typeof(values[0]), "videoId: ", typeof(videoId), "exerciseName: ", typeof(exerciseName))
+            // navigation.pop()
+          }
+            }>Create</TextButton>
         </View>
       </View>
     )
@@ -55,7 +60,7 @@ function CreateExercise({ navigation }) {
         : null}
         {/* <Text style={{fontSize: 100}}>ok</Text> */}
         <View style={{paddingHorizontal: 16, marginBottom: 8}}>
-          <TextInput label="Exercise name" focus={false}></TextInput>
+          <TextInput getValue={setExerciseName} label="Exercise name" focus={false}></TextInput>
         </View>
         {videoId
         ? null
@@ -65,7 +70,6 @@ function CreateExercise({ navigation }) {
           <Spacer mV={32}/>
           <TextButton style={styles.searchButton} color='black' onPress={() => navigation.navigate("Search")}>Search</TextButton>
         </>}
-        {/* <Grid/> */}
         </ScrollView>
         {!keyboard.keyboardShown && <Footer/>}
       </View>

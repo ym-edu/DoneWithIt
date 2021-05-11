@@ -29,7 +29,7 @@ function Input({ label, getValue, focus }) {
       selectionColor={colors.accent}
       // onSubmitEditing={({ nativeEvent }) => { getValue(nativeEvent.text) }} // User must hit enter to set input and before it can be sent on submit, otherwise an empty string will be sent.
       // onChangeText={(input) => getValue(input)} // Value is set everytime user types and is sent on submit
-      onChangeText={(input) => null} 
+      onChangeText={(input) => getValue(input)} 
       ref={inputRef}
       autoCorrect={false}
       keyboardType={Platform.OS === 'android' ? "visible-password" : "default"}
