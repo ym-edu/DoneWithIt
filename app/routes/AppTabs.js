@@ -21,11 +21,14 @@ export default function AppTabs() {
       activeColor={'#FFF'}
       inactiveColor={'#C0C0B87F'}
       sceneAnimationEnabled={Platform.OS === 'android' ? false : true}
+      keyboardHidesNavigationBar={true}
+      barStyle={{ maxHeight: 54 }} //WTF: IDKY ios had thicker height        
       >
         <Tab.Screen
         name="Explore"
         component={Explore}
         options={{
+          tabBarVisible: false,
           tabBarLabel: 'Explore',
           tabBarIcon: ({color}) => (
             <Icon name="explore" size={24} color={color} style={{marginTop: -12}}/>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import Spacer from '../components/Spacer';
 import ExerciseCard from '../components/ExerciseCard';
-import subtitle from '../temp/subTitle';
+// import subtitle from '../temp/subTitle'; //Children exercises
 import { useDB } from '../hooks/useDB';
 
 function ExerciseList() {
@@ -31,7 +31,7 @@ function ExerciseList() {
             <ExerciseCard
               url={item.video.url}
               title={item.exerciseName}
-              subtitle={subtitle(item.data)}
+              subtitle={`Included in ${item.childrenCount} workouts`}
               onPress={() => null}
             />
           )}
