@@ -30,7 +30,7 @@ function Search({ navigation }) {
           </TouchableOpacity>
           <SearchBar
           fill={false}
-          placeholder="Search Youtube"
+          placeholder="Search YouTube"
           onSubmit={(event) => {
             onSubmit(event)
           }}

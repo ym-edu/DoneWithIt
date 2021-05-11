@@ -1,6 +1,6 @@
 import React from 'react';
 import { useKeyboard } from '@react-native-community/hooks';
-import { StyleSheet, View, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, Platform, Text } from 'react-native';
 import Spacer from '../components/Spacer';
 import TextButton from '../components/TextButton';
 import { useLoop, useLoopUpdate } from '../hooks/useLoop';
@@ -59,8 +59,13 @@ function CreateExercise({ navigation }) {
         </View>
         {videoId
         ? null
-        : <TextButton onPress={() => navigation.navigate("Search")}>Search</TextButton>}
-        <Grid/>
+        : <>
+          <Spacer mV={'50%'}/>
+          <Text style={styles.sectionTitle}>Find a video for your exercise</Text>
+          <Spacer mV={32}/>
+          <TextButton style={styles.searchButton} color='black' onPress={() => navigation.navigate("Search")}>Search</TextButton>
+        </>}
+        {/* <Grid/> */}
         </ScrollView>
         {!keyboard.keyboardShown && <Footer/>}
       </View>
@@ -89,6 +94,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     paddingVertical: 8
   },
+  sectionTitle: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  searchButton: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    backgroundColor: '#f1f1f1',
+    alignSelf: 'center',
+    color: 'black',
+    borderRadius: 24,
+  }
 })
 
 export default CreateExercise;
