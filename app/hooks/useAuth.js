@@ -24,18 +24,19 @@ export default function AuthProvider({ children }) {
   const setAuth = React.useMemo(() => {
     return {
       load: () => {
-        setIsLoading(!isLoading);
+        // setIsLoading(!isLoading);
+        setIsLoading(false);
       },
       logIn: () => {
         setIsLoading(false);
-        setUserToken('TOKEN');
+        setUserToken('user-2'); //TEMP //TODO: Set up user authentication
       },
       signUp: () => {
         setIsLoading(false);
-        setUserToken('TOKEN');
+        setUserToken('user-2'); //TEMP //TODO: Set up user authentication
       },
       logOut: () => {
-        setIsLoading(false);
+        setIsLoading(true);
         setUserToken(null);
       },
       resetPassword: (navigation) => Alert.alert(

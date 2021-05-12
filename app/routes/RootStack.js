@@ -16,10 +16,12 @@ export default function RootStack() {
   const setAuth = useAuthUpdate();
 
   React.useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setAuth.load()
-    }, 3000)
-  }, [])
+    }, 3000);
+
+    return () => clearTimeout(timer)
+  }, [auth.user])
 
   return (
     <Stack.Navigator mode="modal"

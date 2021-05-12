@@ -1,96 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import Spacer from '../components/Spacer';
-import firestore from '@react-native-firebase/firestore'
 import ExerciseCard from '../components/ExerciseCard'
 import TextButton from '../components/TextButton'
 
-function MyExercises({ navigation, route }) {
-  const exArray = route.params.list
-  const userId = 'user-';
-  const currentWorkout = route.params.woId
-  const [exercises, setExercises] = useState(null);
-  const [selection, setSelection] = useState([]);
-  const [exerciseCount, setExerciseCount] = useState(null)
-
-  const handleAdd = () => {
-    const increment = firestore.FieldValue.increment(1)
-    // console.log('added')
-    let currentIndex = exerciseCount
-    selection.forEach(item => {
-      if(exArray.includes(item)) return;
-      // console.log(item)
-      firestore().collection("users").doc(userId).collection("exercises").doc(item)
-      .set({
-        workouts: {
-          [currentWorkout]: currentIndex,
-        }
-      }, { merge: true });
-
-
-      firestore().collection("users").doc(userId).collection("workouts").doc(currentWorkout).update({
-        exCount: increment,
-      })
-
-      currentIndex += 1;
-    })
-
-  }
-
-  const selectSubtitle = (data) => {
-    switch(data.mode) {
-      case 'r1':
-      case 'r2':
-        return `${data.reps} reps`;
-      case 't1':
-      case 't2':
-        return (
-          `${data.min === 0 ? '' : `${data.min} min `}${data.sec === 0 ? '' : `${data.sec} sec`}`
-        )
-      default:
-        alert('NAN');
-    }
-  }
-
-  useEffect(() => {
-    let unsubscribeFromExercises;
-    let unsubscribeFromExerciseCount;
-
-    const fetchExercises = () => {
-      unsubscribeFromExercises = firestore().collection("users").doc(userId).collection("exercises").orderBy("exName")
-      .onSnapshot(snapshot => {
-        const exerciseDocs = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        // console.log("ExerciseCount", exerciseDocs.length)
-        setExercises(exerciseDocs)
-      })
-    };
-    fetchExercises()
-
-    const getExerciseCount = () => {
-      unsubscribeFromExerciseCount = firestore().collection("users").doc(userId)
-      .collection("workouts").doc(currentWorkout)
-      .onSnapshot(snapshot => {
-        const workoutDoc = snapshot.data().exCount
-        setExerciseCount(workoutDoc)
-        // console.log("Count", workoutDoc)
-      });
-    }
-    getExerciseCount()
-
-    return () => {
-      unsubscribeFromExercises()
-      unsubscribeFromExerciseCount()
-    }
-  }, [])
-
+function MyExercises({ navigation }) {
   return (
     <>
       <View style={styles.body}>
         <FlatList style={styles.content}
-          data={exercises}
+          data={null}
           keyExtractor={data => data.id.toString()}
           renderItem={({ item }) => (
             <ExerciseCard

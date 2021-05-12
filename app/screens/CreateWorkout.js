@@ -1,37 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import TextInput from '../components/TextInput'
 import TextButton from '../components/TextButton'
-import firestore from '@react-native-firebase/firestore'
 
 function CreateWorkout({ navigation }) {
-  const userId = 'user-';
-  const [input, setInput] = useState(null)
-
-  const handleSubmit = (title) => {
-    const countWorkouts = async () => {
-      const increment = firestore.FieldValue.increment(1)
-      await firestore().collection("users").doc(userId).update({
-        workoutCount: increment,
-      });
-    }
-
-    firestore().collection("users").doc(userId).collection("workouts").add({
-      woName: title,
-      woCount: 0,
-    }).then(ref => {
-      // console.log("Added doc with ID:", ref.id)
-      countWorkouts()
-      navigation.pop()
-    })
-  }
-
   return (
     <>
       <View style={styles.container}>
         <View style={styles.modal}>
           <Text style={styles.title}>New workout</Text>
-          <TextInput label={'Title'} focus={true} getValue={setInput}/>
+          <TextInput label={'Title'} focus={true} getValue={null}/>
           <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
             <TextButton onPress={() => navigation.pop()}>
               Cancel

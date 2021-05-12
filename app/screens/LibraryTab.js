@@ -1,52 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
-import WorkoutCard from '../components/WorkoutCard'
+import WorkoutCard from '../components/WorkoutCard';
 import CreateButton from '../components/CreateButton';
-import Spacer from '../components/Spacer'
-import firestore from '@react-native-firebase/firestore'
+import Spacer from '../components/Spacer';
+import { useDB } from '../hooks/useDB';
 
 function LibraryTab({navigation}) {
-  const userId = 'user-';
-  const [workouts, setWorkouts] = useState(null)
-  const [exerciseCount, setExerciseCount] = useState(null)
+  const db = useDB();
+  const [workouts, setWorkouts] = useState([]);
+  const [exerciseCount, setExerciseCount] = useState(0);
+  const [workoutCount, setWorkoutCount] = useState(0);
 
   useEffect(() => {
     let unsubscribeFromWorkouts;
-    let unsubscribeFromExerciseCount;
+    let unsubscribeFromCounts;
     
     const fetchWorkouts = () => {
-      unsubscribeFromWorkouts = firestore().collection("users").doc(userId).collection("workouts")
+      unsubscribeFromWorkouts = db.collection("workouts")
       .onSnapshot(snapshot => {
         const workoutDocs = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
         }));
-        // console.log("WorkoutCount", workoutDocs.length)
         setWorkouts(workoutDocs)
-      })
-    };
-    fetchWorkouts()
-
-    const getExerciseCount = () => {
-      unsubscribeFromExerciseCount = firestore().collection("users").doc(userId).onSnapshot(snapshot => {
-        const userDoc = snapshot.data().exerciseCount
-        setExerciseCount(userDoc)
-        // console.log("Count", userDoc)
       });
-    }
-    getExerciseCount()
+    };
+    fetchWorkouts();
+
+    const getCounts = () => {
+      unsubscribeFromCounts = db.onSnapshot(snapshot => {
+        const userDoc = snapshot.data()
+        setExerciseCount(userDoc.parentExerciseCount)
+        setWorkoutCount(userDoc.workoutCount) //TODO: Pass count to CreateWorkout as next workout index (spotify like default naming)
+      });
+    };
+    getCounts();
 
     return () => {
       unsubscribeFromWorkouts()
-      unsubscribeFromExerciseCount()
-    }
-  }, [])
+      unsubscribeFromCounts()
+    };
+  }, []);
 
   return (
     <>
       <View style={styles.header}>
           <WorkoutCard
-          title={'my exercises'}
+          title={'Exercises'}
           subTitle={exerciseCount}
           onPress={() => navigation.navigate('Exercises')}
           />
@@ -63,9 +63,12 @@ function LibraryTab({navigation}) {
           renderItem={({item}) => (
             <WorkoutCard
             // url={item.video.url} //TODO: cloud function
-            onPress={() => navigation.navigate('Workout', {id: item.id, title: item.woName})}
-            title={item.woName}
-            subTitle={item.exCount}
+            onPress={
+              // () => navigation.navigate('Workout', {id: item.id, title: item.workoutName})
+              () => null
+            }
+            title={item.workoutName}
+            subTitle={item.parentExerciseCount}
             />
           )}
           ItemSeparatorComponent={() => <Spacer mV={8}/>}

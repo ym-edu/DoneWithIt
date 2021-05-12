@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   primaryText:{
     color: '#E5E5E5',
     fontWeight: 'bold',
-    textTransform: 'capitalize',
+    // textTransform: 'capitalize',
     fontSize: 16,
   },
   secondaryText:{

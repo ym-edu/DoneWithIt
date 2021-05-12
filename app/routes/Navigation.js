@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import RootStack from './RootStack';
 import AuthProvider from '../hooks/useAuth';
+import DBProvider from '../hooks/useDB';
 import analytics from '@react-native-firebase/analytics';
 
 const Theme = { //TODO: Toggle dark mode through device system settings
@@ -34,10 +35,13 @@ export default function Navigation() {
           screen_class: currentRouteName,
         })
       }
+      // console.log(currentRouteName)
     }}
     >
       <AuthProvider>
-        <RootStack/>
+        <DBProvider>
+          <RootStack/>
+        </DBProvider>
       </AuthProvider>
     </NavigationContainer>
   );
