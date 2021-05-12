@@ -6,11 +6,12 @@ import ExerciseCard from '../components/ExerciseCard';
 import { useDB } from '../hooks/useDB';
 
 function ExerciseList() {
-  const db = useDB();
+  const { parentExercises } = useDB();
   const [exercises, setExercises] = useState([]);
 
   useEffect(() => {
-    unsubscribe = db.collection("parentExercises").orderBy("exerciseName_std")
+    unsubscribe = parentExercises.ref.collection("parentExercises")
+    .orderBy("exerciseName_std")
     .onSnapshot(snapshot => {
       const exerciseDocs = snapshot.docs.map(doc => ({
         id: doc.id,
@@ -31,7 +32,7 @@ function ExerciseList() {
             <ExerciseCard
               url={item.video.url}
               title={item.exerciseName}
-              subtitle={`Included in ${item.childrenCount} workouts`}
+              subtitle={`Included in ${item.children_count} workouts`}
               onPress={() => null}
             />
           )}

@@ -6,17 +6,19 @@ import Spacer from '../components/Spacer';
 import { useDB } from '../hooks/useDB';
 
 function LibraryTab({navigation}) {
-  const db = useDB();
+  const { workouts: { ref }, parentExercises: { tally } } = useDB();
   const [workouts, setWorkouts] = useState([]);
   const [exerciseCount, setExerciseCount] = useState(0);
-  const [workoutCount, setWorkoutCount] = useState(0);
 
   useEffect(() => {
     let unsubscribeFromWorkouts;
-    let unsubscribeFromCounts;
+    let unsubscribeFromParentExercises;
     
     const fetchWorkouts = () => {
-      unsubscribeFromWorkouts = db.collection("workouts")
+      unsubscribeFromWorkouts = ref
+      .orderBy("workoutName_std")
+      // .where('__name__', '!=', '_tally') //Fetch all docs in 'workouts' collection except the tally doc
+      //Note: orderBy is preferable to '__name__' by virtue of tally not having fields that a normal workout would normally have i.e. 'workoutName_std'
       .onSnapshot(snapshot => {
         const workoutDocs = snapshot.docs.map(doc => ({
           id: doc.id,
@@ -27,18 +29,18 @@ function LibraryTab({navigation}) {
     };
     fetchWorkouts();
 
-    const getCounts = () => {
-      unsubscribeFromCounts = db.onSnapshot(snapshot => {
-        const userDoc = snapshot.data()
-        setExerciseCount(userDoc.parentExerciseCount)
-        setWorkoutCount(userDoc.workoutCount) //TODO: Pass count to CreateWorkout as next workout index (spotify like default naming)
+    const getParentExerciseCount = () => {
+      unsubscribeFromParentExercises = tally
+      .onSnapshot(snapshot => {
+        const tallyDoc = snapshot.data()
+        setExerciseCount(tallyDoc.parentExercise_count) //TODO: Pass count to CreateWorkout as next workout index (spotify like default naming)
       });
     };
-    getCounts();
+    getParentExerciseCount();
 
     return () => {
       unsubscribeFromWorkouts()
-      unsubscribeFromCounts()
+      unsubscribeFromParentExercises()
     };
   }, []);
 

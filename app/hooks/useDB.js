@@ -9,11 +9,36 @@ export function useDB() {
 }
 
 export default function DBProvider({ children }) {
-  const { user } = useAuth()
-  const userRef = firestore().collection("users").doc(user)
+  const db = firestore;
+  const { user } = useAuth();
+
+  const userRef = firestore().collection("users").doc(user);
+  const parentExercisesRef = userRef.collection("parentExercises");
+  const workoutsRef = userRef.collection("workouts");
+  
+  const increment = firestore.FieldValue.increment(1);
+  const decrement = firestore.FieldValue.increment(-1);
+
+  const parentExercisesTally = parentExercisesRef.doc("_tally");
+  const workoutsTally = workoutsRef.doc("_tally")
+
+  const getDB = {
+    db: db,
+    userRef: userRef,
+    parentExercises: {
+      ref: parentExercisesRef,
+      tally: parentExercisesTally
+    },
+    workouts: {
+      ref: workoutsRef,
+      tally: workoutsTally,
+    },
+    increment: increment,
+    decrement: decrement,
+  }
 
   return (
-    <DBContext.Provider value={userRef}>
+    <DBContext.Provider value={getDB}>
         {children}
     </DBContext.Provider>
   )
