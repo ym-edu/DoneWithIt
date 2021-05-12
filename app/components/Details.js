@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-function Details({title, subTitle = 'included in n workouts'}) {
+function Details({title, subtitle}) {
   return (
     <View style={styles.container}>
       <Text style={styles.primaryText} numberOfLines={2}>{title}</Text>
-      {subTitle && <Text style={styles.secondaryText}>{subTitle}</Text>}
+      {subtitle ? <Text style={styles.secondaryText}>{subtitle}</Text> : null}
     </View>
   );
 }

@@ -1,20 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
-import CreateButton from '../components/CreateButton'
+import CreateButton from '../components/CreateButton';
 import Spacer from '../components/Spacer';
-import ExerciseCard from '../components/ExerciseCard'
+import ExerciseCard from '../components/ExerciseCard';
+import subtitle from '../temp/subTitle';
+import { useDB } from '../hooks/useDB';
 
-function Workout({ navigation }) {
+function Workout({ navigation, route }) {
+  const { workouts } = useDB()
+  const { params: { id } } = route;
+
+  const [exercises, setExercises] = useState([]);
+
+  useEffect(() => {
+    let unsubscribe;
+
+    const fetchExercises = () => {
+      unsubscribe = workouts.ref.doc(id).collection("childExercises")
+      .orderBy("exerciseName_std")
+      .onSnapshot(snapshot => {
+        const exerciseDocs = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        // console.log(exerciseDocs) //TODO: Save state for parent to determine count
+        setExercises(exerciseDocs)
+        
+        // exArray.current = exerciseDocs.map(item => {
+        //   // console.log(item.id)
+        //   return item.id
+        // });
+        // console.log(exArray.current)
+      })
+    };
+    fetchExercises()
+
+    return () => {
+      unsubscribe()
+    }
+  }, [])
+
   return (
     <View style={styles.container}>
       <FlatList style={styles.content}
           data={exercises}
-          keyExtractor={data => data.id.toString()}
+          keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
             <ExerciseCard
-              url={item.video.url}
-              title={item.exName}
-              subtitle={selectSubtitle(item.data)}
+              url={item.video.url} //ZfawH9NsTtl ZfawH9NsTtl
+              title={item.exerciseName}
+              subtitle={subtitle(item.mode)}
               onPress={() => null}
             />
           )}
@@ -24,7 +59,13 @@ function Workout({ navigation }) {
       {/* <Text style={styles.text}>{routeData}</Text> */}
       <Spacer mV={16}
       style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-      <CreateButton icon={'plus'} title='add exercises' onPress={() => navigation.navigate("Modal", {list: exArray.current, woId: routeData })}/>
+      <CreateButton
+      icon={'plus'}
+      title='add exercises'
+      onPress={() => {
+      // navigation.navigate("Modal", {list: exArray.current, woId: routeData })
+      }
+      }/>
       <Spacer mV={16}/>
     </View>
   );

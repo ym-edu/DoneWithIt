@@ -33,7 +33,7 @@ function ExerciseCard({id='', url='', title = '', subtitle = '', onPress = () =>
       <View style={[styles.container, selected && {backgroundColor: '#242626'}]}>
         <Media source={url}/>
         <Spacer mH={8}/>
-        <Details title={title} subTitle={subtitle}/>
+        <Details title={title} subtitle={subtitle}/>
         <Spacer mH={8}/>
         <TouchableOpacity>
           <MaterialCommunityIcons name="dots-vertical" size={24} color="white" />

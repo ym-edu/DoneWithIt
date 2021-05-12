@@ -67,8 +67,8 @@ function LibraryTab({navigation}) {
             <WorkoutCard
             // url={item.video.url} //TODO: cloud function
             onPress={
-              // () => navigation.navigate('Workout', {id: item.id, title: item.workoutName})
-              () => null
+              () => navigation.navigate('Workout', {id: item.id, title: item.workoutName})
+              // () => null
             }
             title={item.workoutName}
             subTitle={item.parentExerciseCount}
