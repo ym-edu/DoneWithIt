@@ -1,10 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import TextInput from '../components/TextInput'
-import TextButton from '../components/TextButton'
+import TextInput from '../components/TextInput';
+import TextButton from '../components/TextButton';
 import Spacer from '../components/Spacer';
+import { useDB } from '../hooks/useDB';
 
 function CreateWorkout({ navigation }) {
+  const { db, workouts, increment } = useDB();
+
+  const [input, setInput] = useState(null);
+
+  const handleSubmit = (input) => {
+    const newRef = workouts.ref.doc();
+    const batch = db().batch(); //Must assign to new batch every function call, otherwise it is mistaken for the previously commited batch.
+
+    batch.set(newRef, {
+      workoutName: input,
+      workoutName_std: input.toLowerCase(),
+    });
+    batch.set(workouts.tally, { workout_count: increment }, { merge: true })
+    batch.commit().then(() => {
+      navigation.pop()
+    });
+  }
+
   return (
     <>
       <View style={styles.container}>
@@ -12,7 +31,7 @@ function CreateWorkout({ navigation }) {
         <View style={styles.modal}>
           <Text style={styles.title}>New workout</Text>
           <Spacer mV={8} />
-          <TextInput label={'Title'} focus={true} getValue={null}/>
+          <TextInput label={'Title'} focus={true} getValue={setInput} />
           <Spacer mV={16} />
           <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
             <TextButton onPress={() => navigation.pop()}>
