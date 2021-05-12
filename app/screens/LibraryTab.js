@@ -52,7 +52,8 @@ function LibraryTab({navigation}) {
           />
           <Spacer mV={32}/>
           <CreateButton icon={'plus'} title='create workout' onPress={
-            () => navigation.navigate('CreateWorkout')
+            () => null
+            // () => navigation.navigate('CreateWorkout')
           }/>
       </View>
 
