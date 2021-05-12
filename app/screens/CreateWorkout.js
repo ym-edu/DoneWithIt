@@ -28,18 +28,19 @@ const styles = StyleSheet.create({
   container: {
     flex:1,
     justifyContent: 'center',
-    alignItems: 'center',
-    padding: 32,
+    paddingHorizontal: 32,
   },
   modal: {
     flex: 1/4,
     padding: 16,
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     backgroundColor: '#242626',
     width: '100%',
     borderRadius: 2,
     borderWidth: .25,
     borderColor: '#C8C0B8F7',
+    position: 'absolute',
+    alignSelf: 'center',
   },
   title: {
     color: 'white',

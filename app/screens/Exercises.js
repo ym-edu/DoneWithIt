@@ -4,14 +4,14 @@ import CreateButton from '../components/CreateButton';
 import Spacer from '../components/Spacer';
 import ExerciseList from '../components/ExerciseList';
 
-function MyExercises({ navigation }) {
+function Exercises({ navigation }) {
   return (
     <>
       <ExerciseList/>
       <View style={styles.footer}>
         <Spacer mV={16}
         style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-        <CreateButton icon={'plus'} title='create exercise' onPress={() => navigation.navigate("Modal")}/>
+        <CreateButton icon={'plus'} title='create exercise' onPress={() => navigation.navigate("CreateExercise")}/>
         <Spacer mV={16}/>
       </View>
     </>
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default MyExercises;
+export default Exercises;

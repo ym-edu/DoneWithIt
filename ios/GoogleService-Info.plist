@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-2742026173933447~6120117185</string>
 	<key>CLIENT_ID</key>
 	<string>664851097747-srsk2bq1jph1ad9298kuq2csdsslieon.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>

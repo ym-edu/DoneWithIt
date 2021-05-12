@@ -4,7 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AppTabs from './AppTabs';
 import Splash from '../screens/Splash';
 import AuthStack from './AuthStack';
-import MyExercisesModal from '../screens/MyExercisesModal';
+import CreateExercise from '../screens/CreateExercise';
+import Search from '../screens/Search';
 import CreateWorkout from '../screens/CreateWorkout';
 
 import { useAuth, useAuthUpdate } from '../hooks/useAuth';
@@ -38,10 +39,17 @@ export default function RootStack() {
         : <Stack.Screen name="AuthStack" component={AuthStack} />
       }
       <Stack.Screen
-      name="Modal"
-      component={MyExercisesModal}
+      name="CreateExercise"
+      component={CreateExercise}
       options={{
         animationEnabled: true,
+      }}
+      />
+      <Stack.Screen
+      name="Search"
+      component={Search}
+      options={{
+        animationEnabled: false,
       }}
       />
       <Stack.Screen

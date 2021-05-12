@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Library from '../screens/LibraryTab';
-import Exercises from '../screens/MyExercises';
+import Exercises from '../screens/Exercises';
 import Workout from '../screens/Workout';
 
 const Stack = createStackNavigator();
@@ -27,7 +27,7 @@ export default function LibraryStack() {
         <Stack.Screen
         name='Exercises'
         component={Exercises}
-        options={{title: 'My Exercises'}}
+        options={{title: 'Exercises'}}
         />
 
          <Stack.Screen
