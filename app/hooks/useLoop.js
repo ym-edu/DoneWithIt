@@ -23,7 +23,7 @@ export default function LoopProvider({children}) {
 
   const [playing, setPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
-  
+
   const getValue = {
     values: values,
     duration: duration,

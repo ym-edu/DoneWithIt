@@ -7,6 +7,7 @@ const screenHeight = Dimensions.get('screen').height - statusBar;
 const spacerHorizontal = 8;
 const spacerVertical = spacerHorizontal * 2;
 const fullWidth = screenWidth - spacerVertical;
+const windowHeight = Dimensions.get('window').height
 
 export default {
   fullWidth,
@@ -15,4 +16,5 @@ export default {
   spacerHorizontal,
   spacerVertical,
   statusBar,
+  windowHeight,
 }

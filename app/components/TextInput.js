@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { constants } from '../config';
 const { colors } = constants;
@@ -31,7 +31,9 @@ function Input({ label, getValue, focus }) {
       // onChangeText={(input) => getValue(input)} // Value is set everytime user types and is sent on submit
       onChangeText={(input) => null} 
       ref={inputRef}
-    />
+      autoCorrect={false}
+      keyboardType={Platform.OS === 'android' ? "visible-password" : "default"}
+      />
   );
 }
 
