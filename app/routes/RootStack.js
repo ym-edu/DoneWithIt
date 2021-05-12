@@ -4,8 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AppTabs from './AppTabs';
 import Splash from '../screens/Splash';
 import AuthStack from './AuthStack';
-import Modal from '../screens/Modal';
-import Alert from '../screens/Alert';
+import MyExercisesModal from '../screens/MyExercisesModal';
+import CreateWorkout from '../screens/CreateWorkout';
 
 import { useAuth, useAuthUpdate } from '../hooks/useAuth';
 
@@ -37,14 +37,14 @@ export default function RootStack() {
       }
       <Stack.Screen
       name="Modal"
-      component={Modal}
+      component={MyExercisesModal}
       options={{
         animationEnabled: true,
       }}
       />
       <Stack.Screen
-      name="Alert"
-      component={Alert}
+      name="CreateWorkout"
+      component={CreateWorkout}
       options={{
         animationEnabled: false,
         cardStyle: { backgroundColor: '#0000001A' },

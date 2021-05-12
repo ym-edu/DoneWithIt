@@ -1,13 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
-import CreateButton from '../components/CreateButton'
 import Spacer from '../components/Spacer';
 import firestore from '@react-native-firebase/firestore'
 import ExerciseCard from '../components/ExerciseCard'
+import TextButton from '../components/TextButton'
 
-function MyExercises({ navigation }) {
+function MyExercises({ navigation, route }) {
+  const exArray = route.params.list
   const userId = 'user-';
-  const [exercises, setExercises] = useState(null)
+  const currentWorkout = route.params.woId
+  const [exercises, setExercises] = useState(null);
+  const [selection, setSelection] = useState([]);
+  const [exerciseCount, setExerciseCount] = useState(null)
+
+  const handleAdd = () => {
+    const increment = firestore.FieldValue.increment(1)
+    // console.log('added')
+    let currentIndex = exerciseCount
+    selection.forEach(item => {
+      if(exArray.includes(item)) return;
+      // console.log(item)
+      firestore().collection("users").doc(userId).collection("exercises").doc(item)
+      .set({
+        workouts: {
+          [currentWorkout]: currentIndex,
+        }
+      }, { merge: true });
+
+
+      firestore().collection("users").doc(userId).collection("workouts").doc(currentWorkout).update({
+        exCount: increment,
+      })
+
+      currentIndex += 1;
+    })
+
+  }
 
   const selectSubtitle = (data) => {
     switch(data.mode) {
@@ -26,6 +54,7 @@ function MyExercises({ navigation }) {
 
   useEffect(() => {
     let unsubscribeFromExercises;
+    let unsubscribeFromExerciseCount;
 
     const fetchExercises = () => {
       unsubscribeFromExercises = firestore().collection("users").doc(userId).collection("exercises").orderBy("exName")
@@ -40,8 +69,20 @@ function MyExercises({ navigation }) {
     };
     fetchExercises()
 
+    const getExerciseCount = () => {
+      unsubscribeFromExerciseCount = firestore().collection("users").doc(userId)
+      .collection("workouts").doc(currentWorkout)
+      .onSnapshot(snapshot => {
+        const workoutDoc = snapshot.data().exCount
+        setExerciseCount(workoutDoc)
+        // console.log("Count", workoutDoc)
+      });
+    }
+    getExerciseCount()
+
     return () => {
       unsubscribeFromExercises()
+      unsubscribeFromExerciseCount()
     }
   }, [])
 
@@ -53,10 +94,13 @@ function MyExercises({ navigation }) {
           keyExtractor={data => data.id.toString()}
           renderItem={({ item }) => (
             <ExerciseCard
+              disabled={false}
+              id={item.id}
               url={item.video.url}
               title={item.exName}
               subtitle={selectSubtitle(item.data)}
-              onPress={() => null}
+              onPress={setSelection}
+              now={selection}
             />
           )}
           ItemSeparatorComponent={() => <Spacer mV={8}/>}
@@ -66,7 +110,17 @@ function MyExercises({ navigation }) {
       <View style={styles.footer}>
         <Spacer mV={16}
         style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-        <CreateButton icon={'plus'} title='create exercise' onPress={() => navigation.navigate("Modal")}/>
+        <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between', paddingHorizontal: 32}}>
+            <TextButton onPress={() => navigation.pop()}>
+              Cancel
+            </TextButton>
+            <TextButton onPress={() => {
+              handleAdd()
+              navigation.pop()
+            }}>
+              Add
+            </TextButton>
+          </View>
         <Spacer mV={16}/>
       </View>
     </>

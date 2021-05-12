@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Library from '../screens/LibraryTab';
 import Exercises from '../screens/MyExercises';
+import Workout from '../screens/Workout';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,16 @@ export default function LibraryStack() {
         name='Exercises'
         component={Exercises}
         options={{title: 'My Exercises'}}
+        />
+
+         <Stack.Screen
+        name='Workout'
+        component={Workout}
+        options={({route}) => {
+          return {
+            headerTitle: route.params.title
+          }
+        }}
         />
       </Stack.Navigator>
   );

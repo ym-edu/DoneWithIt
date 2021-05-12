@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
 import CreateButton from '../components/CreateButton'
 import Spacer from '../components/Spacer';
 import firestore from '@react-native-firebase/firestore'
 import ExerciseCard from '../components/ExerciseCard'
 
-function MyExercises({ navigation }) {
+function Workout({ navigation, route }) {
+  const routeData = route.params.id
+
   const userId = 'user-';
   const [exercises, setExercises] = useState(null)
+  const exArray = useRef()
 
   const selectSubtitle = (data) => {
     switch(data.mode) {
@@ -28,14 +31,21 @@ function MyExercises({ navigation }) {
     let unsubscribeFromExercises;
 
     const fetchExercises = () => {
-      unsubscribeFromExercises = firestore().collection("users").doc(userId).collection("exercises").orderBy("exName")
+      unsubscribeFromExercises = firestore().collection("users").doc(userId).collection("exercises")
+      .orderBy(`workouts.${routeData}`)
       .onSnapshot(snapshot => {
         const exerciseDocs = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
         }));
-        // console.log("ExerciseCount", exerciseDocs.length)
+        // console.log(exerciseDocs[0].id) //TODO: Save state for parent to determine count
         setExercises(exerciseDocs)
+        
+        exArray.current = exerciseDocs.map(item => {
+          // console.log(item.id)
+          return item.id
+        });
+        // console.log(exArray.current)
       })
     };
     fetchExercises()
@@ -44,11 +54,10 @@ function MyExercises({ navigation }) {
       unsubscribeFromExercises()
     }
   }, [])
-
+  
   return (
-    <>
-      <View style={styles.body}>
-        <FlatList style={styles.content}
+    <View style={styles.container}>
+      <FlatList style={styles.content}
           data={exercises}
           keyExtractor={data => data.id.toString()}
           renderItem={({ item }) => (
@@ -62,20 +71,20 @@ function MyExercises({ navigation }) {
           ItemSeparatorComponent={() => <Spacer mV={8}/>}
           showsVerticalScrollIndicator={false}
         />
-      </View>
-      <View style={styles.footer}>
-        <Spacer mV={16}
-        style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-        <CreateButton icon={'plus'} title='create exercise' onPress={() => navigation.navigate("Modal")}/>
-        <Spacer mV={16}/>
-      </View>
-    </>
+      {/* <Text style={styles.text}>{routeData}</Text> */}
+      <Spacer mV={16}
+      style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
+      <CreateButton icon={'plus'} title='add exercises' onPress={() => navigation.navigate("Modal", {list: exArray.current, woId: routeData })}/>
+      <Spacer mV={16}/>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  body: {
+  container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
     paddingHorizontal: 16,
     paddingTop: 16,
   },
@@ -85,13 +94,9 @@ const styles = StyleSheet.create({
     height: '100%',
     // backgroundColor: 'pink',
   },
-  footer: {
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
   text: {
     color: 'white'
   }
 })
 
-export default MyExercises;
+export default Workout;

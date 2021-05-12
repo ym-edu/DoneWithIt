@@ -43,14 +43,14 @@ function LogIn({ navigation }) {
 // ############################################################################
     // Single Doc | One time call
     const readFunc1 = async () => {
-      const userDoc = await docRef.doc("user-1").get()
+      const userDoc = await docRef.doc("user-").get()
       // console.log(userDoc.data().userName)
       setFunc1(userDoc.data().userName)
     }
     readFunc1()
 // ----------------------------------------------------------------------------
     // Single Doc | Real time listener
-    const readFunc2 = docRef.doc("user-2").onSnapshot(userDoc => {
+    const readFunc2 = docRef.doc("user-").onSnapshot(userDoc => {
       // console.log(userDoc.data().userName)
       setFunc2(userDoc.data().userName)
     })
@@ -62,7 +62,7 @@ function LogIn({ navigation }) {
           id: doc.id,
           ...doc.data(),
         }))
-        console.log("GET |", userDocs)
+        // console.log("GET |", userDocs)
       })
     }
     readFunc3()
@@ -74,7 +74,7 @@ function LogIn({ navigation }) {
           id: doc.id,
           ...doc.data(),
         }))
-        console.log("SNAPSHOT |", userDocs)
+        // console.log("SNAPSHOT |", userDocs)
       })
     }
 // ############################################################################
@@ -94,7 +94,7 @@ function LogIn({ navigation }) {
   return (
     <>
       <Button title="Log In" onPress={() => {
-        interstitial.show();
+        // interstitial.show();
         logIn()
       }} />
       <Button title="Sign Up" onPress={() => navigation.navigate("SignUp")} />
