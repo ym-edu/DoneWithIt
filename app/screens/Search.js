@@ -1,22 +1,18 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, FlatList } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, TouchableOpacity, FlatList, ActivityIndicator, Platform } from 'react-native';
 import SearchBar from '../components/SearchBar';
 import { Ionicons } from '@expo/vector-icons';
 import Spacer from '../components/Spacer';
 import VideoCard from '../components/VideoCard';
-import { useVideoIdUpdate } from '../hooks/useVideoId'
+import { useSearch, useSearchUpdate } from '../hooks/useSearch';
 
 function Search({ navigation }) {
-  const { setVideoId } = useVideoIdUpdate();
-  const [searchResults, setSearchResults] = useState([]);
+  const { searchResults, loading } = useSearch();
+  const { onSubmit, onEndReached, setLoading, setVideoId } = useSearchUpdate();
 
-  const fetchVideos = async (query) => {
-    const url = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=${query}&type=video&key=AIzaSyCedwcitDUV0CLExJpuGf269YAzaInjgkA`
-
-    const response = await fetch(url);
-    const json = await response.json();
-    setSearchResults(json.items)
-  }
+  React.useEffect(() => {
+    setLoading(false)
+  }, [searchResults])
 
   return (
     <>
@@ -30,15 +26,21 @@ function Search({ navigation }) {
           <SearchBar
           fill={false}
           placeholder="Search Youtube"
-          onSubmit={fetchVideos}
+          onSubmit={(event) => {
+            onSubmit(event)
+          }}
           />
           <Spacer mH={32}/>
           {/* Helps center SearchBar within header*/}
         </View>
         <View style={{flex: 1, paddingTop: 16, paddingHorizontal: 16}}>
           <FlatList style={styles.flatlist}
+            // showsVerticalScrollIndicator={true}
             data={searchResults}
-            keyExtractor={(item) => item.id.videoId}
+            // This helps in case video instances repeat accross multiple pages
+            keyExtractor={(item, index) => item.id.videoId + index}
+            onEndReached={() => onEndReached()} //WARNING: If items.length <≈ 2 (amount of items that fit on screen), onEndReached will automatically trigger
+            onEndReachedThreshold={.5}
             renderItem={({ item }) => (
               <VideoCard
                 thumbnail={item.snippet.thumbnails.high.url}
@@ -50,10 +52,14 @@ function Search({ navigation }) {
                 }}
               />
             )}
-            ItemSeparatorComponent={() => <Spacer mV={8}/>}
+            ItemSeparatorComponent={() => <Spacer mV={16}/>}
             ListFooterComponent={() =>
-            <Spacer mV={64}/>}
-            showsVerticalScrollIndicator={false}
+            <View style={{height: 64, justifyContent: 'center'}}>
+              { loading && <ActivityIndicator size={Platform.OS === 'ios' ? 'small' : 'large'} color="#C8C0B8" animating={true}/> }
+            </View>
+          }
+            showsVerticalScrollIndicator={true}
+            indicatorStyle={'white'} //TODO: Consider making an xml search bar for android - https://stackoverflow.com/questions/54752669/change-color-of-scrollview-indicator
           />
         </View>
       </View>
@@ -78,7 +84,6 @@ const styles = StyleSheet.create({
   },
   flatlist: {
     flex: 1,
-    // backgroundColor: 'pink',
   }
 })
 

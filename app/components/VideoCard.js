@@ -12,12 +12,10 @@ function VideoCard({thumbnail, title, subtitle, onPress}) {
       <View style={styles.container}>
         <Media directSource={thumbnail}/>
       </View>
-      <View style={{height: 72, width: '100%'}}>
         <Details
         title={title}
         subTitle={subtitle}
         />
-      </View>
     </TouchableOpacity>
   );
 }

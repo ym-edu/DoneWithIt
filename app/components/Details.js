@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: '100%',
-    justifyContent: 'space-between',
-    paddingVertical: 16,
+    justifyContent: 'space-around',
+    paddingVertical: 8,
   },
   primaryText:{
     color: '#E5E5E5',
