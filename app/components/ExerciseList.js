@@ -10,7 +10,7 @@ function ExerciseList() {
   const [exercises, setExercises] = useState([]);
 
   useEffect(() => {
-    unsubscribe = parentExercises.ref.collection("parentExercises")
+    unsubscribe = parentExercises.ref
     .orderBy("exerciseName_std")
     .onSnapshot(snapshot => {
       const exerciseDocs = snapshot.docs.map(doc => ({
@@ -37,6 +37,8 @@ function ExerciseList() {
             />
           )}
           ItemSeparatorComponent={() => <Spacer mV={8}/>}
+          ListFooterComponent={() =>
+            <Spacer mV={64}/>}
           showsVerticalScrollIndicator={false}
         />
       </View>

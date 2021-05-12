@@ -24,7 +24,7 @@ function CreateExercise({ navigation }) {
     const batch = db().batch(); //Must assign to new batch every function call, otherwise it is mistaken for the previously commited batch.
 
     batch.set(newRef, {
-      childrenCount: 0,
+      children_count: 0,
       exerciseName: exerciseName,
       exerciseName_std: exerciseName.toLowerCase(),
       video: {
@@ -33,7 +33,7 @@ function CreateExercise({ navigation }) {
         url: videoId
       },
     });
-    batch.set(parentExercises.tally, { parentExerciseCount: increment }, { merge: true })
+    batch.set(parentExercises.tally, { parentExercise_count: increment }, { merge: true })
     batch.commit().then(() => {
       clearLoopState()
     });
