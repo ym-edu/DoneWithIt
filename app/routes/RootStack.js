@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import AppTabs from './AppTabs';
@@ -57,7 +58,7 @@ export default function RootStack() {
       component={CreateWorkout}
       options={{
         animationEnabled: false,
-        cardStyle: { backgroundColor: '#0000001A' },
+        cardStyle: { backgroundColor: Platform.OS === 'android' ? '#171818' : '#0000001A' },
         cardOverlayEnabled: true,
         cardStyleInterpolator: ({ current: { progress } }) => {
           return {
@@ -70,7 +71,7 @@ export default function RootStack() {
             overlayStyle: {
               opacity: progress.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, 0.5],
+                outputRange: [0, Platform.OS === 'android' ? 1 : 0.5],
                 extrapolate: "clamp",
               })
             }
