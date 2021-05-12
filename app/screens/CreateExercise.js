@@ -9,11 +9,35 @@ import Slider from '../components/Slider';
 import TextInput from '../components/TextInput';
 import sizes from '../config/constants/sizes';
 
+import { useDB } from '../hooks/useDB';
+
 function CreateExercise({ navigation }) {
+  const { db, parentExercises, increment } = useDB();
+
   const keyboard = useKeyboard()
   
   const { exerciseName, videoId, scrollEnabled, values } = useLoop()
   const { setExerciseName, clearLoopState } = useLoopUpdate()
+
+  const handleAdd = () => {
+    const newRef = parentExercises.ref.doc();
+    const batch = db().batch(); //Must assign to new batch every function call, otherwise it is mistaken for the previously commited batch.
+
+    batch.set(newRef, {
+      childrenCount: 0,
+      exerciseName: exerciseName,
+      exerciseName_std: exerciseName.toLowerCase(),
+      video: {
+        endTimeSec: values[1],
+        startTimeSec: values[0],
+        url: videoId
+      },
+    });
+    batch.set(parentExercises.tally, { parentExerciseCount: increment }, { merge: true })
+    batch.commit().then(() => {
+      clearLoopState()
+    });
+  }
   
   function Footer() {
     return(
@@ -28,8 +52,9 @@ function CreateExercise({ navigation }) {
           <TextButton
           disabled={(values.length > 0 && videoId && exerciseName) ? false : true }
           onPress={() => {
-            console.log("values: ", typeof(values[0]), "videoId: ", typeof(videoId), "exerciseName: ", typeof(exerciseName))
-            // navigation.pop()
+            // console.log("values: ", typeof(values[0]), "videoId: ", typeof(videoId), "exerciseName: ", typeof(exerciseName))
+            handleAdd()
+            navigation.pop()
           }
             }>Create</TextButton>
         </View>
