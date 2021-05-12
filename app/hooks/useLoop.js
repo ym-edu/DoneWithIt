@@ -13,6 +13,7 @@ export function useLoopUpdate() {
 }
 
 export default function LoopProvider({children}) {
+  const [exerciseName, setExerciseName] = useState(null)
   const [videoId, setVideoId] = useState(null);
   const [duration, setDuration] = useState(null);
 
@@ -25,6 +26,7 @@ export default function LoopProvider({children}) {
   const [currentTime, setCurrentTime] = useState(0);
 
   const getValue = {
+    exerciseName: exerciseName,
     values: values,
     duration: duration,
     videoId: videoId,
@@ -36,12 +38,14 @@ export default function LoopProvider({children}) {
 
   const setValue = useMemo(() => {
     return({
+      setExerciseName: setExerciseName,
       setVideoId: setVideoId,
       clearLoopState: () => {
         setVideoId('')
         setDuration(null)
         setValues([])
         setCurrentTime(0)
+        setExerciseName(null)
       },
       setDuration: setDuration,
       PTtoSeconds: (duration) => moment.duration(duration).format("s", {

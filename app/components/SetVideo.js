@@ -22,7 +22,8 @@ function Video({url, navigation}) {
   useEffect(() => {
     fetchVideo().then(result => {
       const PT = result.items[0].contentDetails.duration
-      const videoDuration = parseInt(PTtoSeconds(PT), 10) - 1 // API vs OEmbed differs by 1; This 1 second can prevent video from ever reaching end as slider range will not include the end second.
+      const videoDuration = parseInt(PTtoSeconds(PT).replace(/,/g, ''), 10) - 1 // API vs OEmbed differs by 1; This 1 second can prevent video from ever reaching end as slider range will not include the end second.
+      console.log(videoDuration)
       setDuration(videoDuration)
       setValues([0, videoDuration])
 
