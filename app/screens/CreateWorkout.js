@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, KeyboardAvoidingView } from 'react-native';
 import TextInput from '../components/TextInput';
 import TextButton from '../components/TextButton';
 import Spacer from '../components/Spacer';
@@ -26,6 +26,11 @@ function CreateWorkout({ navigation }) {
 
   return (
     <>
+    <KeyboardAvoidingView
+    behavior={Platform.OS === "ios" ? "padding" : null} //Works for createWorkout but not good for createExercise (hiding bottom submit bar)
+    style={{flex: 1}}
+    >
+
       <View style={styles.container}>
 
         <View style={styles.modal}>
@@ -44,6 +49,8 @@ function CreateWorkout({ navigation }) {
         </View>
 
       </View>
+
+    </KeyboardAvoidingView>
     </>
   );
 }

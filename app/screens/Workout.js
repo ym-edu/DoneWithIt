@@ -41,7 +41,9 @@ function Workout({ navigation, route }) {
   }, [])
 
   return (
+    <>
     <View style={styles.container}>
+
       <FlatList style={styles.content}
           data={exercises}
           keyExtractor={item => item.id.toString()}
@@ -56,7 +58,12 @@ function Workout({ navigation, route }) {
           ItemSeparatorComponent={() => <Spacer mV={8}/>}
           showsVerticalScrollIndicator={false}
         />
+
       {/* <Text style={styles.text}>{routeData}</Text> */}
+
+    </View>
+
+    <View style={styles.footer}>
       <Spacer mV={16}
       style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
       <CreateButton
@@ -68,6 +75,7 @@ function Workout({ navigation, route }) {
       }/>
       <Spacer mV={16}/>
     </View>
+    </>
   );
 }
 
@@ -83,7 +91,10 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    // backgroundColor: 'pink',
+  },
+  footer: {
+    width: '100%',
+    alignItems: 'center'
   },
   text: {
     color: 'white'
