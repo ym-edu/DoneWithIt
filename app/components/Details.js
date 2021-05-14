@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     justifyContent: 'space-around',
-    paddingVertical: 8,
+    paddingVertical: 0,
   },
   primaryText:{
     color: '#E5E5E5',

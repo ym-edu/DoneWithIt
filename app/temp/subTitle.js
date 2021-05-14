@@ -17,7 +17,9 @@ export default (mode) => {
       return `${mode[`${mode.current}`]} reps`;
     case 'timeFixed':
     case 'timeTarget':
-      return `${minutes(mode[mode.current].min)}${seconds(mode[mode.current].sec)}`
+      return mode[mode.current].min === 0 && mode[mode.current].sec === 0
+      ? '∞'
+      : `${minutes(mode[mode.current].min)}${seconds(mode[mode.current].sec)}`
     default:
       alert('NAN');
   }
