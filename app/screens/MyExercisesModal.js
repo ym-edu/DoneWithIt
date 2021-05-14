@@ -1,31 +1,61 @@
-import React from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import TextButton from '../components/TextButton';
+import ExerciseList from '../components/ExerciseList';
 import Spacer from '../components/Spacer';
-import ExerciseCard from '../components/ExerciseCard'
-import TextButton from '../components/TextButton'
+import { useDB } from '../hooks/useDB';
 
-function MyExercises({ navigation }) {
+function AddExercises({ navigation, route }) {
+  const { workouts } = useDB();
+  const exArray = route.params.list;
+  const currentWorkout = route.params.workoutId;
+  const exerciseCount = route.params.count
+  const { invokedBy } = route.params
+  const [selection, setSelection] = useState([]);
+
+  const handleAdd = () => {
+    const newRef = workouts.ref.doc(currentWorkout)
+    .collection("childExercises").doc();
+    const batch = db().batch();
+
+    batch.set(newRef, {
+      children_count: 0,
+      exerciseName: exerciseName,
+      exerciseName_std: exerciseName.toLowerCase(),
+      video: {
+        endTimeSec: values[1],
+        startTimeSec: values[0],
+        url: videoId
+      },
+    });
+
+    let currentIndex = exerciseCount
+    selection.forEach(item => {
+      workouts.ref.doc(currentWorkout).collection("childExercies")
+      .set({
+        workouts: {
+          [currentWorkout]: currentIndex,
+        }
+      }, { merge: true });
+
+
+      firestore().collection("users").doc(userId).collection("workouts").doc(currentWorkout).update({
+        exCount: increment,
+      })
+
+      currentIndex += 1;
+    })
+
+  }
+
   return (
     <>
-      <View style={styles.body}>
-        <FlatList style={styles.content}
-          data={null}
-          keyExtractor={data => data.id.toString()}
-          renderItem={({ item }) => (
-            <ExerciseCard
-              disabled={false}
-              id={item.id}
-              url={item.video.url}
-              title={item.exName}
-              subtitle={selectSubtitle(item.data)}
-              onPress={setSelection}
-              now={selection}
-            />
-          )}
-          ItemSeparatorComponent={() => <Spacer mV={8}/>}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
+      <ExerciseList
+      mode={'selectableList'}
+      state={selection}
+      onPress={setSelection}
+      />
+
       <View style={styles.footer}>
         <Spacer mV={16}
         style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
@@ -34,8 +64,10 @@ function MyExercises({ navigation }) {
               Cancel
             </TextButton>
             <TextButton onPress={() => {
-              handleAdd()
-              navigation.pop()
+              // handleAdd()
+              // navigation.pop()
+              // console.log(selection, exerciseCount)
+              console.log(invokedBy)
             }}>
               Add
             </TextButton>
@@ -47,24 +79,10 @@ function MyExercises({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-  },
-  content: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    // backgroundColor: 'pink',
-  },
   footer: {
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
-  text: {
-    color: 'white'
-  }
 })
 
-export default MyExercises;
+export default AddExercises;

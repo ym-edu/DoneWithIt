@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import CreateButton from '../components/CreateButton';
 import Spacer from '../components/Spacer';
@@ -11,6 +11,8 @@ function Workout({ navigation, route }) {
   const { params: { id } } = route;
 
   const [exercises, setExercises] = useState([]);
+  const [exerciseCount, setExerciseCount] = useState(0)
+  const exArray = useRef()
 
   useEffect(() => {
     let unsubscribe;
@@ -25,11 +27,12 @@ function Workout({ navigation, route }) {
         }));
         // console.log(exerciseDocs) //TODO: Save state for parent to determine count
         setExercises(exerciseDocs)
-        
-        // exArray.current = exerciseDocs.map(item => {
-        //   // console.log(item.id)
-        //   return item.id
-        // });
+        setExerciseCount(exerciseDocs.length)
+
+        exArray.current = exerciseDocs.map(item => {
+          // console.log(item.id)
+          return item.id
+        });
         // console.log(exArray.current)
       })
     };
@@ -70,7 +73,13 @@ function Workout({ navigation, route }) {
       icon={'plus'}
       title='add exercises'
       onPress={() => {
+        console.log(exArray)
       // navigation.navigate("Modal", {list: exArray.current, woId: routeData })
+      navigation.navigate("AddExercises", {
+        workoutId: id,
+        list: exArray.current,
+        count: exerciseCount,
+      })
       }
       }/>
       <Spacer mV={16}/>
