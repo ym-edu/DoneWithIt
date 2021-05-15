@@ -13,9 +13,9 @@ function ExerciseCard({
    * 'selectableList' | disabled: false, selected: (selectable), hasOptions: false
    */
   mode = 'list',
-  state = null,
+  state = null, //selection
   data = null,
-  onPress = () => null,
+  onPress = () => null, //setSelection
 }) {
   const [disabled, setDisabled] = useState(true);
   const [selected, setSelected] = useState(false);
@@ -32,22 +32,18 @@ function ExerciseCard({
 
   const handlePress = () => {
     setSelected(!selected)
+
+    if(state.includes(data)) { //To avoid pushing to array when deselecting an item
+      const array = [...state]
+      const index = array.indexOf(data)
+      if (index !== -1) {
+        array.splice(index, 1);
+        onPress(array)
+      }
+    } else {
+      onPress([...state, data])
+    }
   }
-
-  // const handlePress = () => {
-  //   setSelected(!selected)
-
-  //   if(state.includes(data)) {
-  //     const array = [...state]
-  //     const index = array.indexOf(data)
-  //     if (index !== -1) {
-  //       array.splice(index, 1);
-  //       onPress(array)
-  //     }
-  //   } else {
-  //     onPress([...state, data])
-  //   }
-  // }
   
   return (
     <TouchableWithoutFeedback

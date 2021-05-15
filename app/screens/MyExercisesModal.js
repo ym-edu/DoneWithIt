@@ -5,47 +5,67 @@ import ExerciseList from '../components/ExerciseList';
 import Spacer from '../components/Spacer';
 import { useDB } from '../hooks/useDB';
 
+import chunk from 'lodash.chunk';
+
 function AddExercises({ navigation, route }) {
-  const { workouts } = useDB();
-  const exArray = route.params.list;
+  const { db, workouts, parentExercises } = useDB();
+
   const currentWorkout = route.params.workoutId;
-  const exerciseCount = route.params.count
-  const { invokedBy } = route.params
+  const exerciseCount = route.params.count;
+
   const [selection, setSelection] = useState([]);
 
   const handleAdd = () => {
-    const newRef = workouts.ref.doc(currentWorkout)
-    .collection("childExercises").doc();
     const batch = db().batch();
 
-    batch.set(newRef, {
-      children_count: 0,
-      exerciseName: exerciseName,
-      exerciseName_std: exerciseName.toLowerCase(),
-      video: {
-        endTimeSec: values[1],
-        startTimeSec: values[0],
-        url: videoId
-      },
-    });
+    const chunks = chunk(selection, 10)
 
-    let currentIndex = exerciseCount
-    selection.forEach(item => {
-      workouts.ref.doc(currentWorkout).collection("childExercies")
-      .set({
-        workouts: {
-          [currentWorkout]: currentIndex,
-        }
-      }, { merge: true });
+    chunks.forEach(chunk => {
+      parentExercises.ref.where(db.FieldPath.documentId(), 'in', chunk).get()
+      .then(snapshot => {
+        snapshot.docs.forEach(doc => {
+          // console.log(doc.id)
 
+          const newRef = workouts.ref.doc(currentWorkout)
+          .collection("childExercises").doc();
 
-      firestore().collection("users").doc(userId).collection("workouts").doc(currentWorkout).update({
-        exCount: increment,
+          batch.set(newRef, {
+            exerciseName: doc.data().exerciseName,
+            exerciseName_std: doc.data().exerciseName_std,
+            mode: {
+              current: "repsFixed",
+              repsFixed: 8,
+              repsTarget: 12,
+              timeFixed: { min: 0, sec: 30 },
+              timeTarget: { min: 1, sec: 30 }
+            },
+            parentExercise_ref: doc.id,
+            video: doc.data().video,
+          });
+        });
+        batch.commit().then(() => {
+          console.log("WOW MUCH COMMIT")
+        });
       })
-
-      currentIndex += 1;
     })
 
+
+    // let currentIndex = exerciseCount
+    // selection.forEach(item => {
+    //   workouts.ref.doc(currentWorkout).collection("childExercies")
+    //   .set({
+    //     workouts: {
+    //       [currentWorkout]: currentIndex,
+    //     }
+    //   }, { merge: true });
+
+
+    //   firestore().collection("users").doc(userId).collection("workouts").doc(currentWorkout).update({
+    //     exCount: increment,
+    //   })
+
+    //   currentIndex += 1;
+    // })
   }
 
   return (
@@ -64,10 +84,8 @@ function AddExercises({ navigation, route }) {
               Cancel
             </TextButton>
             <TextButton onPress={() => {
-              // handleAdd()
+              handleAdd()
               // navigation.pop()
-              // console.log(selection, exerciseCount)
-              console.log(invokedBy)
             }}>
               Add
             </TextButton>
