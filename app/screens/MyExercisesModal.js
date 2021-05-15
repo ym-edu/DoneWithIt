@@ -18,37 +18,41 @@ function AddExercises({ navigation, route }) {
   const handleAdd = () => {
     const batch = db().batch();
 
-    const chunks = chunk(selection, 10)
+    const chunks = chunk(selection, 10) //Tested with 2 - Status: working
 
-    chunks.forEach(chunk => {
-      parentExercises.ref.where(db.FieldPath.documentId(), 'in', chunk).get()
-      .then(snapshot => {
-        snapshot.docs.forEach(doc => {
-          // console.log(doc.id)
+    let queries = chunks.map(chunk => {
+      return parentExercises.ref.where(db.FieldPath.documentId(), 'in', chunk).get()
+    });
 
-          const newRef = workouts.ref.doc(currentWorkout)
-          .collection("childExercises").doc();
+    Promise.all(queries).then(querySnapshots => {
+      return querySnapshots.map(snapshot => snapshot.docs)
+      .reduce((accumulator, resultingDocs) => [...accumulator, ...resultingDocs])
+    }).then((documents) => {
+      documents.forEach(doc => {
+        console.log(doc.id)
 
-          batch.set(newRef, {
-            exerciseName: doc.data().exerciseName,
-            exerciseName_std: doc.data().exerciseName_std,
-            mode: {
-              current: "repsFixed",
-              repsFixed: 8,
-              repsTarget: 12,
-              timeFixed: { min: 0, sec: 30 },
-              timeTarget: { min: 1, sec: 30 }
-            },
-            parentExercise_ref: doc.id,
-            video: doc.data().video,
-          });
+        const newRef = workouts.ref.doc(currentWorkout)
+        .collection("childExercises").doc();
+
+        batch.set(newRef, {
+          exerciseName: doc.data().exerciseName,
+          exerciseName_std: doc.data().exerciseName_std,
+          mode: {
+            current: "repsFixed",
+            repsFixed: 8,
+            repsTarget: 12,
+            timeFixed: { min: 0, sec: 30 },
+            timeTarget: { min: 1, sec: 30 }
+          },
+          parentExercise_ref: doc.id,
+          video: doc.data().video,
         });
-        batch.commit().then(() => {
-          console.log("WOW MUCH COMMIT")
-        });
-      })
+      });
+      batch.commit().then(() => {
+        console.log("WOW MUCH COMMIT")
+      });
     })
-
+  }
 
     // let currentIndex = exerciseCount
     // selection.forEach(item => {
@@ -66,7 +70,7 @@ function AddExercises({ navigation, route }) {
 
     //   currentIndex += 1;
     // })
-  }
+  // }
 
   return (
     <>
