@@ -5,8 +5,6 @@ import ExerciseList from '../components/ExerciseList';
 import Spacer from '../components/Spacer';
 import { useDB } from '../hooks/useDB';
 
-import chunk from 'lodash.chunk';
-
 function AddExercises({ navigation, route }) {
   const { db, workouts, parentExercises, increment } = useDB();
   const { workoutId, exerciseCount } = route.params;
@@ -56,9 +54,7 @@ function AddExercises({ navigation, route }) {
 
         currentIndex += 1;
       });
-      batch.commit().then(() => {
-        navigation.pop()
-      });
+      batch.commit()
     })
   }
    
@@ -71,22 +67,24 @@ function AddExercises({ navigation, route }) {
       />
 
       <View style={styles.footer}>
-        <Spacer mV={16}
-        style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-        <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between', paddingHorizontal: 32}}>
+        <Spacer mV={2} style={styles.line}/>
+        <View style={styles.buttons}>
             <TextButton onPress={() => {
               navigation.pop()
             }}>
               Cancel
             </TextButton>
-            <TextButton onPress={() => {
-              // console.log("Items: ", selection)
+            <TextButton
+            onPress={() => {
               handleAdd()
-            }}>
+              navigation.pop()
+            }}
+            disabled={selection.length > 0 ? false : true}
+            >
               Add
             </TextButton>
           </View>
-        <Spacer mV={16}/>
+        <Spacer mV={2}/>
       </View>
     </>
   );
@@ -96,6 +94,19 @@ const styles = StyleSheet.create({
   footer: {
     alignItems: 'center',
     justifyContent: 'flex-end',
+    backgroundColor: '#1D1E1E',
+  },
+  line: {
+    width: '100%',
+    borderTopWidth: 1,
+    borderTopColor: '#383B3B',
+  },
+  buttons: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    paddingHorizontal: 32,
+    paddingVertical: 8
   },
 })
 

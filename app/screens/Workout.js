@@ -12,7 +12,6 @@ function Workout({ navigation, route }) {
 
   const [exercises, setExercises] = useState([]);
   const [exerciseCount, setExerciseCount] = useState(0)
-  const exArray = useRef()
 
   useEffect(() => {
     let unsubscribeFromExercises;
@@ -29,12 +28,6 @@ function Workout({ navigation, route }) {
         // console.log(exerciseDocs) //TODO: Save state for parent to determine count
         setExercises(exerciseDocs)
         // setExerciseCount(exerciseDocs.length)
-
-        exArray.current = exerciseDocs.map(item => {
-          // console.log(item.id)
-          return item.id
-        });
-        // console.log(exArray.current)
       })
     };
     fetchExercises()
@@ -58,7 +51,6 @@ function Workout({ navigation, route }) {
   return (
     <>
     <View style={styles.container}>
-
       <FlatList style={styles.content}
           data={exercises}
           keyExtractor={item => item.id.toString()}
@@ -71,30 +63,25 @@ function Workout({ navigation, route }) {
             />
           )}
           ItemSeparatorComponent={() => <Spacer mV={8}/>}
+          ListFooterComponent={() => <Spacer mV={64}/>}
           showsVerticalScrollIndicator={false}
         />
-
-      {/* <Text style={styles.text}>{routeData}</Text> */}
-
     </View>
 
     <View style={styles.footer}>
-      <Spacer mV={16}
+      <Spacer mV={8}
       style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
       <CreateButton
       icon={'plus'}
       title='add exercises'
       onPress={() => {
-        // console.log(exArray)
-
       navigation.navigate("AddExercises", {
         workoutId: id,
         exerciseCount: exerciseCount,
-        // list: exArray.current,
       })
       }
       }/>
-      <Spacer mV={16}/>
+      <Spacer mV={8}/>
     </View>
     </>
   );
@@ -115,7 +102,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     width: '100%',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   text: {
     color: 'white'

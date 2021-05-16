@@ -52,11 +52,9 @@ function CreateExercise({ navigation }) {
           <TextButton
           disabled={(values.length > 0 && videoId && exerciseName) ? false : true }
           onPress={() => {
-            // console.log("values: ", typeof(values[0]), "videoId: ", typeof(videoId), "exerciseName: ", typeof(exerciseName))
             handleAdd()
             navigation.pop()
-          }
-            }>Create</TextButton>
+          }}>Create</TextButton>
         </View>
       </View>
     )

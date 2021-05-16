@@ -8,7 +8,7 @@ import { useDB } from '../hooks/useDB';
 function CreateWorkout({ navigation }) {
   const { db, workouts, increment } = useDB();
 
-  const [input, setInput] = useState(null);
+  const [input, setInput] = useState('');
 
   const handleSubmit = (input) => {
     const newRef = workouts.ref.doc();
@@ -24,9 +24,7 @@ function CreateWorkout({ navigation }) {
       childExercise_count: 0,
       childExercise_index: 0,
     })
-    batch.commit().then(() => {
-      navigation.pop()
-    });
+    batch.commit()
   }
 
   return (
@@ -47,7 +45,13 @@ function CreateWorkout({ navigation }) {
             <TextButton onPress={() => navigation.pop()}>
               Cancel
             </TextButton>
-            <TextButton onPress={() => handleSubmit(input)}>
+            <TextButton
+            onPress={() => {
+              handleSubmit(input)
+              navigation.pop()
+            }}
+            disabled={input.length > 0 ? false : true}
+            >
               Create
             </TextButton>
           </View>
