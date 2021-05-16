@@ -13,9 +13,9 @@ function ExerciseCard({
    * 'selectableList' | disabled: false, selected: (selectable), hasOptions: false
    */
   mode = 'list',
+  data = null, // exerciseId
   state = null, //selection
-  data = null,
-  onPress = () => null, //setSelection
+  setState = null, //setSelection
 }) {
   const [disabled, setDisabled] = useState(true);
   const [selected, setSelected] = useState(false);
@@ -36,12 +36,14 @@ function ExerciseCard({
     if(state.includes(data)) { //To avoid pushing to array when deselecting an item
       const array = [...state]
       const index = array.indexOf(data)
+
       if (index !== -1) {
         array.splice(index, 1);
-        onPress(array)
+
+        setState(array)
       }
     } else {
-      onPress([...state, data])
+      setState([...state, data])
     }
   }
   

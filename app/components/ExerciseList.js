@@ -5,7 +5,7 @@ import ExerciseCard from '../components/ExerciseCard';
 // import subtitle from '../temp/subTitle'; //Children exercises
 import { useDB } from '../hooks/useDB';
 
-function ExerciseList({ mode = 'list', state, onPress }) {
+function ExerciseList({ mode = 'list', state, setState }) {
   const { parentExercises } = useDB();
   const [exercises, setExercises] = useState([]);
 
@@ -38,10 +38,10 @@ function ExerciseList({ mode = 'list', state, onPress }) {
               : null}
 
               mode={mode}
-              state={state}
               data={item.id}
-
-              onPress={onPress}
+              
+              state={state}
+              setState={setState}
             />
           )}
 

@@ -8,7 +8,7 @@ import { useDB } from '../hooks/useDB';
 import chunk from 'lodash.chunk';
 
 function AddExercises({ navigation, route }) {
-  const { db, workouts, parentExercises } = useDB();
+  const { db, workouts, parentExercises, increment } = useDB();
   const { workoutId, exerciseCount } = route.params;
 
   const [selection, setSelection] = useState([]);
@@ -18,10 +18,8 @@ function AddExercises({ navigation, route }) {
 
     let currentIndex = exerciseCount;
 
-    const chunks = chunk(selection, 10) //Tested with 2 - Status: working
-
-    let queries = chunks.map(chunk => {
-      return parentExercises.ref.where(db.FieldPath.documentId(), 'in', chunk).get()
+    let queries = selection.map(itemId => {
+      return parentExercises.ref.where(db.FieldPath.documentId(), '==', itemId).get()
     });
 
     Promise.all(queries).then(querySnapshots => {
@@ -29,7 +27,7 @@ function AddExercises({ navigation, route }) {
       .reduce((accumulator, resultingDocs) => [...accumulator, ...resultingDocs])
     }).then((documents) => {
       documents.forEach(doc => {
-        // console.log(doc.id)
+        console.log("Item: ", doc.id, currentIndex)
         // console.log(currentIndex)
         
         const newRef = workouts.ref.doc(workoutId)
@@ -50,10 +48,16 @@ function AddExercises({ navigation, route }) {
           position: currentIndex
         });
 
+        batch.set(workouts.ref.doc(workoutId)
+        .collection("childExercises").doc("_tally"), {
+          childExercise_count: increment,
+          childExercise_index: increment,
+        }, { merge: true });
+
         currentIndex += 1;
       });
       batch.commit().then(() => {
-        console.log("WOW MUCH COMMIT")
+        navigation.pop()
       });
     })
   }
@@ -63,7 +67,7 @@ function AddExercises({ navigation, route }) {
       <ExerciseList
       mode={'selectableList'}
       state={selection}
-      onPress={setSelection}
+      setState={setSelection}
       />
 
       <View style={styles.footer}>
@@ -76,8 +80,8 @@ function AddExercises({ navigation, route }) {
               Cancel
             </TextButton>
             <TextButton onPress={() => {
+              // console.log("Items: ", selection)
               handleAdd()
-              navigation.pop()
             }}>
               Add
             </TextButton>

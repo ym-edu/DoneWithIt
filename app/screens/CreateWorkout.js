@@ -19,6 +19,11 @@ function CreateWorkout({ navigation }) {
       workoutName_std: input.toLowerCase(),
     });
     batch.set(workouts.tally, { workout_count: increment }, { merge: true })
+    //TODO: Upon creating a user, create the '_tally' doc with count set to 0 within the 'parentExercises' & 'workouts' collections so a tally listener can have an initial refference value, independant from user having created an exercise or workout to avoid listening for a nonexistant value.
+    batch.set(newRef.collection("childExercises").doc("_tally"), {
+      childExercise_count: 0,
+      childExercise_index: 0,
+    })
     batch.commit().then(() => {
       navigation.pop()
     });

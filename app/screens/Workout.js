@@ -15,10 +15,11 @@ function Workout({ navigation, route }) {
   const exArray = useRef()
 
   useEffect(() => {
-    let unsubscribe;
+    let unsubscribeFromExercises;
+    let unsubscribeFromTally;
 
     const fetchExercises = () => {
-      unsubscribe = workouts.ref.doc(id).collection("childExercises")
+      unsubscribeFromExercises = workouts.ref.doc(id).collection("childExercises")
       .orderBy("position")
       .onSnapshot(snapshot => {
         const exerciseDocs = snapshot.docs.map(doc => ({
@@ -27,7 +28,7 @@ function Workout({ navigation, route }) {
         }));
         // console.log(exerciseDocs) //TODO: Save state for parent to determine count
         setExercises(exerciseDocs)
-        setExerciseCount(exerciseDocs.length)
+        // setExerciseCount(exerciseDocs.length)
 
         exArray.current = exerciseDocs.map(item => {
           // console.log(item.id)
@@ -38,8 +39,19 @@ function Workout({ navigation, route }) {
     };
     fetchExercises()
 
+    const fetchTally = () => {
+      unsubscribeFromTally = workouts.ref.doc(id)
+      .collection("childExercises").doc("_tally")
+      .onSnapshot(tallyDoc => {
+        //TODO: If workout is deleted from workout page an error occurs as listener cannot find nonexistant tally doc
+        setExerciseCount(tallyDoc.data().childExercise_index)
+      })
+    }
+    fetchTally()
+
     return () => {
-      unsubscribe()
+      unsubscribeFromExercises()
+      unsubscribeFromTally()
     }
   }, [])
 
