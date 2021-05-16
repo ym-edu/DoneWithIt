@@ -9,14 +9,14 @@ import chunk from 'lodash.chunk';
 
 function AddExercises({ navigation, route }) {
   const { db, workouts, parentExercises } = useDB();
-
-  const currentWorkout = route.params.workoutId;
-  const exerciseCount = route.params.count;
+  const { workoutId, exerciseCount } = route.params;
 
   const [selection, setSelection] = useState([]);
 
   const handleAdd = () => {
     const batch = db().batch();
+
+    let currentIndex = exerciseCount;
 
     const chunks = chunk(selection, 10) //Tested with 2 - Status: working
 
@@ -29,11 +29,12 @@ function AddExercises({ navigation, route }) {
       .reduce((accumulator, resultingDocs) => [...accumulator, ...resultingDocs])
     }).then((documents) => {
       documents.forEach(doc => {
-        console.log(doc.id)
-
-        const newRef = workouts.ref.doc(currentWorkout)
+        // console.log(doc.id)
+        // console.log(currentIndex)
+        
+        const newRef = workouts.ref.doc(workoutId)
         .collection("childExercises").doc();
-
+      
         batch.set(newRef, {
           exerciseName: doc.data().exerciseName,
           exerciseName_std: doc.data().exerciseName_std,
@@ -46,32 +47,17 @@ function AddExercises({ navigation, route }) {
           },
           parentExercise_ref: doc.id,
           video: doc.data().video,
+          position: currentIndex
         });
+
+        currentIndex += 1;
       });
       batch.commit().then(() => {
         console.log("WOW MUCH COMMIT")
       });
     })
   }
-
-    // let currentIndex = exerciseCount
-    // selection.forEach(item => {
-    //   workouts.ref.doc(currentWorkout).collection("childExercies")
-    //   .set({
-    //     workouts: {
-    //       [currentWorkout]: currentIndex,
-    //     }
-    //   }, { merge: true });
-
-
-    //   firestore().collection("users").doc(userId).collection("workouts").doc(currentWorkout).update({
-    //     exCount: increment,
-    //   })
-
-    //   currentIndex += 1;
-    // })
-  // }
-
+   
   return (
     <>
       <ExerciseList
@@ -84,12 +70,14 @@ function AddExercises({ navigation, route }) {
         <Spacer mV={16}
         style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
         <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between', paddingHorizontal: 32}}>
-            <TextButton onPress={() => navigation.pop()}>
+            <TextButton onPress={() => {
+              navigation.pop()
+            }}>
               Cancel
             </TextButton>
             <TextButton onPress={() => {
               handleAdd()
-              // navigation.pop()
+              navigation.pop()
             }}>
               Add
             </TextButton>

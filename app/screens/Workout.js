@@ -19,7 +19,7 @@ function Workout({ navigation, route }) {
 
     const fetchExercises = () => {
       unsubscribe = workouts.ref.doc(id).collection("childExercises")
-      .orderBy("exerciseName_std")
+      .orderBy("position")
       .onSnapshot(snapshot => {
         const exerciseDocs = snapshot.docs.map(doc => ({
           id: doc.id,
@@ -73,12 +73,12 @@ function Workout({ navigation, route }) {
       icon={'plus'}
       title='add exercises'
       onPress={() => {
-        console.log(exArray)
-      // navigation.navigate("Modal", {list: exArray.current, woId: routeData })
+        // console.log(exArray)
+
       navigation.navigate("AddExercises", {
         workoutId: id,
-        list: exArray.current,
-        count: exerciseCount,
+        exerciseCount: exerciseCount,
+        // list: exArray.current,
       })
       }
       }/>
