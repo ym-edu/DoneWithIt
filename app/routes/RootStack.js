@@ -2,15 +2,19 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import AppTabs from './AppTabs';
 import Splash from '../screens/Splash';
 import AuthStack from './AuthStack';
+import AppTabs from './AppTabs';
+
 import CreateExercise from '../screens/CreateExercise';
 import Search from '../screens/Search';
+
 import CreateWorkout from '../screens/CreateWorkout';
+
 import AddExercises from '../screens/AddExercises';
 
-import WorkoutOptions from '../screens/WorkoutOptions';
+import WorkoutOptionsModal from '../screens/WorkoutOptionsModal';
+import SortChildExercises from '../screens/SortChildExercises';
 
 import { useAuth, useAuthUpdate } from '../hooks/useAuth';
 
@@ -92,10 +96,17 @@ export default function RootStack() {
       }}
       />
       <Stack.Screen
-      name="WorkoutOptions"
-      component={WorkoutOptions}
+      name="WorkoutOptionsModal"
+      component={WorkoutOptionsModal}
       options={{...modalOptions, 
         cardStyle: { backgroundColor: Platform.OS === 'android' ? '#0000001A' : '#0000001A' }
+      }}
+      />
+      <Stack.Screen
+      name="SortChildExercises"
+      component={SortChildExercises}
+      options={{
+        animationEnabled: true,
       }}
       />
     </Stack.Navigator>
