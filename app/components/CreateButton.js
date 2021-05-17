@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useIcon } from '../layout'
 import Spacer from '../components/Spacer'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+// import { TouchableOpacity } from 'react-native-gesture-handler'; //WTF: somehow this makes button clickable from any screen
 
 function CreateButton({icon, title, style, onPress}) {
   const Icon = useIcon()
