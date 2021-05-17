@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableWithoutFeedback, TouchableOpacity } from 're
 import Media from './Media';
 import Details from './Details';
 import Spacer from './Spacer';
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import Options from './Options';
 
 function ExerciseCard({
   url='', title = '', subtitle = '',
@@ -62,11 +62,7 @@ function ExerciseCard({
         <Spacer mH={8}/>
         <Details title={title} subtitle={subtitle}/>
         <Spacer mH={8}/>
-        {hasOptions 
-        ? <TouchableOpacity>
-            <MaterialCommunityIcons name="dots-vertical" size={24} color="white" />
-          </TouchableOpacity>
-        : null}
+        {hasOptions ? <Options /> : null}
       </View>
 
     </TouchableWithoutFeedback>
