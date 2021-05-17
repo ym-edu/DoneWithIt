@@ -5,12 +5,12 @@ import ExerciseCard from '../components/ExerciseCard';
 // import subtitle from '../temp/subTitle'; //Children exercises
 import { useDB } from '../hooks/useDB';
 
-function ExerciseList() {
+function ExerciseList({ mode = 'list', state, setState }) {
   const { parentExercises } = useDB();
   const [exercises, setExercises] = useState([]);
 
   useEffect(() => {
-    unsubscribe = parentExercises.ref
+    const unsubscribe = parentExercises.ref
     .orderBy("exerciseName_std")
     .onSnapshot(snapshot => {
       const exerciseDocs = snapshot.docs.map(doc => ({
@@ -28,17 +28,25 @@ function ExerciseList() {
         <FlatList style={styles.flatlist}
           data={exercises}
           keyExtractor={data => data.id.toString()}
+
           renderItem={({ item }) => (
             <ExerciseCard
               url={item.video.url}
               title={item.exerciseName}
-              subtitle={`Included in ${item.children_count} workouts`}
-              onPress={() => null}
+              subtitle={mode === 'list'
+              ? `Included in ${item.children_count} workouts`
+              : null}
+
+              mode={mode}
+              data={item.id}
+              
+              state={state}
+              setState={setState}
             />
           )}
+
           ItemSeparatorComponent={() => <Spacer mV={8}/>}
-          ListFooterComponent={() =>
-            <Spacer mV={64}/>}
+          ListFooterComponent={() => <Spacer mV={64}/>}
           showsVerticalScrollIndicator={false}
         />
       </View>

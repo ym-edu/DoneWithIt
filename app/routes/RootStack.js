@@ -8,6 +8,7 @@ import AuthStack from './AuthStack';
 import CreateExercise from '../screens/CreateExercise';
 import Search from '../screens/Search';
 import CreateWorkout from '../screens/CreateWorkout';
+import AddExercises from '../screens/MyExercisesModal';
 
 import { useAuth, useAuthUpdate } from '../hooks/useAuth';
 
@@ -77,6 +78,13 @@ export default function RootStack() {
             }
           }
         }
+      }}
+      />
+      <Stack.Screen
+      name="AddExercises"
+      component={AddExercises}
+      options={{
+        animationEnabled: true,
       }}
       />
     </Stack.Navigator>

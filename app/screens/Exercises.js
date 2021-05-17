@@ -7,12 +7,12 @@ import ExerciseList from '../components/ExerciseList';
 function Exercises({ navigation }) {
   return (
     <>
-      <ExerciseList/>
+      <ExerciseList main={true}/>
       <View style={styles.footer}>
-        <Spacer mV={16}
+        <Spacer mV={8}
         style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
         <CreateButton icon={'plus'} title='create exercise' onPress={() => navigation.navigate("CreateExercise")}/>
-        <Spacer mV={16}/>
+        <Spacer mV={8}/>
       </View>
     </>
   );

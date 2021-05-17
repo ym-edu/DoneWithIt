@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import Media from './Media';
 import Details from './Details'
+import Spacer from './Spacer';
 
 function VideoCard({thumbnail, title, subtitle, onPress}) {
   return (
@@ -12,10 +13,12 @@ function VideoCard({thumbnail, title, subtitle, onPress}) {
       <View style={styles.container}>
         <Media directSource={thumbnail}/>
       </View>
-        <Details
-        title={title}
-        subTitle={subtitle}
-        />
+      <Spacer mV={8}/>
+      <Details
+      title={title}
+      subTitle={subtitle}
+      />
+      <Spacer mV={8}/>
     </TouchableOpacity>
   );
 }
