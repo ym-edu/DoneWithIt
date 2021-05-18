@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons';
 import Media from './Media';
 import Details from './Details';
 import Spacer from './Spacer';
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import Options from './Options';
 
 function ExerciseCard({
   url='', title = '', subtitle = '',
@@ -16,6 +17,8 @@ function ExerciseCard({
   data = null, // exerciseId
   state = null, //selection
   setState = null, //setSelection
+  onLongPress = null,
+  isActive = null,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [selected, setSelected] = useState(false);
@@ -48,28 +51,36 @@ function ExerciseCard({
   }
   
   return (
-    <TouchableWithoutFeedback
-    style={{borderRadius: 8}}
-    onPress={() => handlePress()}
-    disabled={disabled}>
+    <View style={mode === 'sortableList' && styles.sortableList}>
 
-      <View style={[
-        styles.container,
-        selected && {backgroundColor: '#242626'},
-        mode != 'list' && {height: 54}
-        ]}>
-        <Media source={url}/>
-        <Spacer mH={8}/>
-        <Details title={title} subtitle={subtitle}/>
-        <Spacer mH={8}/>
-        {hasOptions 
-        ? <TouchableOpacity>
-            <MaterialCommunityIcons name="dots-vertical" size={24} color="white" />
-          </TouchableOpacity>
-        : null}
-      </View>
+      {mode === 'sortableList'
+      ? <TouchableOpacity
+        style={{padding: 8}}
+        onLongPress={onLongPress}
+        delayLongPress={0}
+        >
+          <FontAwesome5 name="grip-lines" size={16} color="white" />
+        </TouchableOpacity>
+      : null}
 
-    </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback
+      disabled={disabled}
+      style={{borderRadius: 8}}
+      onPress={() => mode != 'sortableList' ? handlePress() : null}>
+        <View style={[
+          styles.container,
+          (selected || isActive) && {backgroundColor: '#242626'},
+          mode != 'list' && {height: 54},
+          ]}>
+          <Media source={url}/>
+          <Spacer mH={8}/>
+          <Details title={title} subtitle={subtitle}/>
+          <Spacer mH={8}/>
+          {hasOptions ? <Options /> : null}
+        </View>
+      </TouchableWithoutFeedback>
+
+    </View>
   );
 }
 
@@ -82,7 +93,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-  }
+  },
+  sortableList: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
 })
 
 export default ExerciseCard;

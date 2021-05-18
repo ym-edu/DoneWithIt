@@ -27,7 +27,11 @@ function Workout({ navigation, route }) {
         }));
         // console.log(exerciseDocs) //TODO: Save state for parent to determine count
         setExercises(exerciseDocs)
-        // setExerciseCount(exerciseDocs.length)
+        
+        navigation.setParams({
+          exercises: exerciseDocs,
+          workoutId: id,
+        })
       })
     };
     fetchExercises()
