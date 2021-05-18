@@ -1,11 +1,15 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import TextButton from '../components/TextButton';
 
 function WorkoutOptionsModal({navigation, route: { params: {exercises, workoutId}}}) {
   return (
     <>
-      <View style={styles.container}>
+      <TouchableOpacity
+      style={styles.container}
+      activeOpacity={1}
+      onPress={() => navigation.pop()}
+      >
         <View style={styles.modal}>
           <TextButton onPress={() => navigation.navigate("SortChildExercises", {
             exercises: exercises,
@@ -20,7 +24,7 @@ function WorkoutOptionsModal({navigation, route: { params: {exercises, workoutId
             Delete Workout
           </TextButton>
         </View>
-      </View>
+      </TouchableOpacity>
     </>
   );
 }
