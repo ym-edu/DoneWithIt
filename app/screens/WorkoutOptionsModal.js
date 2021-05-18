@@ -2,13 +2,14 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import TextButton from '../components/TextButton';
 
-function WorkoutOptionsModal({ navigation, route: { params: { exercises } } }) {
+function WorkoutOptionsModal({navigation, route: { params: {exercises, workoutId}}}) {
   return (
     <>
       <View style={styles.container}>
         <View style={styles.modal}>
           <TextButton onPress={() => navigation.navigate("SortChildExercises", {
-            exercises: exercises
+            exercises: exercises,
+            workoutId: workoutId,
           })} style={styles.button}>
             Sort Exercises
           </TextButton>

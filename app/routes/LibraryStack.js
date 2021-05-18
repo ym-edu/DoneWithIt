@@ -33,7 +33,7 @@ export default function LibraryStack() {
         <Stack.Screen
         name='Workout'
         component={Workout}
-        options={({ navigation, route: { params: { title, exercises } } }) => {
+        options={({navigation, route: {params: {title, exercises, workoutId}}}) => {
           return {
             headerTitle: title,
             headerRight: () => (
@@ -41,6 +41,7 @@ export default function LibraryStack() {
               // console.log(route.params.exercises)
               navigation.navigate('WorkoutOptionsModal', {
                 exercises: exercises,
+                workoutId: workoutId
               })
             }}/>
             ),

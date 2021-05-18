@@ -5,19 +5,52 @@ import ExerciseCard from '../components/ExerciseCard';
 import Spacer from '../components/Spacer';
 import subtitle from '../temp/subTitle';
 import TextButton from '../components/TextButton';
+import { useDB } from '../hooks/useDB';
 
-function Example({ navigation, route: { params: { exercises } } }) {
-  const [data, setData] = useState(exercises)
+function SortChildExercises({ navigation, route: { params: { exercises, workoutId}}}) {
+  const { db, workouts } = useDB();
 
-  const handleEnd = (data) => {
-    const list = data.map(item => {
-      return item.position
+  const [data, setData] = useState(exercises);
+  const [changeCount, setChangeCount] = useState(0);
+
+  const handleAdd = () => {
+    const batch = db().batch();
+    
+    const ids = data.map(item => item.id)
+    // console.log("Ids: ", ids)
+
+    batch.update(workouts.ref.doc(workoutId).collection("childExercises")
+    .doc("_tally"), {
+      childExercise_index: ids.length,
     })
 
-    console.log(list)
+    let queries = ids.map(itemId => {
+      return workouts.ref.doc(workoutId).collection("childExercises")
+      .where(db.FieldPath.documentId(), '==', itemId).get()
+    });
+
+    Promise.all(queries).then(querySnapshots => {
+      return querySnapshots.map(snapshot => snapshot.docs)
+      .reduce((accumulator, resultingDocs) => [...accumulator, ...resultingDocs])
+    }).then((documents) => {
+      documents.forEach((doc, index) => {
+        // console.log("Position: ", doc.data().position, "NewPosition: ", index)
+        const ref = workouts.ref.doc(workoutId)
+        .collection("childExercises").doc(doc.id)
+
+        batch.update(ref, {
+          position: index
+        })
+      });
+      batch.commit()
+      //TODO: render loading overlay while batchWrite completes
+    })
+
+
+
   }
 
-  const renderItem = useCallback(({ item, index, drag, isActive }) => {
+  const renderItem = useCallback(({ item, drag, isActive }) => {
     return (
       <ExerciseCard
           url={item.video.url}
@@ -37,14 +70,16 @@ function Example({ navigation, route: { params: { exercises } } }) {
      <View style={styles.container}>
         <DraggableFlatList style={styles.flatlist}
         data={data}
-        // keyExtractor={(item, index) => `draggable-item-${index}}`} //Warning: Causes buggy behaviour, i.e. item data sorts iteself effectively, however image stays fixed in same position
         keyExtractor={data => data.id.toString()}
 
         renderItem={renderItem}
 
-        onDragEnd={({data}) => {
-          handleEnd(data)
-          setData(data)
+        onDragEnd={(event) => {
+          if(event.from != event.to) {
+            // console.log(event.from, event.to)
+            setChangeCount(prev => prev + 1)
+            setData(event.data)
+          };
         }}
 
         ItemSeparatorComponent={() => <Spacer mV={8}/>}
@@ -63,8 +98,9 @@ function Example({ navigation, route: { params: { exercises } } }) {
             <TextButton
             onPress={() => {
               handleAdd()
+              navigation.navigate("Workout")
             }}
-            disabled={true}
+            disabled={changeCount > 0 ? false : true}
             >
               Save
             </TextButton>
@@ -105,4 +141,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Example;
+export default SortChildExercises;

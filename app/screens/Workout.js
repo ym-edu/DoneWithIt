@@ -30,6 +30,7 @@ function Workout({ navigation, route }) {
         
         navigation.setParams({
           exercises: exerciseDocs,
+          workoutId: id,
         })
       })
     };
