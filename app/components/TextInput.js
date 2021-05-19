@@ -4,7 +4,7 @@ import { TextInput } from 'react-native-paper';
 import { constants } from '../config';
 const { colors } = constants;
 
-function Input({ label, getValue, focus }) {
+function Input({ label, getValue, focus, value }) {
   const inputRef = useRef()
 
   useEffect(() => {
@@ -33,6 +33,7 @@ function Input({ label, getValue, focus }) {
       ref={inputRef}
       autoCorrect={false}
       keyboardType={Platform.OS === 'android' ? "visible-password" : "default"}
+      value={value}
       />
   );
 }

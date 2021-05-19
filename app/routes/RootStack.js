@@ -10,6 +10,7 @@ import CreateExercise from '../screens/CreateExercise';
 import Search from '../screens/Search';
 
 import CreateWorkout from '../screens/CreateWorkout';
+import UpdateWorkout from '../screens/UpdateWorkout';
 
 import AddExercises from '../screens/AddExercises';
 
@@ -108,6 +109,11 @@ export default function RootStack() {
       options={{
         animationEnabled: true,
       }}
+      />
+      <Stack.Screen
+      name="UpdateWorkout"
+      component={UpdateWorkout}
+      options={modalOptions}
       />
     </Stack.Navigator>
   );
