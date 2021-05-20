@@ -5,6 +5,7 @@ import Media from './Media';
 import Details from './Details';
 import Spacer from './Spacer';
 import Options from './Options';
+import ExerciseOptions from './ExerciseOptions';
 
 function ExerciseCard({
   url='', title = '', subtitle = '',
@@ -13,6 +14,7 @@ function ExerciseCard({
    * 'sortableList' | disabled: true, selected: (selectable),  hasOptions: false
    * 'selectableList' | disabled: false, selected: (selectable), hasOptions: false
    */
+  parent = true,
   mode = 'list',
   data = null, // exerciseId
   state = null, //selection
@@ -23,6 +25,7 @@ function ExerciseCard({
   const [disabled, setDisabled] = useState(true);
   const [selected, setSelected] = useState(false);
   const [hasOptions, setHasOptions] = useState(true);
+  const [optionsOpen, setOptionsOpen] = useState(false);
 
   useEffect(() => {
     if(mode === 'sortableList') {
@@ -51,6 +54,8 @@ function ExerciseCard({
   }
   
   return (
+    <>
+    {optionsOpen ? <ExerciseOptions setState={setOptionsOpen} parent={parent}/> : null}
     <View style={mode === 'sortableList' && styles.sortableList}>
 
       {mode === 'sortableList'
@@ -76,11 +81,12 @@ function ExerciseCard({
           <Spacer mH={8}/>
           <Details title={title} subtitle={subtitle}/>
           <Spacer mH={8}/>
-          {hasOptions ? <Options /> : null}
+          {hasOptions ? <Options onPress={() => setOptionsOpen(true)}/> : null}
         </View>
       </TouchableWithoutFeedback>
 
     </View>
+    </>
   );
 }
 

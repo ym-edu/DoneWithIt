@@ -64,6 +64,7 @@ function Workout({ navigation, route }) {
               title={item.exerciseName}
               subtitle={subtitle(item.mode)}
               onPress={() => null}
+              parent={false}
             />
           )}
           ItemSeparatorComponent={() => <Spacer mV={8}/>}
