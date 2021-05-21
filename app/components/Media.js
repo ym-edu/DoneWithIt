@@ -11,16 +11,19 @@ function Media({ source, square = false, directSource }) {
   const [thumbnail, setThumbnail] = useState(null);
 
   useEffect(() => {
+    let isMounted = true;
     if(directSource) {
       setThumbnail(directSource)
     }
     if(!source) return;
     const fetchMedia = async () => {
       getYoutubeMeta(source).then(data => {
-        setThumbnail(data.thumbnail_url);
+        if (isMounted) setThumbnail(data.thumbnail_url);
       });
     }
     fetchMedia()
+
+    return () => { isMounted = false }
   }, []);
 
   function Thumbnail() {

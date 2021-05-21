@@ -13,6 +13,8 @@ function Workout({ navigation, route }) {
   const [exercises, setExercises] = useState([]);
   const [exerciseCount, setExerciseCount] = useState(0)
 
+  const flatlistRef = useRef();
+
   useEffect(() => {
     let unsubscribeFromExercises;
     let unsubscribeFromTally;
@@ -26,7 +28,7 @@ function Workout({ navigation, route }) {
           ...doc.data(),
         }));
         // console.log(exerciseDocs) //TODO: Save state for parent to determine count
-        setExercises(exerciseDocs)
+        setExercises(exerciseDocs.reverse())
         
         navigation.setParams({
           exercises: exerciseDocs,
@@ -68,8 +70,13 @@ function Workout({ navigation, route }) {
             />
           )}
           ItemSeparatorComponent={() => <Spacer mV={8}/>}
-          ListFooterComponent={() => <Spacer mV={64}/>}
+          ListHeaderComponent={() => <Spacer mV={64}/>}
           showsVerticalScrollIndicator={false}
+// =================================================================================
+          inverted
+          onContentSizeChange={() => flatlistRef?.current?.scrollToEnd({animated: false})}
+          ref={flatlistRef}
+          contentContainerStyle={{flexGrow: 1, justifyContent: 'flex-end'}}
         />
     </View>
 
@@ -101,9 +108,9 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   content: {
-    flex: 1,
     width: '100%',
     height: '100%',
+    // overflow: 'visible', //Prevents scroll
   },
   footer: {
     width: '100%',

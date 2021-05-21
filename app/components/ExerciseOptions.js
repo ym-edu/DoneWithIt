@@ -77,6 +77,8 @@ function ExerciseOptions({setState, parent}) {
           showArrowIcon={false}
           dropDownContainerStyle={{backgroundColor: '#242626'}}
           closeAfterSelecting={true}
+          listMode={"FLATLIST"}
+          dropDownDirection={"BOTTOM"}
         />
       </View>
     )
