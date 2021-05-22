@@ -16,7 +16,7 @@ function ExerciseCard({
    */
   parent = true,
   mode = 'list',
-  data = null, // exerciseId
+  data = null, // [(exerciseId) exerciseMode]
   state = null, //selection
   setState = null, //setSelection
   onLongPress = null,
@@ -55,7 +55,7 @@ function ExerciseCard({
   
   return (
     <>
-    {optionsOpen ? <ExerciseOptions setState={setOptionsOpen} parent={parent}/> : null}
+    {optionsOpen ? <ExerciseOptions setState={setOptionsOpen} parent={parent} data={data}/> : null}
     <View style={mode === 'sortableList' && styles.sortableList}>
 
       {mode === 'sortableList'

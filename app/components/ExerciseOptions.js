@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text, Platform} from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 import { useIcon } from '../layout';
 import { FontAwesome } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-function ExerciseOptions({setState, parent}) {
+function ExerciseOptions({setState, parent, data: {id, mode}}) {
   const Icon = useIcon();
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState(mode);
   const [items, setItems] = useState([
-    {label: 'reps fixed', value: 'repsFixex'},
+    {label: 'reps fixed', value: 'repsFixed'},
     {label: 'reps target', value: 'repsTarget'},
     {label: 'time Fixed', value: 'timeFixed'},
     {label: 'time target', value: 'timeTarget'},
@@ -27,12 +27,12 @@ function ExerciseOptions({setState, parent}) {
       </TouchableOpacity>
         {/* <Spacer mH={32} /> */}
       <View style={styles.buttons}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
         style={{backgroundColor: '#1D1E1E', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 20}}
         // onPress={() => setState(false)}
         >
           <FontAwesome name="history" size={20} color="white" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
         // onPress={() => setState(false)}
@@ -75,6 +75,7 @@ function ExerciseOptions({setState, parent}) {
           placeholder={"select a mode"}
           placeholderStyle={{color: '#C0C0B87F'}}
           showArrowIcon={false}
+          showTickIcon={false}
           dropDownContainerStyle={{backgroundColor: '#242626'}}
           closeAfterSelecting={true}
           listMode={"FLATLIST"}
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     // backgroundColor: 'white',
     flex: 2,
   },
