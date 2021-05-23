@@ -113,6 +113,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     overflow: 'hidden',
     borderRadius: 8,
+
+    marginBottom: 8,
   },
   sortableList: {
     flexDirection: 'row',

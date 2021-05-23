@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
-import ExerciseOptions from '../components/ExerciseOptions';
 import Spacer from '../components/Spacer';
 import CreateButton from '../components/CreateButton';
 import ExerciseCard from '../components/ExerciseCard';
@@ -102,7 +101,7 @@ function Workout({ navigation, route }) {
       <FlatList style={styles.flatlist}
         data={exercises}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           // <ExerciseOptions data={item}/>
           <ExerciseCard
             url={item.video.url} //ZfawH9NsTtl ZfawH9NsTtl
@@ -115,27 +114,29 @@ function Workout({ navigation, route }) {
             
             menuIsOpen={menuIsOpen}
             handleMenuState={handleMenuState}
+
+            index={index}
           />
         )}
-        CellRendererComponent={({ children, index, style, ...props }) => {
-          // console.log(index)
-          // console.log(children)
+        // CellRendererComponent={({ children, index, style, ...props }) => {
+        //   // console.log(index)
+        //   // console.log(children)
 
-          const childrenWithProps = React.Children.map(children, (child) => {
-            if(child === null || child === undefined) return;
-            return React.cloneElement(child, {
-              index: index,
-              last: 0,
-              // last: data.length-1,
-            });
-          });
+        //   const childrenWithProps = React.Children.map(children, (child) => {
+        //     if(child === null || child === undefined) return;
+        //     return React.cloneElement(child, {
+        //       index: index,
+        //       last: 0,
+        //       // last: data.length-1,
+        //     });
+        //   });
 
-          return (
-            <View style={[style, styles.cell, index === 0 && {marginBottom: 0}]}>
-              {childrenWithProps.reverse()}
-            </View>
-          )
-        }}
+        //   return (
+        //     <View style={[style, styles.cell, index === 0 && {marginBottom: 0}]}>
+        //       {childrenWithProps.reverse()}
+        //     </View>
+        //   )
+        // }}
         contentContainerStyle={{flexDirection: 'column-reverse', paddingTop: 16, marginHorizontal: 16}}
 
         // inverted
@@ -143,7 +144,7 @@ function Workout({ navigation, route }) {
         // getItemLayout={(data, index) => ({length: 72, offset: 72 * index, index})}
 
         // ItemSeparatorComponent={() => <Spacer mV={8}/>}
-        ListHeaderComponent={() => <Spacer mV={64 * 2}/>}
+        ListHeaderComponent={() => <Spacer mV={32 * 4 - 8}/>}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -165,12 +166,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  cell: {
-    marginBottom: 8,
-    // paddingBottom: 8,
-    // borderWidth: 1,
-    // borderColor: 'white',
-  },
+  // cell: {
+  //   marginBottom: 8,
+  //   // paddingBottom: 8,
+  //   // borderWidth: 1,
+  //   // borderColor: 'white',
+  // },
   footer: {
     width: '100%',
     alignItems: 'center',
