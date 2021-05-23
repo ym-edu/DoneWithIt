@@ -11,13 +11,13 @@ export default function useIcon() {
 }
 
 export function IconProvider({ children }) {
-  function Icon ({ name, size = 16, color = colors.Light, container = false, style }) {
+  function Icon ({ name, size = 16, color = colors.Light, fill = false, style }) {
     const containerSize = size * 2;
 
     const iconStyle = {
       width: containerSize,
       height: containerSize,
-      backgroundColor: container ? colors.primaryLighter : null,
+      backgroundColor: fill ? colors.primary : null,
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: size,

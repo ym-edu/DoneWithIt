@@ -10,7 +10,7 @@ function CreateButton({icon, title, style, onPress}) {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={[styles.container, style]}>
-        <Icon name={icon} container={true} style={{borderRadius: 4}}/>
+        <Icon name={icon} fill={true} style={{borderRadius: 4}}/>
         <Spacer mH={8}/>
         <Text style={styles.title}>{title}</Text>
       </View>
