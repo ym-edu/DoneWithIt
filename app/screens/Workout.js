@@ -1,100 +1,55 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
-import CreateButton from '../components/CreateButton';
-import Spacer from '../components/Spacer';
-import ExerciseCard from '../components/ExerciseCard';
-import subtitle from '../temp/subTitle';
-import { useDB } from '../hooks/useDB';
+import ExerciseOptions from '../components/ExerciseOptions';
 
 function Workout({ navigation, route }) {
-  const { workouts } = useDB()
-  const { params: { id } } = route;
-
-  const [exercises, setExercises] = useState([]);
-  const [exerciseCount, setExerciseCount] = useState(0)
-
-  const flatlistRef = useRef();
-
-  useEffect(() => {
-    let unsubscribeFromExercises;
-    let unsubscribeFromTally;
-
-    const fetchExercises = () => {
-      unsubscribeFromExercises = workouts.ref.doc(id).collection("childExercises")
-      .orderBy("position")
-      .onSnapshot(snapshot => {
-        const exerciseDocs = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        // console.log(exerciseDocs) //TODO: Save state for parent to determine count
-        setExercises(exerciseDocs.reverse())
-        
-        navigation.setParams({
-          exercises: exerciseDocs,
-          workoutId: id,
-        })
-      })
-    };
-    fetchExercises()
-
-    const fetchTally = () => {
-      unsubscribeFromTally = workouts.ref.doc(id)
-      .collection("childExercises").doc("_tally")
-      .onSnapshot(tallyDoc => {
-        //TODO: If workout is deleted from workout page an error occurs as listener cannot find nonexistant tally doc
-        setExerciseCount(tallyDoc.data().childExercise_index)
-      })
-    }
-    fetchTally()
-
-    return () => {
-      unsubscribeFromExercises()
-      unsubscribeFromTally()
-    }
-  }, [])
-
+  const data = [1,2,3,4,5,6,7,8,9,11,22,33,44,55,66,77,88,99]
   return (
     <>
     <View style={styles.container}>
       <FlatList style={styles.content}
-          data={exercises}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
-            <ExerciseCard
-              url={item.video.url} //ZfawH9NsTtl ZfawH9NsTtl
-              title={item.exerciseName}
-              subtitle={subtitle(item.mode)}
-              onPress={() => null}
-              parent={false}
-              data={{id: item.id, mode: item.mode.current}}
-            />
-          )}
-          ItemSeparatorComponent={() => <Spacer mV={8}/>}
-          ListHeaderComponent={() => <Spacer mV={64}/>}
-          showsVerticalScrollIndicator={false}
-// =================================================================================
-          inverted
-          onContentSizeChange={() => flatlistRef?.current?.scrollToEnd({animated: false})}
-          ref={flatlistRef}
-          contentContainerStyle={{flexGrow: 1, justifyContent: 'flex-end'}}
-        />
-    </View>
+        data={data}
+        keyExtractor={item => item.toString()}
+        renderItem={() => (
+          <ExerciseOptions/>
+        )}
+        initialScrollIndex={17}
+        getItemLayout={(data, index) => ({length: 72, offset: 72 * index, index})}
+        inverted
+        // contentContainerStyle={{flexDirection: 'column-reverse'}}
+        CellRendererComponent={({ children, index, style, ...props }) => {
+          console.log(index)
+          console.log(children)
 
-    <View style={styles.footer}>
-      <Spacer mV={8}
-      style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-      <CreateButton
-      icon={'plus'}
-      title='add exercises'
-      onPress={() => {
-      navigation.navigate("AddExercises", {
-        workoutId: id,
-        exerciseCount: exerciseCount,
-      })
-      }
-      }/>
-      <Spacer mV={8}/>
+          const childrenWithProps = React.Children.map(children[0], (child) => {
+            return React.cloneElement(child, {
+              index: index,
+              // last: data.length-1
+              last: 0
+            });
+          });
+
+          const cellStyle = [
+            style,
+            {
+              backgroundColor: 'yellow',
+              // borderWidth: 2,
+              // borderColor: index === data.length-1 ? 'red' : 'white',
+              borderColor: index === 0 ? 'red' : 'white',
+              // marginBottom: 8,
+              zIndex: index * -1,
+              // flex: 1,
+              // position: 'relative',
+              // minHeight: index === data.length-1 ? 80 : 20 ,
+            }
+          ]
+          return (
+            <View style={cellStyle}>
+              {childrenWithProps}
+            </View>
+          )
+        }}
+      />
     </View>
     </>
   );
@@ -112,6 +67,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     // overflow: 'visible', //Prevents scroll
+    // flexDirection: 'column-reverse'
+    // transform: [{ scaleY: -1 }],
   },
   footer: {
     width: '100%',
