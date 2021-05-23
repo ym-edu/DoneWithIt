@@ -4,8 +4,21 @@ import { useIcon } from '../layout';
 import { FontAwesome } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Spacer from './Spacer';
+import { useDB } from '../hooks/useDB';
 
-function ExerciseOptions({parent, index, last, data, handleMenuState}) {
+
+function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}) {
+  const { workouts } = useDB()
+
+  const handleDropDownChange = (value) => {
+    // console.log("WTF", value)
+    workouts.ref.doc(workoutId).collection("childExercises").doc(data.id)
+    .update({
+      "mode.current": value,
+    })
+    // .then(() => console.log("Updated"))
+  }
+
   const Icon = useIcon();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(data.mode);
@@ -60,7 +73,10 @@ function ExerciseOptions({parent, index, last, data, handleMenuState}) {
           value={value}
           items={items}
           setOpen={setOpen}
-          setValue={setValue}
+          setValue={(newValue) => {
+            setValue(newValue)
+            handleDropDownChange(newValue())
+          }}
           setItems={setItems}
 
           containerStyle={{flex: 2}}

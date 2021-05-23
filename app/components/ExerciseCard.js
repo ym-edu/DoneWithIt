@@ -25,6 +25,7 @@ function ExerciseCard({
   last,
   menuIsOpen,
   handleMenuState,
+  workoutId,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [selected, setSelected] = useState(false);
@@ -97,6 +98,7 @@ function ExerciseCard({
           index={index} //Get cell index
           last={last} // Define last cell's index
           handleMenuState={handleMenuState} // Set menuIsOpen state to false
+          workoutId={workoutId}
         />
       : null}
     </View>

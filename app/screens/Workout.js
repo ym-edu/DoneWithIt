@@ -116,6 +116,7 @@ function Workout({ navigation, route }) {
             handleMenuState={handleMenuState}
 
             index={index}
+            workoutId={id}
           />
         )}
         // CellRendererComponent={({ children, index, style, ...props }) => {
