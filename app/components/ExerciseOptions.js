@@ -8,7 +8,7 @@ import Spacer from './Spacer';
 function ExerciseOptions({setState, parent, index, last, data}) {
   const Icon = useIcon();
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState(data.mode);
   const [items, setItems] = useState([
     {label: 'reps fixed', value: 'repsFixed'},
     {label: 'reps target', value: 'repsTarget'},
@@ -54,7 +54,7 @@ function ExerciseOptions({setState, parent, index, last, data}) {
   function Picker() {
     return (
       <View style={styles.pickerContainer}>
-        <Text style={styles.label}>I:{data}P:{index}</Text>
+        <Text style={styles.label}>set mode</Text>
         <DropDownPicker
           open={open}
           value={value}

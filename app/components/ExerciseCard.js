@@ -21,6 +21,8 @@ function ExerciseCard({
   setState = null, //setSelection
   onLongPress = null,
   isActive = null,
+  index,
+  last,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [selected, setSelected] = useState(false);
@@ -55,7 +57,6 @@ function ExerciseCard({
   
   return (
     <>
-    {optionsOpen ? <ExerciseOptions setState={setOptionsOpen} parent={parent} data={data}/> : null}
     <View style={mode === 'sortableList' && styles.sortableList}>
 
       {mode === 'sortableList'
@@ -84,7 +85,8 @@ function ExerciseCard({
           {hasOptions ? <Options onPress={() => setOptionsOpen(true)}/> : null}
         </View>
       </TouchableWithoutFeedback>
-
+      
+      {optionsOpen ? <ExerciseOptions setState={setOptionsOpen} parent={parent} data={data} index={index} last={last}/> : null}
     </View>
     </>
   );
