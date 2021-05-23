@@ -1,54 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import ExerciseOptions from '../components/ExerciseOptions';
+import Spacer from '../components/Spacer';
 
 function Workout({ navigation, route }) {
-  const data = [1,2,3,4,5,6,7,8,9,11,22,33,44,55,66,77,88,99]
+  const data = [1,2,3,4,5,6,7,8,9]
+
   return (
     <>
     <View style={styles.container}>
-      <FlatList style={styles.content}
-        data={data}
+      <FlatList style={styles.flatlist}
+        data={data.reverse()}
         keyExtractor={item => item.toString()}
-        renderItem={() => (
-          <ExerciseOptions/>
+        renderItem={({ item }) => (
+          <ExerciseOptions data={item}/>
         )}
-        initialScrollIndex={17}
-        getItemLayout={(data, index) => ({length: 72, offset: 72 * index, index})}
-        inverted
-        // contentContainerStyle={{flexDirection: 'column-reverse'}}
         CellRendererComponent={({ children, index, style, ...props }) => {
-          console.log(index)
-          console.log(children)
+          // console.log(index)
+          // console.log(children)
 
-          const childrenWithProps = React.Children.map(children[0], (child) => {
+          const childrenWithProps = React.Children.map(children, (child) => {
+            if(child === null || child === undefined) return;
             return React.cloneElement(child, {
               index: index,
-              // last: data.length-1
-              last: 0
+              last: 0,
+              // last: data.length-1,
             });
           });
 
-          const cellStyle = [
-            style,
-            {
-              backgroundColor: 'yellow',
-              // borderWidth: 2,
-              // borderColor: index === data.length-1 ? 'red' : 'white',
-              borderColor: index === 0 ? 'red' : 'white',
-              // marginBottom: 8,
-              zIndex: index * -1,
-              // flex: 1,
-              // position: 'relative',
-              // minHeight: index === data.length-1 ? 80 : 20 ,
-            }
-          ]
           return (
-            <View style={cellStyle}>
-              {childrenWithProps}
+            <View style={[style, styles.cell]}>
+              {childrenWithProps.reverse()}
             </View>
           )
         }}
+        contentContainerStyle={{flexDirection: 'column-reverse'}}
+        // inverted
+        // initialScrollIndex={8}
+        // getItemLayout={(data, index) => ({length: 72, offset: 72 * index, index})}
+        ItemSeparatorComponent={() => <Spacer mV={8}/>}
+        ListHeaderComponent={() => <Spacer mV={64}/>}
       />
     </View>
     </>
@@ -60,15 +51,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
     paddingTop: 16,
   },
-  content: {
+  flatlist: {
     width: '100%',
     height: '100%',
-    // overflow: 'visible', //Prevents scroll
-    // flexDirection: 'column-reverse'
-    // transform: [{ scaleY: -1 }],
+  },
+  cell: {
+    paddingHorizontal: 16,
+    // backgroundColor: 'pink',
   },
   footer: {
     width: '100%',

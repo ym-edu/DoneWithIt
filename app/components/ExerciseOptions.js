@@ -5,7 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Spacer from './Spacer';
 
-function ExerciseOptions({setState, parent, index, last}) {
+function ExerciseOptions({setState, parent, index, last, data}) {
   const Icon = useIcon();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -54,7 +54,7 @@ function ExerciseOptions({setState, parent, index, last}) {
   function Picker() {
     return (
       <View style={styles.pickerContainer}>
-        <Text style={styles.label}>set mode</Text>
+        <Text style={styles.label}>I:{data}P:{index}</Text>
         <DropDownPicker
           open={open}
           value={value}
@@ -90,7 +90,12 @@ function ExerciseOptions({setState, parent, index, last}) {
   }
 
   return (
-    <View style={[styles.childCard, parent && styles.parentCard]}>
+    <View
+    style={[
+      styles.childCard,
+      parent && styles.parentCard,
+      index === last && { borderWidth: 1, borderRadius: 8, borderColor: 'white'}
+    ]}>
       <Buttons />
       <Spacer mV={4}/>
       {!parent && <Picker/>}
@@ -172,81 +177,3 @@ const styles = StyleSheet.create({
 })
 
 export default ExerciseOptions;
-
-
-// function SetMode() {
-//   return (
-//     <View style={styles.setMode}>
-//       <Text style={styles.text}>set mode</Text>
-//       <DropDownPicker
-//         open={open}
-//         value={value}
-//         items={items}
-//         setOpen={setOpen}
-//         setValue={setValue}
-//         setItems={setItems}
-//         style={styles.dropDownSelector}
-//         containerStyle={{flex: 2}}
-//         textStyle={[{color: 'white', textAlign: 'center'}]}
-//         placeholder={"select a mode"}
-//         placeholderStyle={{color: '#C0C0B87F'}}
-//         showArrowIcon={false}
-//         showTickIcon={false}
-//         dropDownContainerStyle={{backgroundColor: '#242626'}}
-//         closeAfterSelecting={true}
-//         listMode={"FLATLIST"}
-//         dropDownDirection={"BOTTOM"}
-//       />
-//     </View>
-//   )
-// }
-
-// return (
-//   <View style={[styles.container, parent && { justifyContent: 'center' }]}>
-//     <Buttons />
-//     {parent ? null : <SetMode/>}
-//   </View>
-// );
-// }
-
-// const styles = StyleSheet.create({
-// container: {
-//   width: '75%',
-//   height: 72,
-//   paddingHorizontal: 16,
-//   paddingVertical: 4,
-//   borderRadius: 8,
-//   // overflow: 'hidden',
-//   alignSelf: 'flex-end',
-//   position: 'absolute',
-//   backgroundColor: '#171818',
-//   // backgroundColor: 'red',
-//   zIndex: 1,
-// },
-// buttons: {
-//   flexDirection: 'row',
-//   alignItems: 'center',
-//   justifyContent: 'space-around',
-//   // backgroundColor: 'white',
-//   flex: 2,
-// },
-// setMode: {
-//   flexDirection: 'row',
-//   alignItems: 'center',
-//   justifyContent: 'space-between',
-//   maxHeight: 30,
-// },
-// text : {
-//   flex: 1,
-//   color: '#C0C0B87F',
-//   fontWeight: '700',
-// },
-// dropDownSelector: {
-//   backgroundColor: '#1D1E1E',
-//   padding: 0,
-//   margin: 0,
-//   maxHeight: 20,
-//   borderRadius: 2,
-//   borderWidth: 0,
-// },
-// })
