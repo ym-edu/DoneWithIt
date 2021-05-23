@@ -23,11 +23,12 @@ function ExerciseCard({
   isActive = null,
   index,
   last,
+  menuIsOpen,
+  handleMenuState,
 }) {
   const [disabled, setDisabled] = useState(true);
   const [selected, setSelected] = useState(false);
   const [hasOptions, setHasOptions] = useState(true);
-  const [optionsOpen, setOptionsOpen] = useState(false);
 
   useEffect(() => {
     if(mode === 'sortableList') {
@@ -61,32 +62,43 @@ function ExerciseCard({
 
       {mode === 'sortableList'
       ? <TouchableOpacity
-        style={{padding: 8}}
-        onLongPress={onLongPress}
-        delayLongPress={0}
+          style={{padding: 8}}
+          onLongPress={onLongPress}
+          delayLongPress={0}
         >
           <FontAwesome5 name="grip-lines" size={16} color="white" />
         </TouchableOpacity>
       : null}
 
       <TouchableWithoutFeedback
-      disabled={disabled}
-      style={{borderRadius: 8}}
-      onPress={() => mode != 'sortableList' ? handlePress() : null}>
+        disabled={disabled}
+        style={{borderRadius: 8}}
+        onPress={() => mode != 'sortableList' ? handlePress() : null}
+      >
         <View style={[
           styles.container,
           (selected || isActive) && {backgroundColor: '#242626'},
           mode != 'list' && {height: 54},
-          ]}>
+        ]}>
           <Media source={url}/>
           <Spacer mH={8}/>
           <Details title={title} subtitle={subtitle}/>
           <Spacer mH={8}/>
-          {hasOptions ? <Options onPress={() => setOptionsOpen(true)}/> : null}
+          {hasOptions
+          ? <Options onPress={() => {handleMenuState(index, true)}}/>
+          : null}
         </View>
       </TouchableWithoutFeedback>
       
-      {optionsOpen ? <ExerciseOptions setState={setOptionsOpen} parent={parent} data={data} index={index} last={last}/> : null}
+      {menuIsOpen[index] 
+      ? <ExerciseOptions 
+          parent={parent} //Show pickerLayer
+          data={data} //Pass item Mode to picker
+          index={index} //Get cell index
+          last={last} // Define last cell's index
+          handleMenuState={handleMenuState} // Set menuIsOpen state to false
+        />
+      : null}
     </View>
     </>
   );
@@ -94,13 +106,13 @@ function ExerciseCard({
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
     width: '100%',
     height: 72,
-    borderRadius: 8,
-    overflow: 'hidden',
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    overflow: 'hidden',
+    borderRadius: 8,
   },
   sortableList: {
     flexDirection: 'row',

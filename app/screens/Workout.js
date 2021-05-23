@@ -12,7 +12,23 @@ function Workout({ navigation, route }) {
   const { params: { id } } = route;
 
   const [exercises, setExercises] = useState([]);
-  const [exerciseCount, setExerciseCount] = useState(0)
+  const [exerciseCount, setExerciseCount] = useState(0);
+  const [menuIsOpen, setMenuIsOpen] = useState([]);
+
+  const handleMenuState = (index, open) => {
+    console.log(index)
+    const i = index;
+
+    let stateArray;
+
+    if(open) {
+      stateArray = menuIsOpen.map(item => false)
+    } else stateArray = [...menuIsOpen]
+
+    stateArray[i] = !stateArray[i];
+
+    setMenuIsOpen(stateArray)
+  }
 
   useEffect(() => {
     let unsubscribeFromExercises;
@@ -25,6 +41,7 @@ function Workout({ navigation, route }) {
         const exerciseDocs = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
+          isEditing: false
         }));
         // console.log(exerciseDocs) //TODO: Save state for parent to determine count
         setExercises(exerciseDocs.reverse())
@@ -52,6 +69,13 @@ function Workout({ navigation, route }) {
       unsubscribeFromTally()
     }
   }, [])
+
+  useEffect(() => {
+    if(exercises.length > 0) {
+      const initialState = exercises.map(item => item.isEditing)
+      setMenuIsOpen(initialState)
+    }
+  }, [exercises])
 
   function Footer() {
     return (
@@ -84,9 +108,13 @@ function Workout({ navigation, route }) {
             url={item.video.url} //ZfawH9NsTtl ZfawH9NsTtl
             title={item.exerciseName}
             subtitle={subtitle(item.mode)}
-            onPress={() => null}
+            
             parent={false}
             data={{id: item.id, mode: item.mode.current}}
+            onPress={() => null}
+            
+            menuIsOpen={menuIsOpen}
+            handleMenuState={handleMenuState}
           />
         )}
         CellRendererComponent={({ children, index, style, ...props }) => {

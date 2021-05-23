@@ -5,7 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Spacer from './Spacer';
 
-function ExerciseOptions({setState, parent, index, last, data}) {
+function ExerciseOptions({parent, index, last, data, handleMenuState}) {
   const Icon = useIcon();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(data.mode);
@@ -21,7 +21,7 @@ function ExerciseOptions({setState, parent, index, last, data}) {
     <View style={{flexDirection: 'row'}}>
       <TouchableOpacity
         style={{flex: 1}}
-        onPress={() => setState(false)}
+        onPress={() => handleMenuState(index)}
       >
         <Icon name="close" size={20} color={'white'}/>
       </TouchableOpacity>
@@ -30,19 +30,19 @@ function ExerciseOptions({setState, parent, index, last, data}) {
       <View style={styles.buttonContainer}>
         {/* <TouchableOpacity
           style={styles.button}
-          onPress={() => setState(false)}
+          onPress={() => null}
         >
           <FontAwesome name="history" size={20} color="white" />
         </TouchableOpacity> */}
 
         <TouchableOpacity
-          // onPress={() => setState(false)}
+          // onPress={() => null}
         >
           <Icon name="edit-page" size={20} color={'white'} fill={true}/>
         </TouchableOpacity>
 
         <TouchableOpacity
-        // onPress={() => setState(false)}
+        // onPress={() => null}
         >
           <Icon name="layer-minus" size={20} color={'white'} fill={true}/>
         </TouchableOpacity>
