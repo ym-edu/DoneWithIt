@@ -72,14 +72,18 @@ function ExerciseOptions({setState, parent, index, last, data}) {
           
           dropDownContainerStyle={[
             styles.dropdown,
-            index === last && styles.dropdownExpand,
+            // index === last && styles.dropdownExpand,
           ]}
 
           listItemContainerStyle={styles.dropdownItem}
           textStyle={[{color: 'white', textAlign: 'center'}]}
           showTickIcon={false}
 
-          onOpen={() => console.log("index: ", index, "last: ", last)}
+          onOpen={() => {
+            if(index === last) {
+              console.log("index: ", index, "last: ", last)
+            }
+          }}
           closeAfterSelecting={true}
 
           listMode={"FLATLIST"}
@@ -94,7 +98,7 @@ function ExerciseOptions({setState, parent, index, last, data}) {
     style={[
       styles.childCard,
       parent && styles.parentCard,
-      index === last && { borderWidth: 1, borderRadius: 8, borderColor: 'white'}
+      // index === last && { borderWidth: 1, borderRadius: 8, borderColor: 'white'}
     ]}>
       <Buttons />
       <Spacer mV={4}/>
@@ -115,9 +119,9 @@ const styles = StyleSheet.create({
 
     // // overflow: 'hidden',
     position: 'absolute',
-    // zIndex: 1,
+
+    borderRadius: 8,
     // borderWidth: 1,
-    // borderRadius: 8,
     // borderColor: 'white',
   },
   parentCard: {
@@ -166,10 +170,10 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     backgroundColor: '#242626',
   },
-  dropdownExpand: {
-    position: 'relative',
-    top: 0,
-  },
+  // dropdownExpand: {
+  //   position: 'relative',
+  //   top: 0,
+  // },
   dropdownItem: {
     height: 32,
     borderWidth: .5,

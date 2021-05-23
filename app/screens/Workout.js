@@ -103,7 +103,7 @@ function Workout({ navigation, route }) {
           });
 
           return (
-            <View style={[style, styles.cell]}>
+            <View style={[style, styles.cell, index === 0 && {marginBottom: 0}]}>
               {childrenWithProps.reverse()}
             </View>
           )
@@ -115,7 +115,7 @@ function Workout({ navigation, route }) {
         // getItemLayout={(data, index) => ({length: 72, offset: 72 * index, index})}
 
         // ItemSeparatorComponent={() => <Spacer mV={8}/>}
-        ListHeaderComponent={() => <Spacer mV={64}/>}
+        ListHeaderComponent={() => <Spacer mV={64 * 2}/>}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -138,9 +138,10 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   cell: {
-    borderWidth: 1,
-    borderColor: 'white',
     marginBottom: 8,
+    // paddingBottom: 8,
+    // borderWidth: 1,
+    // borderColor: 'white',
   },
   footer: {
     width: '100%',
