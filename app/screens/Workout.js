@@ -15,7 +15,7 @@ function Workout({ navigation, route }) {
   const [menuIsOpen, setMenuIsOpen] = useState([]);
 
   const handleMenuState = (index, open) => {
-    console.log(index)
+    // console.log(index)
     const i = index;
 
     let stateArray;

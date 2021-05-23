@@ -80,9 +80,9 @@ function ExerciseOptions({parent, index, last, data, handleMenuState}) {
           showTickIcon={false}
 
           onOpen={() => {
-            if(index === last) {
-              console.log("index: ", index, "last: ", last)
-            }
+            // if(index === last) {
+              // console.log("index: ", index, "last: ", last)
+            // }
           }}
           closeAfterSelecting={true}
 
