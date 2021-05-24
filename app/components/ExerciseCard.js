@@ -43,9 +43,9 @@ function ExerciseCard({
   const handlePress = () => {
     setSelected(!selected)
 
-    if(state.includes(data)) { //To avoid pushing to array when deselecting an item
+    if(state.includes(data.id)) { //To avoid pushing to array when deselecting an item
       const array = [...state]
-      const index = array.indexOf(data)
+      const index = array.indexOf(data.id)
 
       if (index !== -1) {
         array.splice(index, 1);
@@ -53,7 +53,7 @@ function ExerciseCard({
         setState(array)
       }
     } else {
-      setState([...state, data])
+      setState([...state, data.id])
     }
   }
   

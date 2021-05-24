@@ -5,9 +5,11 @@ import { FontAwesome } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Spacer from './Spacer';
 import { useDB } from '../hooks/useDB';
+import { useNavigation } from '@react-navigation/native';
 
 
 function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}) {
+  const navigation = useNavigation();
   const {db, parentExercises, workouts, decrement } = useDB()
 
   const handleDropDownChange = (value) => {
@@ -51,6 +53,11 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
     // .then(() => console.log("Deleted Child"))
   }
 
+  const handleUpdateParent = () => {
+    console.log("EditPressed")
+    navigation.navigate("ParentExerciseUpdate", {data: data});
+  }
+
   const Icon = useIcon();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(data.mode);
@@ -85,11 +92,12 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
         </TouchableOpacity> */}
 
         <TouchableOpacity
-          // onPress={() => {
-          //   if(parent){
-
-          //   } else {}
-          // }}
+          onPress={() => {
+            if(parent){
+              null
+              // handleUpdateParent();
+            } else {null}
+          }}
         >
           <Icon name="edit-page" size={20} color={'white'} fill={true}/>
         </TouchableOpacity>
