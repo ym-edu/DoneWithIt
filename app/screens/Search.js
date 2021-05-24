@@ -10,7 +10,7 @@ import { useLoopUpdate } from '../hooks/useLoop';
 function Search({ navigation }) {
   const { searchResults, loading } = useSearch();
   const { onSubmit, onEndReached, setLoading } = useSearchUpdate();
-  const { setVideoId, setPlaying } = useLoopUpdate();
+  const { setPlaying, setVideo } = useLoopUpdate();
 
   React.useEffect(() => {
     setLoading(false)
@@ -52,7 +52,7 @@ function Search({ navigation }) {
                 title={item.snippet.title}
                 subtitle={item.snippet.channelTitle}
                 onPress={() => {
-                  setVideoId(item.id.videoId)
+                  setVideo(item.id.videoId)
                   navigation.pop()
                 }}
               />

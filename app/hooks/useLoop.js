@@ -47,6 +47,12 @@ export default function LoopProvider({children}) {
         setCurrentTime(0)
         setExerciseName(null)
       },
+      setVideo: (id) => {
+        setVideoId(id)
+        setDuration(null)
+        setValues([])
+        setCurrentTime(0)
+      },
       setDuration: setDuration,
       PTtoSeconds: (duration) => moment.duration(duration).format("s", {
         groupingSeparator: "",
