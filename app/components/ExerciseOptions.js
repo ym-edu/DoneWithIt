@@ -6,9 +6,10 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Spacer from './Spacer';
 import { useDB } from '../hooks/useDB';
 import { useNavigation } from '@react-navigation/native';
-
+import { useLoopUpdate } from '../hooks/useLoop'
 
 function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}) {
+  const { setData } = useLoopUpdate()
   const navigation = useNavigation();
   const {db, parentExercises, workouts, decrement } = useDB()
 
@@ -22,9 +23,9 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
   };
 
   const handleDeleteParent = () => {
-    // console.log("Parent Id: ", data)
+    // console.log("Parent Id: ", data.id)
     const batch = db().batch();
-    const ref = parentExercises.ref.doc(data)
+    const ref = parentExercises.ref.doc(data.id)
     const tally = parentExercises.tally
 
     batch.delete(ref)
@@ -54,8 +55,9 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
   }
 
   const handleUpdateParent = () => {
-    console.log("EditPressed")
-    navigation.navigate("ParentExerciseUpdate", {data: data});
+    // console.log("EditPressed")
+    navigation.navigate("ParentExerciseUpdate");
+    setData(data)
   }
 
   const Icon = useIcon();
@@ -95,7 +97,7 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
           onPress={() => {
             if(parent){
               null
-              // handleUpdateParent();
+              handleUpdateParent();
             } else {null}
           }}
         >

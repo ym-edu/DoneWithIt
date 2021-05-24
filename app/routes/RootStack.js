@@ -17,6 +17,8 @@ import AddExercises from '../screens/AddExercises';
 import WorkoutOptionsModal from '../screens/WorkoutOptionsModal';
 import SortChildExercises from '../screens/SortChildExercises';
 
+import ParentExerciseUpdate from '../screens/ParentExerciseUpdate';
+
 import { useAuth, useAuthUpdate } from '../hooks/useAuth';
 
 const Stack = createStackNavigator();
@@ -114,6 +116,13 @@ export default function RootStack() {
       name="UpdateWorkout"
       component={UpdateWorkout}
       options={modalOptions}
+      />
+      <Stack.Screen
+      name="ParentExerciseUpdate"
+      component={ParentExerciseUpdate}
+      options={{
+        animationEnabled: true,
+      }}
       />
     </Stack.Navigator>
   );

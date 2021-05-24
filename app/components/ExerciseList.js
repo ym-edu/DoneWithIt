@@ -62,7 +62,7 @@ function ExerciseList({ mode = 'list', state, setState }) {
               // : null}
 
               mode={mode}
-              data={{id: item.id, video: item.video}}
+              data={{id: item.id, name: item.exerciseName, video: item.video}}
               
               state={state}
               setState={setState}
