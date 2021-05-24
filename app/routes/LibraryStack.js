@@ -40,7 +40,7 @@ export default function LibraryStack() {
             <Options onPress={() => {
               // console.log(title)
               navigation.navigate('WorkoutOptionsModal', {
-                exercises: exercises,
+                exercises: exercises, //Compensation for 'inverted' list
                 workoutId: workoutId,
                 workoutName: workoutName,
               })
