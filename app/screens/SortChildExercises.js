@@ -81,8 +81,8 @@ function SortChildExercises({ navigation, route: { params: { exercises, workoutI
             setData(event.data)
           };
         }}
-
-        ItemSeparatorComponent={() => <Spacer mV={8}/>}
+        contentContainerStyle={{paddingHorizontal: 16, paddingTop: 16}}
+        // ItemSeparatorComponent={() => <Spacer mV={8}/>}
         ListFooterComponent={() => <Spacer mV={64}/>}
         showsVerticalScrollIndicator={false}
         />
@@ -114,8 +114,6 @@ function SortChildExercises({ navigation, route: { params: { exercises, workoutI
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 16,
   },
   flatlist: {
     flex: 1,

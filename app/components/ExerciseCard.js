@@ -77,16 +77,21 @@ function ExerciseCard({
         onPress={() => mode != 'sortableList' ? handlePress() : null}
       >
         <View style={[
+          //Optimized for childExercise card
           styles.container,
+          //ParentExerciseList | SortableList
           (selected || isActive) && {backgroundColor: '#242626'},
-          (mode != 'list' || parent) && {height: 54, marginBottom: 4},
+          //SortableList
+          isActive && {minHeight: 63},
+          //SortableList | ParentExerciseList
+          (mode != 'list' || parent) && {height: 54, marginBottom: 12},
         ]}>
           <Media source={url}/>
           <Spacer mH={8}/>
           <Details title={title} subtitle={subtitle}/>
           <Spacer mH={8}/>
           {hasOptions
-          ? <Options onPress={() => {handleMenuState(index, true)}}/>
+          ? <Options onPress={() => {handleMenuState(index, true)}}/> //Open menu
           : null}
         </View>
       </TouchableWithoutFeedback>
@@ -116,7 +121,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderRadius: 8,
 
-    marginBottom: 8,
+    marginBottom: 12,
   },
   sortableList: {
     flexDirection: 'row',

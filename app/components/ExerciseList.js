@@ -48,7 +48,7 @@ function ExerciseList({ mode = 'list', state, setState }) {
   }, [exercises])
 
   return (
-      <View style={styles.container}>
+      <View style={{flex: 1}}>
         <FlatList style={styles.flatlist}
           data={exercises}
           keyExtractor={data => data.id.toString()}
@@ -73,8 +73,8 @@ function ExerciseList({ mode = 'list', state, setState }) {
               index={index}
             />
           )}
-
-          ItemSeparatorComponent={() => <Spacer mV={8}/>}
+          contentContainerStyle={{paddingTop: 16, marginHorizontal: 16}}
+          // ItemSeparatorComponent={() => <Spacer mV={8}/>}
           ListFooterComponent={() => <Spacer mV={64}/>}
           showsVerticalScrollIndicator={false}
         />
@@ -85,13 +85,11 @@ function ExerciseList({ mode = 'list', state, setState }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 16,
   },
   flatlist: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    // width: '100%',
+    // height: '100%',
   },
 })
 
