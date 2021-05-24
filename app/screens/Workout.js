@@ -42,8 +42,9 @@ function Workout({ navigation, route }) {
           ...doc.data(),
           isEditing: false
         }));
+        const reversedExerciseDocs = exerciseDocs.map(doc => doc).reverse()
         // console.log(exerciseDocs) //TODO: Save state for parent to determine count
-        setExercises(exerciseDocs.reverse())
+        setExercises(reversedExerciseDocs)
         
         navigation.setParams({
           exercises: exerciseDocs,

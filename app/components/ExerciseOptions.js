@@ -8,7 +8,7 @@ import { useDB } from '../hooks/useDB';
 
 
 function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}) {
-  const { workouts } = useDB()
+  const {db, parentExercises, workouts, decrement } = useDB()
 
   const handleDropDownChange = (value) => {
     // console.log("WTF", value)
@@ -17,6 +17,38 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
       "mode.current": value,
     })
     // .then(() => console.log("Updated"))
+  };
+
+  const handleDeleteParent = () => {
+    // console.log("Parent Id: ", data)
+    const batch = db().batch();
+    const ref = parentExercises.ref.doc(data)
+    const tally = parentExercises.tally
+
+    batch.delete(ref)
+    batch.update(tally, {
+      parentExercise_count: decrement,
+    });
+
+    batch.commit();
+    // .then(() => console.log("Deleted Parent"))
+    //TODO: Warning/Confirmation: 'All of your history for this exercise will be deleted' ...
+  }
+
+  const handleDeleteChild = () => {
+    // console.log("Child Id: ", data.id)
+    const batch = db().batch();
+    const ref = workouts.ref.doc(workoutId).collection("childExercises").doc(data.id)
+    const tally = workouts.ref.doc(workoutId)
+    .collection("childExercises").doc("_tally")
+
+    batch.delete(ref)
+    batch.update(tally, {
+      childExercise_count: decrement,
+    });
+
+    batch.commit();
+    // .then(() => console.log("Deleted Child"))
   }
 
   const Icon = useIcon();
@@ -63,11 +95,11 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
         </TouchableOpacity>
 
         <TouchableOpacity
-        // onPress={() => {
-        //   if(parent){
-
-        //   } else {}
-        // }}
+          onPress={() => {
+            if(parent){
+              handleDeleteParent()
+            } else {handleDeleteChild()}
+          }}
         >
           <Icon name="layer-minus" size={20} color={'white'} fill={true}/>
         </TouchableOpacity>
