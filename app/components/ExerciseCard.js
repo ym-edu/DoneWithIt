@@ -23,7 +23,7 @@ function ExerciseCard({
   isActive = null,
   index,
   last,
-  menuIsOpen,
+  menuIsOpen = false,
   handleMenuState,
   workoutId,
 }) {
@@ -79,7 +79,7 @@ function ExerciseCard({
         <View style={[
           styles.container,
           (selected || isActive) && {backgroundColor: '#242626'},
-          mode != 'list' && {height: 54},
+          (mode != 'list' || parent) && {height: 54, marginBottom: 4},
         ]}>
           <Media source={url}/>
           <Spacer mH={8}/>

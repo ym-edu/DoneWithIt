@@ -43,19 +43,31 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
       <View style={styles.buttonContainer}>
         {/* <TouchableOpacity
           style={styles.button}
-          onPress={() => null}
+          onPress={() => {
+            if(parent){
+
+            } else {}
+          }}
         >
           <FontAwesome name="history" size={20} color="white" />
         </TouchableOpacity> */}
 
         <TouchableOpacity
-          // onPress={() => null}
+          // onPress={() => {
+          //   if(parent){
+
+          //   } else {}
+          // }}
         >
           <Icon name="edit-page" size={20} color={'white'} fill={true}/>
         </TouchableOpacity>
 
         <TouchableOpacity
-        // onPress={() => null}
+        // onPress={() => {
+        //   if(parent){
+
+        //   } else {}
+        // }}
         >
           <Icon name="layer-minus" size={20} color={'white'} fill={true}/>
         </TouchableOpacity>
@@ -132,6 +144,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     backgroundColor: '#171818',
+    // backgroundColor: '#242626',
+    // backgroundColor: '#1D1E1E',
 
     // // overflow: 'hidden',
     position: 'absolute',
@@ -142,7 +156,8 @@ const styles = StyleSheet.create({
   },
   parentCard: {
     position: 'absolute',
-    height: 72,
+    minHeight: 54,
+    borderRadius: 4,
     zIndex: 1,
     justifyContent: 'center',
   },

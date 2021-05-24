@@ -8,6 +8,22 @@ import { useDB } from '../hooks/useDB';
 function ExerciseList({ mode = 'list', state, setState }) {
   const { parentExercises } = useDB();
   const [exercises, setExercises] = useState([]);
+  const [menuIsOpen, setMenuIsOpen] = useState([]);
+
+  const handleMenuState = (index, open) => {
+    // console.log(index)
+    const i = index;
+
+    let stateArray;
+
+    if(open) {
+      stateArray = menuIsOpen.map(item => false)
+    } else stateArray = [...menuIsOpen]
+
+    stateArray[i] = !stateArray[i];
+
+    setMenuIsOpen(stateArray)
+  }
 
   useEffect(() => {
     const unsubscribe = parentExercises.ref
@@ -16,6 +32,7 @@ function ExerciseList({ mode = 'list', state, setState }) {
       const exerciseDocs = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
+        isEditing: false,
       }));
       setExercises(exerciseDocs)
     });
@@ -23,25 +40,37 @@ function ExerciseList({ mode = 'list', state, setState }) {
     return () => unsubscribe() //IMPORTANT: Never return function without callback
   }, []);
 
+  useEffect(() => {
+    if(exercises.length > 0) {
+      const initialState = exercises.map(item => item.isEditing)
+      setMenuIsOpen(initialState)
+    }
+  }, [exercises])
+
   return (
       <View style={styles.container}>
         <FlatList style={styles.flatlist}
           data={exercises}
           keyExtractor={data => data.id.toString()}
 
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <ExerciseCard
               url={item.video.url}
               title={item.exerciseName}
-              subtitle={mode === 'list'
-              ? `Included in ${item.children_count} workouts`
-              : null}
+              // subtitle={mode === 'list'
+              // ? `Included in ${item.children_count} workouts`
+              // : null}
 
               mode={mode}
               data={item.id}
               
               state={state}
               setState={setState}
+
+              menuIsOpen={menuIsOpen}
+              handleMenuState={handleMenuState}
+
+              index={index}
             />
           )}
 
