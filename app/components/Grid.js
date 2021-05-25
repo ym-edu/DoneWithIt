@@ -20,7 +20,7 @@ export default function Flex() {
 
     <View style={[styles.row, {flex: 0}]}>
       <View style={[styles.col, styles.colOne]}>
-        <Text style={styles.text}>Fixed Set</Text>
+        <Text style={styles.text}>Fixed set</Text>
       </View>
       <RepsInput/>
       <TimeInput/>
@@ -28,7 +28,7 @@ export default function Flex() {
 
     <View style={[styles.row, {flex: 0}]}>
       <View style={[styles.col, styles.colOne]}>
-        <Text style={styles.text}>To Failure</Text>
+        <Text style={styles.text}>To failure</Text>
       </View>
       <RepsInput/>
       <TimeInput/>

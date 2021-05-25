@@ -69,10 +69,10 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(data.mode.current);
   const [items, setItems] = useState([
-    {label: 'reps fixed', value: 'repsFixed'},
-    {label: 'reps target', value: 'repsTarget'},
-    {label: 'time Fixed', value: 'timeFixed'},
-    {label: 'time target', value: 'timeTarget'},
+    {label: 'fixed reps', value: 'repsFixed'},
+    {label: 'reps to failure', value: 'repsTarget'},
+    {label: 'fixed time', value: 'timeFixed'},
+    {label: 'time to failure', value: 'timeTarget'},
   ]);
 
   function Buttons() {
