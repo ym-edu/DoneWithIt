@@ -24,7 +24,7 @@ function ChildExerciseUpdate({ navigation, route: {params: {exercise}}}) {
         <View style={styles.modal}>
           <Text style={styles.title}>Set your goals</Text>
           <Spacer mV={8} />
-            <Grid/>
+            <Grid data={exercise}/>
           {/* <Spacer mV={16} /> */}
           <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
             <TextButton onPress={() => navigation.pop()}>

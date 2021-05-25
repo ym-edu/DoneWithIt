@@ -4,7 +4,7 @@ import RepsInput from './RepsInput';
 import TimeInput from './TimeInput';
 import WeightInput from './WeightInput';
 
-export default function Flex() {
+export default function Flex({data}) {
   return (
     <View style={styles.container}>
 
@@ -38,7 +38,7 @@ export default function Flex() {
       <View style={[styles.col, styles.colOne]}>
         <Text style={styles.text}>Weight</Text>
       </View>
-      <WeightInput/>
+      <WeightInput data={data.weight}/>
       {/* //Used to align columns flush. Kind of hacky but works. */}
       <TimeInput style={{opacity: 0}}/>
     </View>

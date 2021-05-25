@@ -41,6 +41,11 @@ function AddExercises({ navigation, route }) {
             timeFixed: { min: 0, sec: 30 },
             timeTarget: { min: 1, sec: 30 }
           },
+          weight: {
+            current: "lb",
+            kg: 0,
+            lb: 0,
+          },
           parentExercise_ref: doc.id,
           video: doc.data().video,
           position: currentIndex
