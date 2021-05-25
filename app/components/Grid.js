@@ -39,8 +39,7 @@ export default function Grid({data, setWeightState, setModeState}) {
         <Text style={styles.text}>Weight</Text>
       </View>
       <WeightInput data={data.weight} setWeightState={setWeightState}/>
-      {/* //Used to align columns flush. Kind of hacky but works. */}
-      <TimeInput style={{opacity: 0}}/>
+      <View style={[styles.col, {flexDirection: 'row', alignItems: 'space-around'}]}/>
     </View>
 
     </View>

@@ -20,15 +20,6 @@ function WeightInput({style, data, setWeightState}) {
   }
 
   useEffect(() => {
-    //Update weightState (value for current key) whenever input value changes
-
-    //Pre-ES6
-    // const weight = {};
-    // weight["current"] = unit[0];
-    // //'' defaults to 0
-    // weight[weight.current] = value === '' ? 0 : parseInt(value, 10)
-
-    //ES6
     const weight = {
       ["current"]: unit[0],
       [unit[0]]: value === '' ? 0 : parseInt(value, 10)
