@@ -1,10 +1,10 @@
 import React from 'react';
 import { TextInput, StyleSheet, View, Text } from 'react-native';
 
-function TimeInput({mode, getValue}) {
+function TimeInput({mode, getValue, style}) {
   return (
     <>
-      <View style={[styles.col, {flexDirection: 'row', alignItems: 'space-around'}]}>
+      <View style={[styles.col, {flexDirection: 'row', alignItems: 'space-around'}, style]}>
         <View style={{alignSelf:'center'}}>
           <TextInput
           style={styles.input}
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     padding: 8,
+
     // borderWidth: 1,
     // borderColor: 'red',
   },

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextInput, StyleSheet, View, Text } from 'react-native';
 
-function RepsInput({style}) {
+function WeightInput({style}) {
   const [value, setValue] = useState('');
 
   const handleChange = (input) => {
@@ -24,7 +24,7 @@ function RepsInput({style}) {
         }}
         value={value}
         />
-        <Text style={styles.text}>reps</Text>
+        <Text style={styles.text}>kg/lb v</Text>
       </View>
     </>
   );
@@ -50,11 +50,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignContent: 'center',
     justifyContent: 'center',
-    padding: 8,
-    
+    paddingHorizontal: 8,
+
     // borderWidth: 1,
     // borderColor: 'red',
   },
 })
 
-export default RepsInput;
+export default WeightInput;
