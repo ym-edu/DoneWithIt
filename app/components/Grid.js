@@ -4,7 +4,7 @@ import RepsInput from './RepsInput';
 import TimeInput from './TimeInput';
 import WeightInput from './WeightInput';
 
-export default function Flex({data}) {
+export default function Grid({data, setWeightState}) {
   return (
     <View style={styles.container}>
 
@@ -38,7 +38,7 @@ export default function Flex({data}) {
       <View style={[styles.col, styles.colOne]}>
         <Text style={styles.text}>Weight</Text>
       </View>
-      <WeightInput data={data.weight}/>
+      <WeightInput data={data.weight} setWeightState={setWeightState}/>
       {/* //Used to align columns flush. Kind of hacky but works. */}
       <TimeInput style={{opacity: 0}}/>
     </View>

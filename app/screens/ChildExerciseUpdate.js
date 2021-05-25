@@ -7,9 +7,10 @@ import Grid from '../components/Grid';
 
 function ChildExerciseUpdate({ navigation, route: {params: {exercise}}}) {
   const { db, workouts, increment } = useDB();
+  const [weightState, setWeightState] = useState({});
 
   const handleUpdate = () => {
-    console.log(exercise)
+    console.log(weightState)
   }
 
   return (
@@ -24,7 +25,7 @@ function ChildExerciseUpdate({ navigation, route: {params: {exercise}}}) {
         <View style={styles.modal}>
           <Text style={styles.title}>Set your goals</Text>
           <Spacer mV={8} />
-            <Grid data={exercise}/>
+            <Grid data={exercise} setWeightState={setWeightState}/>
           {/* <Spacer mV={16} /> */}
           <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
             <TextButton onPress={() => navigation.pop()}>
@@ -33,7 +34,7 @@ function ChildExerciseUpdate({ navigation, route: {params: {exercise}}}) {
             <TextButton
             onPress={() => {
               handleUpdate()
-              navigation.pop()
+              // navigation.pop()
             }}
             disabled={false}
             >
