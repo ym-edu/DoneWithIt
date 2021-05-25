@@ -4,7 +4,7 @@ import RepsInput from './RepsInput';
 import TimeInput from './TimeInput';
 import WeightInput from './WeightInput';
 
-export default function Grid({data, setWeightState}) {
+export default function Grid({data, setWeightState, setModeState}) {
   return (
     <View style={styles.container}>
 
@@ -22,16 +22,16 @@ export default function Grid({data, setWeightState}) {
       <View style={[styles.col, styles.colOne]}>
         <Text style={styles.text}>Fixed set</Text>
       </View>
-      <RepsInput/>
-      <TimeInput/>
+      <RepsInput current={'repsFixed'} data={data.mode.repsFixed} setModeState={setModeState}/>
+      <TimeInput current={'timeFixed'} data={data.mode.timeFixed} setModeState={setModeState}/>
     </View>
 
     <View style={[styles.row, {flex: 0}]}>
       <View style={[styles.col, styles.colOne]}>
         <Text style={styles.text}>To failure</Text>
       </View>
-      <RepsInput/>
-      <TimeInput/>
+      <RepsInput current={'repsTarget'} data={data.mode.repsTarget} setModeState={setModeState}/>
+      <TimeInput current={'timeTarget'} data={data.mode.timeTarget} setModeState={setModeState}/>
     </View>
 
     <View style={[styles.row, {flex: 0}]}>

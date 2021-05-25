@@ -8,9 +8,11 @@ import Grid from '../components/Grid';
 function ChildExerciseUpdate({ navigation, route: {params: {exercise}}}) {
   const { db, workouts, increment } = useDB();
   const [weightState, setWeightState] = useState({});
+  const [modeState, setModeState] = useState({});
 
   const handleUpdate = () => {
-    console.log(weightState)
+    // console.log(weightState)
+    console.log(modeState)
   }
 
   return (
@@ -25,7 +27,11 @@ function ChildExerciseUpdate({ navigation, route: {params: {exercise}}}) {
         <View style={styles.modal}>
           <Text style={styles.title}>Set your goals</Text>
           <Spacer mV={8} />
-            <Grid data={exercise} setWeightState={setWeightState}/>
+            <Grid
+              data={exercise}
+              setWeightState={setWeightState}
+              setModeState={setModeState}
+            />
           {/* <Spacer mV={16} /> */}
           <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
             <TextButton onPress={() => navigation.pop()}>

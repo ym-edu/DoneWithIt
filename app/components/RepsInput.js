@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextInput, StyleSheet, View, Text } from 'react-native';
 
-function RepsInput({style}) {
-  const [value, setValue] = useState('');
+function RepsInput({style, data, setModeState, current}) {
+  const [value, setValue] = useState(data.toString());
 
   const handleChange = (input) => {
     const validatedInput = input.replace(/[^0-9]/g, '')
     setValue(validatedInput)
   }
+
+  useEffect(() => {
+    setModeState(prev => ({
+      ...prev, [current]: value === '' ? 0 : parseInt(value, 10)
+    }))
+  }, [value])
 
   return (
     <>
@@ -16,7 +22,7 @@ function RepsInput({style}) {
         style={styles.input}
         textAlign='center'
         keyboardType="numeric"
-        maxLength={2}
+        maxLength={3}
         placeholder={'0'}
         placeholderTextColor='#C0C0B87F'
         onChangeText={(input) => {
@@ -32,7 +38,7 @@ function RepsInput({style}) {
 
 const styles = StyleSheet.create({
   input: {
-    width: 40,
+    width: 60,
     height: 40,
     // backgroundColor: 'white',
     alignSelf: 'center',
