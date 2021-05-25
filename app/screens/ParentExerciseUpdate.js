@@ -12,32 +12,24 @@ import sizes from '../config/constants/sizes';
 import { useDB } from '../hooks/useDB';
 import { useEffect } from 'react/cjs/react.development';
 
-function CreateExercise({ navigation }) {
-  const { db, parentExercises, increment } = useDB();
+function CreateExercise({ navigation, route: {params: {exercise}}}) {
+  const { parentExercises } = useDB();
 
   const keyboard = useKeyboard()
   
   const { exerciseName, videoId, scrollEnabled, values, data } = useLoop()
   const { setExerciseName, clearLoopState, setVideoId } = useLoopUpdate()
 
-  const handleAdd = () => {
-    const newRef = parentExercises.ref.doc();
-    const batch = db().batch(); //Must assign to new batch every function call, otherwise it is mistaken for the previously commited batch.
-
-    batch.set(newRef, {
-      children_count: 0,
-      exerciseName: exerciseName,
-      exerciseName_std: exerciseName.toLowerCase(),
-      video: {
-        endTimeSec: values[1],
-        startTimeSec: values[0],
-        url: videoId
-      },
-    });
-    batch.set(parentExercises.tally, { parentExercise_count: increment }, { merge: true })
-    batch.commit().then(() => {
-      clearLoopState()
-    });
+  const handleUpdate = () => {
+    parentExercises.ref.doc(exercise.id)
+    .update({
+      "exerciseName": exerciseName,
+      "exerciseName_std": exerciseName.toLowerCase(),
+      "video.endTimeSec": values[1],
+      "video.startTimeSec": values[0],
+      "video.url": videoId,
+    })
+    .then(() => clearLoopState()) //TODO: Cloud Function to update children
   }
   
   function Footer() {
@@ -51,9 +43,15 @@ function CreateExercise({ navigation }) {
           }}>Cancel
           </TextButton>
           <TextButton
-          disabled={(values.length > 0 && videoId && exerciseName) ? false : true }
+          disabled={(
+            //This really isn't necessary as firestore will not rewrite any fields that have not been updated. Regardless, it works and looks nice.
+            values[0] !== exercise.video.startTimeSec ||
+            values[1] !== exercise.video.endTimeSec ||
+            videoId !== exercise.video.url ||
+            exerciseName !== exercise.name
+            ) ? false : true }
           onPress={() => {
-            handleAdd()
+            handleUpdate()
             navigation.pop()
           }}>Save</TextButton>
         </View>

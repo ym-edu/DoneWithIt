@@ -56,7 +56,7 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
 
   const handleUpdateParent = () => {
     // console.log("EditPressed")
-    navigation.navigate("ParentExerciseUpdate");
+    navigation.navigate("ParentExerciseUpdate", {exercise: data});
     setData(data)
   }
 

@@ -49,6 +49,7 @@ export default function LoopProvider({children}) {
         setValues([])
         setCurrentTime(0)
         setExerciseName(null)
+        setData(null)
       },
       setVideo: (id) => {
         setVideoId(id)
