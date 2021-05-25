@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { TextInput, StyleSheet, View, Text } from 'react-native';
 
-function RepsInput({style, data, setModeState, current}) {
-  const [value, setValue] = useState(data.toString());
+function RepsInput({style, data, setModeState, current, reset}) {
+  const [value, setValue] = useState('');
 
   const handleChange = (input) => {
     const validatedInput = input.replace(/[^0-9]/g, '')
@@ -14,6 +14,10 @@ function RepsInput({style, data, setModeState, current}) {
       ...prev, [current]: value === '' ? 0 : parseInt(value, 10)
     }))
   }, [value])
+
+  useEffect(() => {
+    setValue(data.toString())
+  }, [reset])
 
   return (
     <>

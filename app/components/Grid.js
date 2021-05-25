@@ -1,10 +1,13 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import RepsInput from './RepsInput';
 import TimeInput from './TimeInput';
 import WeightInput from './WeightInput';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function Grid({data, setWeightState, setModeState}) {
+  const [reset, setReset] = useState(false);
+
   return (
     <View style={styles.container}>
 
@@ -22,24 +25,30 @@ export default function Grid({data, setWeightState, setModeState}) {
       <View style={[styles.col, styles.colOne]}>
         <Text style={styles.text}>Fixed set</Text>
       </View>
-      <RepsInput current={'repsFixed'} data={data.mode.repsFixed} setModeState={setModeState}/>
-      <TimeInput current={'timeFixed'} data={data.mode.timeFixed} setModeState={setModeState}/>
+      <RepsInput current={'repsFixed'} data={data.mode.repsFixed} setModeState={setModeState} reset={reset}/>
+      <TimeInput current={'timeFixed'} data={data.mode.timeFixed} setModeState={setModeState} reset={reset}/>
     </View>
 
     <View style={[styles.row, {flex: 0}]}>
       <View style={[styles.col, styles.colOne]}>
         <Text style={styles.text}>To failure</Text>
       </View>
-      <RepsInput current={'repsTarget'} data={data.mode.repsTarget} setModeState={setModeState}/>
-      <TimeInput current={'timeTarget'} data={data.mode.timeTarget} setModeState={setModeState}/>
+      <RepsInput current={'repsTarget'} data={data.mode.repsTarget} setModeState={setModeState} reset={reset}/>
+      <TimeInput current={'timeTarget'} data={data.mode.timeTarget} setModeState={setModeState} reset={reset}/>
     </View>
 
     <View style={[styles.row, {flex: 0}]}>
       <View style={[styles.col, styles.colOne]}>
         <Text style={styles.text}>Weight</Text>
       </View>
-      <WeightInput data={data.weight} setWeightState={setWeightState}/>
-      <View style={[styles.col, {flexDirection: 'row', alignItems: 'space-around'}]}/>
+      <WeightInput data={data.weight} setWeightState={setWeightState} reset={reset}/>
+      <TouchableOpacity
+        style={[styles.col, {alignItems: 'center'}]}
+        onPress={() => setReset(!reset)}
+      >
+        <FontAwesome name="repeat" size={16} color="white" />
+        <Text style={[styles.text]}>reset</Text>
+      </TouchableOpacity>
     </View>
 
     </View>

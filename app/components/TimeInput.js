@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { TextInput, StyleSheet, View, Text } from 'react-native';
 
-function TimeInput({style, data, setModeState, current}) {
-  const [values, setValues] = useState([data.min.toString(), data.sec.toString()])
+function TimeInput({style, data, setModeState, current, reset}) {
+  const [values, setValues] = useState([]);
 
   const handleChangeMin = (input) => {
     let val = input.replace(/[^0-9]/g, '')
@@ -41,6 +41,10 @@ function TimeInput({style, data, setModeState, current}) {
       }
     }))
   }, [values])
+
+  useEffect(() => {
+    setValues([data.min.toString(), data.sec.toString()])
+  }, [reset])
 
   return (
     <>

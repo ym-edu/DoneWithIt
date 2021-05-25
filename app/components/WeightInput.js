@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TextInput, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useEffect } from 'react/cjs/react.development';
 
-function WeightInput({style, data, setWeightState}) {
+function WeightInput({style, data, setWeightState, reset}) {
   const [value, setValue] = useState('');
   const [unit, setUnit] = useState([]);
 
@@ -12,7 +12,7 @@ function WeightInput({style, data, setWeightState}) {
     data.current === 'kg' ? setUnit(['kg', 'lb']) : setUnit(['lb', 'kg'])
     //Set default value from data by using key (kg||lb), defined by unit state
     setValue(data[data.current].toString())
-  }, [])
+  }, [reset])
 
   const handleChange = (input) => {
     const validatedInput = input.replace(/[^0-9]/g, '')
@@ -27,7 +27,7 @@ function WeightInput({style, data, setWeightState}) {
 
     setWeightState(weight)
   }, [value])
-  
+
   function ToggleButton() {
     return (
       <TouchableOpacity style={styles.toggleButton} onPress={() => {
