@@ -60,9 +60,14 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
     setData(data)
   }
 
+  const handleUpdateChild = () => {
+    // console.log("EditPressed")
+    navigation.navigate("ChildExerciseUpdate", {exercise: data});
+  }
+
   const Icon = useIcon();
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(data.mode);
+  const [value, setValue] = useState(data.mode.current);
   const [items, setItems] = useState([
     {label: 'reps fixed', value: 'repsFixed'},
     {label: 'reps target', value: 'repsTarget'},
@@ -98,7 +103,7 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
             if(parent){
               null
               handleUpdateParent();
-            } else {null}
+            } else {handleUpdateChild();}
           }}
         >
           <Icon name="edit-page" size={20} color={'white'} fill={true}/>

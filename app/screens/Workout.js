@@ -110,7 +110,7 @@ function Workout({ navigation, route }) {
             subtitle={subtitle(item.mode)}
             
             parent={false}
-            data={{id: item.id, mode: item.mode.current}}
+            data={{id: item.id, mode: item.mode}}
             onPress={() => null}
             
             menuIsOpen={menuIsOpen}
