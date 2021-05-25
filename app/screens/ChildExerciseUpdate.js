@@ -5,14 +5,27 @@ import Spacer from '../components/Spacer';
 import { useDB } from '../hooks/useDB';
 import Grid from '../components/Grid';
 
-function ChildExerciseUpdate({ navigation, route: {params: {exercise}}}) {
+function ChildExerciseUpdate({ navigation, route: {params: {exercise, workoutId}}}) {
   const { db, workouts, increment } = useDB();
   const [weightState, setWeightState] = useState({});
   const [modeState, setModeState] = useState({});
 
   const handleUpdate = () => {
     // console.log(weightState)
-    console.log(modeState)
+    // console.log(modeState)
+
+    workouts.ref.doc(workoutId).collection("childExercises").doc(exercise.id)
+    .update({
+      "mode.repsFixed": modeState.repsFixed,
+      "mode.repsTarget": modeState.repsTarget,
+      "mode.timeFixed.min": modeState.timeFixed.min,
+      "mode.timeFixed.sec": modeState.timeFixed.sec,
+      "mode.timeTarget.min": modeState.timeTarget.min,
+      "mode.timeTarget.sec": modeState.timeTarget.sec,
+      "weight.current": weightState.current,
+      "weight.kg": "kg" in weightState ? weightState.kg : exercise.weight.kg,
+      "weight.lb": "lb" in weightState ? weightState.lb : exercise.weight.lb,
+    }).then(() => console.log('done'))
   }
 
   return (
@@ -40,7 +53,7 @@ function ChildExerciseUpdate({ navigation, route: {params: {exercise}}}) {
             <TextButton
             onPress={() => {
               handleUpdate()
-              // navigation.pop()
+              navigation.pop()
             }}
             disabled={false}
             >

@@ -62,7 +62,7 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
 
   const handleUpdateChild = () => {
     // console.log("EditPressed")
-    navigation.navigate("ChildExerciseUpdate", {exercise: data});
+    navigation.navigate("ChildExerciseUpdate", {exercise: data, workoutId: workoutId})
   }
 
   const Icon = useIcon();

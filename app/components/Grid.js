@@ -47,7 +47,7 @@ export default function Grid({data, setWeightState, setModeState}) {
         onPress={() => setReset(!reset)}
       >
         <FontAwesome name="repeat" size={16} color="white" />
-        <Text style={[styles.text]}>reset</Text>
+        <Text style={[styles.text]}>reset changes</Text>
       </TouchableOpacity>
     </View>
 
