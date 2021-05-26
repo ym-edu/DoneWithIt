@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import RepsInput from './RepsInput';
 import TimeInput from './TimeInput';
@@ -7,37 +7,75 @@ import { FontAwesome } from '@expo/vector-icons';
 
 export default function Grid({data, setWeightState, setModeState}) {
   const [reset, setReset] = useState(false);
+  const [selected, setSelected] = useState();
+
+  const handlePress = (mode) => {
+    setSelected(mode)
+  }
 
   function Modes() {
     return (
       <View style={{flexDirection: 'row', alignItems: 'space-around'}}>
-        <View style={[
-          styles.mode,
-          data.mode.current === 'repsFixed' && styles.selected
-        ]}>
+        <TouchableOpacity
+          style={[
+            styles.mode,
+            selected === 'repsFixed' && styles.selected
+          ]}
+          onPress={() => {
+            handlePress('repsFixed')
+          }}
+        >
           <Text style={[styles.text, styles.textSmall]}>Fixed Reps</Text>
-        </View>
-        <View style={[
-          styles.mode,
-          data.mode.current === 'timeFixed' && styles.selected
-        ]}>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.mode,
+            selected === 'timeFixed' && styles.selected
+          ]}
+          onPress={() => {
+            handlePress('timeFixed')
+          }}
+        >
           <Text style={[styles.text, styles.textSmall]}>Fixed Time</Text>
-        </View>
-        <View style={[
-          styles.mode,
-          data.mode.current === 'repsTarget' && styles.selected
-        ]}>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.mode,
+            selected === 'repsTarget' && styles.selected
+          ]}
+          onPress={() => {
+            handlePress('repsTarget')
+          }}
+        >
           <Text style={[styles.text, styles.textSmall]}>Reps Target</Text>
-        </View>
-        <View style={[
-          styles.mode,
-          data.mode.current === 'timeTarget' && styles.selected
-        ]}>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.mode,
+            selected === 'timeTarget' && styles.selected
+          ]}
+          onPress={() => {
+            handlePress('timeTarget')
+          }}
+        >
           <Text style={[styles.text, styles.textSmall]}>Time Target</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     )
   }
+
+  useEffect(() => {
+    setModeState(prev => ({
+      ...prev, "current": selected,
+    }))
+  }, [selected])
+
+  useEffect(() => {
+    setSelected(data.mode.current)
+  }, [reset])
 
   return (
     <>
@@ -63,14 +101,14 @@ export default function Grid({data, setWeightState, setModeState}) {
         data={data.mode.repsFixed}
         setModeState={setModeState}
         reset={reset}
-        style={data.mode.current === 'repsFixed' && styles.quadrantII}
+        style={selected === 'repsFixed' && styles.quadrantII}
       />
       <TimeInput
         current={'timeFixed'}
         data={data.mode.timeFixed}
         setModeState={setModeState}
         reset={reset}
-        style={data.mode.current === 'timeFixed' && styles.quadrantI}
+        style={selected === 'timeFixed' && styles.quadrantI}
       />
     </View>
 
@@ -83,14 +121,14 @@ export default function Grid({data, setWeightState, setModeState}) {
         data={data.mode.repsTarget}
         setModeState={setModeState}
         reset={reset}
-        style={data.mode.current === 'repsTarget' && styles.quadrantIII}
+        style={selected === 'repsTarget' && styles.quadrantIII}
       />
       <TimeInput
         current={'timeTarget'}
         data={data.mode.timeTarget}
         setModeState={setModeState}
         reset={reset}
-        style={data.mode.current === 'timeTarget' && styles.quadrantIV}
+        style={selected === 'timeTarget' && styles.quadrantIV}
       />
     </View>
 
@@ -178,7 +216,6 @@ const styles = StyleSheet.create({
     borderRadius: 0,
    },
    mode: {
-    //  flex:1,
      backgroundColor: 'transparent',
      borderWidth: 1,
      borderColor: '#C0C0B87F',

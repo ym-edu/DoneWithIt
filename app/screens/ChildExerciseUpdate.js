@@ -16,6 +16,7 @@ function ChildExerciseUpdate({ navigation, route: {params: {exercise, workoutId}
 
     workouts.ref.doc(workoutId).collection("childExercises").doc(exercise.id)
     .update({
+      "mode.current": modeState.current,
       "mode.repsFixed": modeState.repsFixed,
       "mode.repsTarget": modeState.repsTarget,
       "mode.timeFixed.min": modeState.timeFixed.min,
