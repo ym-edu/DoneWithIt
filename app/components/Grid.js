@@ -8,7 +8,40 @@ import { FontAwesome } from '@expo/vector-icons';
 export default function Grid({data, setWeightState, setModeState}) {
   const [reset, setReset] = useState(false);
 
+  function Modes() {
+    return (
+      <View style={{flexDirection: 'row', alignItems: 'space-around'}}>
+        <View style={[
+          styles.mode,
+          data.mode.current === 'repsFixed' && styles.selected
+        ]}>
+          <Text style={[styles.text, styles.textSmall]}>Fixed Reps</Text>
+        </View>
+        <View style={[
+          styles.mode,
+          data.mode.current === 'timeFixed' && styles.selected
+        ]}>
+          <Text style={[styles.text, styles.textSmall]}>Fixed Time</Text>
+        </View>
+        <View style={[
+          styles.mode,
+          data.mode.current === 'repsTarget' && styles.selected
+        ]}>
+          <Text style={[styles.text, styles.textSmall]}>Reps Target</Text>
+        </View>
+        <View style={[
+          styles.mode,
+          data.mode.current === 'timeTarget' && styles.selected
+        ]}>
+          <Text style={[styles.text, styles.textSmall]}>Time Target</Text>
+        </View>
+      </View>
+    )
+  }
+
   return (
+    <>
+    <Modes/>
     <View style={styles.container}>
 
     <View style={[styles.row, {flex: 0}]}>
@@ -70,12 +103,13 @@ export default function Grid({data, setWeightState, setModeState}) {
         style={[styles.col, {alignItems: 'center'}]}
         onPress={() => setReset(!reset)}
       >
-        <FontAwesome name="repeat" size={16} color="white" />
-        <Text style={[styles.text]}>reset changes</Text>
+        {/* <FontAwesome name="repeat" size={16} color="white" /> */}
+        <Text style={[styles.text, {color: '#D03050'}]}>reset</Text>
       </TouchableOpacity>
     </View>
 
     </View>
+    </>
   );
 };
 
@@ -117,30 +151,47 @@ const styles = StyleSheet.create({
   },
   quadrantI: {
     borderBottomWidth: 2,
-    borderBottomColor: '#ffffff1a',
+    borderBottomColor: '#C0C0B87F',
     borderLeftWidth: 2,
-    borderLeftColor: '#ffffff1a',
+    borderLeftColor: '#C0C0B87F',
     borderRadius: 0,
   },
   quadrantII: {
     borderRightWidth: 2,
-    borderRightColor: '#ffffff1a',
+    borderRightColor: '#C0C0B87F',
     borderBottomWidth: 2,
-    borderBottomColor: '#ffffff1a',
+    borderBottomColor: '#C0C0B87F',
     borderRadius: 0,
   },
   quadrantIII: {
     borderTopWidth: 2,
-    borderTopColor: '#ffffff1a',
+    borderTopColor: '#C0C0B87F',
     borderRightWidth: 2,
-    borderRightColor: '#ffffff1a',
+    borderRightColor: '#C0C0B87F',
     borderRadius: 0,
   },
   quadrantIV: {
     borderTopWidth: 2,
-    borderTopColor: '#ffffff1a',
+    borderTopColor: '#C0C0B87F',
     borderLeftWidth: 2,
-    borderLeftColor: '#ffffff1a',
+    borderLeftColor: '#C0C0B87F',
     borderRadius: 0,
+   },
+   mode: {
+    //  flex:1,
+     backgroundColor: 'transparent',
+     borderWidth: 1,
+     borderColor: '#C0C0B87F',
+     borderRadius: 16,
+     marginHorizontal: 2,
+     paddingVertical: 4,
+     paddingHorizontal: 8,
+   },
+   selected: {
+    backgroundColor: '#C0C0B81A',
+   },
+   textSmall: {
+    color: 'white',
+    fontSize: 10,
    },
 });
