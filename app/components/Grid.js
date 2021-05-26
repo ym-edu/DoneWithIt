@@ -25,16 +25,40 @@ export default function Grid({data, setWeightState, setModeState}) {
       <View style={[styles.col, styles.colOne]}>
         <Text style={styles.text}>Fixed set</Text>
       </View>
-      <RepsInput current={'repsFixed'} data={data.mode.repsFixed} setModeState={setModeState} reset={reset}/>
-      <TimeInput current={'timeFixed'} data={data.mode.timeFixed} setModeState={setModeState} reset={reset}/>
+      <RepsInput
+        current={'repsFixed'}
+        data={data.mode.repsFixed}
+        setModeState={setModeState}
+        reset={reset}
+        style={data.mode.current === 'repsFixed' && styles.quadrantII}
+      />
+      <TimeInput
+        current={'timeFixed'}
+        data={data.mode.timeFixed}
+        setModeState={setModeState}
+        reset={reset}
+        style={data.mode.current === 'timeFixed' && styles.quadrantI}
+      />
     </View>
 
     <View style={[styles.row, {flex: 0}]}>
       <View style={[styles.col, styles.colOne]}>
         <Text style={styles.text}>To failure</Text>
       </View>
-      <RepsInput current={'repsTarget'} data={data.mode.repsTarget} setModeState={setModeState} reset={reset}/>
-      <TimeInput current={'timeTarget'} data={data.mode.timeTarget} setModeState={setModeState} reset={reset}/>
+      <RepsInput
+        current={'repsTarget'}
+        data={data.mode.repsTarget}
+        setModeState={setModeState}
+        reset={reset}
+        style={data.mode.current === 'repsTarget' && styles.quadrantIII}
+      />
+      <TimeInput
+        current={'timeTarget'}
+        data={data.mode.timeTarget}
+        setModeState={setModeState}
+        reset={reset}
+        style={data.mode.current === 'timeTarget' && styles.quadrantIV}
+      />
     </View>
 
     <View style={[styles.row, {flex: 0}]}>
@@ -91,4 +115,32 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontWeight: "700",
   },
+  quadrantI: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#ffffff1a',
+    borderLeftWidth: 2,
+    borderLeftColor: '#ffffff1a',
+    borderRadius: 0,
+  },
+  quadrantII: {
+    borderRightWidth: 2,
+    borderRightColor: '#ffffff1a',
+    borderBottomWidth: 2,
+    borderBottomColor: '#ffffff1a',
+    borderRadius: 0,
+  },
+  quadrantIII: {
+    borderTopWidth: 2,
+    borderTopColor: '#ffffff1a',
+    borderRightWidth: 2,
+    borderRightColor: '#ffffff1a',
+    borderRadius: 0,
+  },
+  quadrantIV: {
+    borderTopWidth: 2,
+    borderTopColor: '#ffffff1a',
+    borderLeftWidth: 2,
+    borderLeftColor: '#ffffff1a',
+    borderRadius: 0,
+   },
 });
