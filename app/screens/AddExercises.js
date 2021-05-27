@@ -7,14 +7,14 @@ import { useDB } from '../hooks/useDB';
 
 function AddExercises({ navigation, route }) {
   const { db, workouts, parentExercises, increment } = useDB();
-  const { workoutId, exerciseCount } = route.params;
+  const { workoutId, exerciseIndex } = route.params;
 
   const [selection, setSelection] = useState([]);
 
   const handleAdd = () => {
     const batch = db().batch();
 
-    let currentIndex = exerciseCount;
+    let currentIndex = exerciseIndex;
 
     let queries = selection.map(itemId => {
       return parentExercises.ref.where(db.FieldPath.documentId(), '==', itemId).get()

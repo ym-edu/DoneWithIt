@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, Text } from 'react-native';
 import Spacer from '../components/Spacer';
 import CreateButton from '../components/CreateButton';
 import ExerciseCard from '../components/ExerciseCard';
@@ -59,10 +59,10 @@ function Workout({ navigation, route }) {
       .collection("childExercises").doc("_tally")
       .onSnapshot(tallyDoc => {
         //TODO: If workout is deleted from workout page an error occurs as listener cannot find nonexistant tally doc
-        setExerciseCount(tallyDoc.data().childExercise_index)
+        setExerciseCount(tallyDoc.data().childExercise_count)
 
         navigation.setParams({
-          exerciseCount: tallyDoc.data().childExercise_index,
+          exerciseIndex: tallyDoc.data().childExercise_index,
         });
       })
     }
@@ -81,6 +81,16 @@ function Workout({ navigation, route }) {
     }
   }, [exercises])
 
+  function WorkoutHeader() {
+    return (
+      <View style={{width: '100%', flexDirection: 'row', paddingVertical: 16}}>
+        <Spacer mH={4} style={{backgroundColor: '#C0C0B8', borderTopLeftRadius: 2, borderBottomLeftRadius: 2}}/>
+        <Spacer mH={16}/>
+        <Text style={[styles.text, {color: '#C0C0B87F'}]}>{exerciseCount} exercises</Text>
+      </View>
+    )
+  }
+
   // function Footer() {
   //   return (
   //     <View style={styles.footer}>
@@ -92,7 +102,7 @@ function Workout({ navigation, route }) {
   //       onPress={() => {
   //         navigation.navigate("AddExercises", {
   //           workoutId: id,
-  //           exerciseCount: exerciseCount,
+  //           exerciseIndex: exerciseIndex,
   //         })
   //       }}/>
   //       <Spacer mV={8}/>
@@ -124,9 +134,10 @@ function Workout({ navigation, route }) {
           />
         )}
  
-        contentContainerStyle={{flexDirection: 'column-reverse', paddingTop: 16, marginHorizontal: 16}}
+        contentContainerStyle={{flexDirection: 'column-reverse', marginHorizontal: 16}}
 
         ListHeaderComponent={() => <Spacer mV={32 * 4 - 8}/>}
+        ListFooterComponent={() => <WorkoutHeader/>}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -159,7 +170,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: 'white'
+    color: 'white',
   }
 })
 
