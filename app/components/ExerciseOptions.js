@@ -8,7 +8,7 @@ import { useDB } from '../hooks/useDB';
 import { useNavigation } from '@react-navigation/native';
 import { useLoopUpdate } from '../hooks/useLoop'
 
-function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}) {
+function ExerciseOptions({parent, index, data, handleMenuState, workoutId}) {
   const { setData } = useLoopUpdate()
   const navigation = useNavigation();
   const {db, parentExercises, workouts, decrement } = useDB()
@@ -67,7 +67,7 @@ function ExerciseOptions({parent, index, last, data, handleMenuState, workoutId}
 
   const Icon = useIcon();
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(data.mode.current);
+  const [value, setValue] = useState(!parent && data.mode.current);
   const [items, setItems] = useState([
     {label: 'fixed reps', value: 'repsFixed'},
     {label: 'reps to failure', value: 'repsTarget'},
