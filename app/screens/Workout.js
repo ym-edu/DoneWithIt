@@ -49,7 +49,7 @@ function Workout({ navigation, route }) {
         navigation.setParams({
           exercises: exerciseDocs,
           workoutId: id,
-        })
+        });
       })
     };
     fetchExercises()
@@ -60,6 +60,10 @@ function Workout({ navigation, route }) {
       .onSnapshot(tallyDoc => {
         //TODO: If workout is deleted from workout page an error occurs as listener cannot find nonexistant tally doc
         setExerciseCount(tallyDoc.data().childExercise_index)
+
+        navigation.setParams({
+          exerciseCount: tallyDoc.data().childExercise_index,
+        });
       })
     }
     fetchTally()
@@ -77,24 +81,24 @@ function Workout({ navigation, route }) {
     }
   }, [exercises])
 
-  function Footer() {
-    return (
-      <View style={styles.footer}>
-        <Spacer mV={8}
-        style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-        <CreateButton
-        icon={'plus'}
-        title='add exercises'
-        onPress={() => {
-          navigation.navigate("AddExercises", {
-            workoutId: id,
-            exerciseCount: exerciseCount,
-          })
-        }}/>
-        <Spacer mV={8}/>
-      </View>
-    )
-  }
+  // function Footer() {
+  //   return (
+  //     <View style={styles.footer}>
+  //       <Spacer mV={8}
+  //       style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
+  //       <CreateButton
+  //       icon={'plus'}
+  //       title='add exercises'
+  //       onPress={() => {
+  //         navigation.navigate("AddExercises", {
+  //           workoutId: id,
+  //           exerciseCount: exerciseCount,
+  //         })
+  //       }}/>
+  //       <Spacer mV={8}/>
+  //     </View>
+  //   )
+  // }
 
   return (
     <>
@@ -103,9 +107,8 @@ function Workout({ navigation, route }) {
         data={exercises}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item, index }) => (
-          // <ExerciseOptions data={item}/>
           <ExerciseCard
-            url={item.video.url} //ZfawH9NsTtl ZfawH9NsTtl
+            url={item.video.url}
             title={item.exerciseName}
             subtitle={subtitle(item.mode)}
             
@@ -120,38 +123,15 @@ function Workout({ navigation, route }) {
             workoutId={id}
           />
         )}
-        // CellRendererComponent={({ children, index, style, ...props }) => {
-        //   // console.log(index)
-        //   // console.log(children)
-
-        //   const childrenWithProps = React.Children.map(children, (child) => {
-        //     if(child === null || child === undefined) return;
-        //     return React.cloneElement(child, {
-        //       index: index,
-        //       last: 0,
-        //       // last: data.length-1,
-        //     });
-        //   });
-
-        //   return (
-        //     <View style={[style, styles.cell, index === 0 && {marginBottom: 0}]}>
-        //       {childrenWithProps.reverse()}
-        //     </View>
-        //   )
-        // }}
+ 
         contentContainerStyle={{flexDirection: 'column-reverse', paddingTop: 16, marginHorizontal: 16}}
 
-        // inverted
-        // initialScrollIndex={8}
-        // getItemLayout={(data, index) => ({length: 72, offset: 72 * index, index})}
-
-        // ItemSeparatorComponent={() => <Spacer mV={8}/>}
         ListHeaderComponent={() => <Spacer mV={32 * 4 - 8}/>}
         showsVerticalScrollIndicator={false}
       />
     </View>
 
-    <Footer/>
+    {/* <Footer/> */}
     </>
   );
 }

@@ -83,6 +83,7 @@ function AddExercises({ navigation, route }) {
             onPress={() => {
               handleAdd()
               navigation.pop()
+              navigation.pop()
             }}
             disabled={selection.length > 0 ? false : true}
             >

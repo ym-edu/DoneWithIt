@@ -4,7 +4,7 @@ import TextButton from '../components/TextButton';
 import Spacer from '../components/Spacer';
 import { useDB } from '../hooks/useDB';
 
-function WorkoutOptionsModal({navigation, route: { params: {exercises, workoutId, workoutName}}}) {
+function WorkoutOptionsModal({navigation, route: { params: {exercises, workoutId, workoutName, exerciseCount}}}) {
   const { db, workouts, decrement } = useDB();
 
   const [destroy, setDestroy] = useState(false);
@@ -24,6 +24,16 @@ function WorkoutOptionsModal({navigation, route: { params: {exercises, workoutId
   function OptionsBox() {
     return(
     <View style={styles.modal}>
+      <TextButton
+      style={styles.button}
+      onPress={() => {
+        navigation.navigate("AddExercises", {
+          workoutId: workoutId,
+          exerciseCount: exerciseCount,
+        })
+      }}>
+        Add Exercises
+      </TextButton>
       <TextButton onPress={() => navigation.navigate("SortChildExercises", {
         exercises: exercises,
         workoutId: workoutId,
