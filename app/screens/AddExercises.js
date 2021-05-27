@@ -7,14 +7,14 @@ import { useDB } from '../hooks/useDB';
 
 function AddExercises({ navigation, route }) {
   const { db, workouts, parentExercises, increment } = useDB();
-  const { workoutId, exerciseCount } = route.params;
+  const { workoutId, exerciseIndex } = route.params;
 
   const [selection, setSelection] = useState([]);
 
   const handleAdd = () => {
     const batch = db().batch();
 
-    let currentIndex = exerciseCount;
+    let currentIndex = exerciseIndex;
 
     let queries = selection.map(itemId => {
       return parentExercises.ref.where(db.FieldPath.documentId(), '==', itemId).get()
@@ -40,6 +40,11 @@ function AddExercises({ navigation, route }) {
             repsTarget: 12,
             timeFixed: { min: 0, sec: 30 },
             timeTarget: { min: 1, sec: 30 }
+          },
+          weight: {
+            current: "lb",
+            kg: 0,
+            lb: 0,
           },
           parentExercise_ref: doc.id,
           video: doc.data().video,
@@ -77,6 +82,7 @@ function AddExercises({ navigation, route }) {
             <TextButton
             onPress={() => {
               handleAdd()
+              navigation.pop()
               navigation.pop()
             }}
             disabled={selection.length > 0 ? false : true}

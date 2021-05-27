@@ -4,9 +4,10 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import { useLoop, useLoopUpdate } from '../hooks/useLoop';
 import sizes from '../config/constants/sizes';
 import CustomLabel from '../components/CustomLabel'
+import { useEffect } from 'react/cjs/react.development';
 
 function Slider() {
-  const { duration, scrollEnabled, currentTime, values } = useLoop();
+  const { duration, scrollEnabled, currentTime, values, data } = useLoop();
   const { setValues, formatSeconds } = useLoopUpdate();
 
   const enableScroll = () => {
@@ -42,6 +43,12 @@ function Slider() {
     )
   }
 
+  useEffect(() => {
+    if(data !== null) {
+      setValues([data.video.startTimeSec, data.video.endTimeSec])
+    }
+  }, [])
+
   return (
     <>
       <View style={{alignSelf: 'center'}}>
@@ -52,7 +59,9 @@ function Slider() {
           <MultiSlider
           min={0}
           max={duration}
-          values={[0, duration]}
+          values={data === null
+            ? [0, duration]
+            : [data.video.startTimeSec, data.video.endTimeSec]}
           sliderLength={width}
           onValuesChangeStart={disableScroll}
           onValuesChangeFinish={onValuesChangeFinish}

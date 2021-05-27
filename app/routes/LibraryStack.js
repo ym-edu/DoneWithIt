@@ -33,14 +33,15 @@ export default function LibraryStack() {
         <Stack.Screen
         name='Workout'
         component={Workout}
-        options={({navigation, route: {params: {workoutName, exercises, workoutId}}}) => {
+        options={({navigation, route: {params: {exercises, exerciseIndex, workoutName, workoutId}}}) => {
           return {
             headerTitle: workoutName,
             headerRight: () => (
             <Options onPress={() => {
               // console.log(title)
               navigation.navigate('WorkoutOptionsModal', {
-                exercises: exercises,
+                exercises: exercises, //Compensation for 'inverted' list
+                exerciseIndex: exerciseIndex,
                 workoutId: workoutId,
                 workoutName: workoutName,
               })

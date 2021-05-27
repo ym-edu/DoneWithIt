@@ -5,7 +5,7 @@ import { useLoop, useLoopUpdate } from '../hooks/useLoop';
 import TextButton from '../components/TextButton';
 
 function Video({url, navigation}) {
-  const { playerRef, duration, values, playing } = useLoop();
+  const { playerRef, duration, values, playing, data } = useLoop();
   const { PTtoSeconds, setDuration, setValues, setPlaying, setCurrentTime } = useLoopUpdate();
 
   const [playerReady, setPlayerReady] = useState(false)
@@ -25,7 +25,10 @@ function Video({url, navigation}) {
       const videoDuration = parseInt(PTtoSeconds(PT).replace(/,/g, ''), 10) - 1 // API vs OEmbed differs by 1; This 1 second can prevent video from ever reaching end as slider range will not include the end second.
       console.log(videoDuration)
       setDuration(videoDuration)
-      setValues([0, videoDuration])
+      
+      if(data === null) {
+        setValues([0, videoDuration])
+      } else setValues([data.video.startTimeSec, data.video.endTimeSec])
 
       console.log("Duration", videoDuration)
     })
@@ -65,7 +68,7 @@ function Video({url, navigation}) {
 
   return (
     <>
-      <View style={{aspectRatio: 16/9, width: '100%'}}>
+      <View style={{aspectRatio: 16/9, width: '100%', backgroundColor: '#1D1E1E'}}>
         {duration && <YoutubePlayer
         videoId={url}
         height={'100%'}

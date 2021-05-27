@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
-import CreateButton from '../components/CreateButton';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, FlatList, Text } from 'react-native';
 import Spacer from '../components/Spacer';
+import CreateButton from '../components/CreateButton';
 import ExerciseCard from '../components/ExerciseCard';
 import subtitle from '../temp/subTitle';
 import { useDB } from '../hooks/useDB';
@@ -11,7 +11,23 @@ function Workout({ navigation, route }) {
   const { params: { id } } = route;
 
   const [exercises, setExercises] = useState([]);
-  const [exerciseCount, setExerciseCount] = useState(0)
+  const [exerciseCount, setExerciseCount] = useState(0);
+  const [menuIsOpen, setMenuIsOpen] = useState([]);
+
+  const handleMenuState = (index, open) => {
+    // console.log(index)
+    const i = index;
+
+    let stateArray;
+
+    if(open) {
+      stateArray = menuIsOpen.map(item => false)
+    } else stateArray = [...menuIsOpen]
+
+    stateArray[i] = !stateArray[i];
+
+    setMenuIsOpen(stateArray)
+  }
 
   useEffect(() => {
     let unsubscribeFromExercises;
@@ -24,14 +40,16 @@ function Workout({ navigation, route }) {
         const exerciseDocs = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
+          isEditing: false
         }));
+        const reversedExerciseDocs = exerciseDocs.map(doc => doc).reverse()
         // console.log(exerciseDocs) //TODO: Save state for parent to determine count
-        setExercises(exerciseDocs)
+        setExercises(reversedExerciseDocs)
         
         navigation.setParams({
           exercises: exerciseDocs,
           workoutId: id,
-        })
+        });
       })
     };
     fetchExercises()
@@ -41,7 +59,11 @@ function Workout({ navigation, route }) {
       .collection("childExercises").doc("_tally")
       .onSnapshot(tallyDoc => {
         //TODO: If workout is deleted from workout page an error occurs as listener cannot find nonexistant tally doc
-        setExerciseCount(tallyDoc.data().childExercise_index)
+        setExerciseCount(tallyDoc.data().childExercise_count)
+
+        navigation.setParams({
+          exerciseIndex: tallyDoc.data().childExercise_index,
+        });
       })
     }
     fetchTally()
@@ -52,41 +74,75 @@ function Workout({ navigation, route }) {
     }
   }, [])
 
+  useEffect(() => {
+    if(exercises.length > 0) {
+      const initialState = exercises.map(item => item.isEditing)
+      setMenuIsOpen(initialState)
+    }
+  }, [exercises])
+
+  function WorkoutHeader() {
+    return (
+      <View style={{width: '100%', flexDirection: 'row', paddingVertical: 16}}>
+        <Spacer mH={4} style={{backgroundColor: '#C0C0B8', borderTopLeftRadius: 2, borderBottomLeftRadius: 2}}/>
+        <Spacer mH={16}/>
+        <Text style={[styles.text, {color: '#C0C0B87F'}]}>{exerciseCount} exercises</Text>
+      </View>
+    )
+  }
+
+  // function Footer() {
+  //   return (
+  //     <View style={styles.footer}>
+  //       <Spacer mV={8}
+  //       style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
+  //       <CreateButton
+  //       icon={'plus'}
+  //       title='add exercises'
+  //       onPress={() => {
+  //         navigation.navigate("AddExercises", {
+  //           workoutId: id,
+  //           exerciseIndex: exerciseIndex,
+  //         })
+  //       }}/>
+  //       <Spacer mV={8}/>
+  //     </View>
+  //   )
+  // }
+
   return (
     <>
     <View style={styles.container}>
-      <FlatList style={styles.content}
-          data={exercises}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
-            <ExerciseCard
-              url={item.video.url} //ZfawH9NsTtl ZfawH9NsTtl
-              title={item.exerciseName}
-              subtitle={subtitle(item.mode)}
-              onPress={() => null}
-            />
-          )}
-          ItemSeparatorComponent={() => <Spacer mV={8}/>}
-          ListFooterComponent={() => <Spacer mV={64}/>}
-          showsVerticalScrollIndicator={false}
-        />
+      <FlatList style={styles.flatlist}
+        data={exercises}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item, index }) => (
+          <ExerciseCard
+            url={item.video.url}
+            title={item.exerciseName}
+            subtitle={subtitle(item.mode)}
+            
+            parent={false}
+            data={{id: item.id, mode: item.mode, weight: item.weight}}
+            onPress={() => null}
+            
+            menuIsOpen={menuIsOpen}
+            handleMenuState={handleMenuState}
+
+            index={index}
+            workoutId={id}
+          />
+        )}
+ 
+        contentContainerStyle={{flexDirection: 'column-reverse', marginHorizontal: 16}}
+
+        ListHeaderComponent={() => <Spacer mV={32 * 4 - 8}/>}
+        ListFooterComponent={() => <WorkoutHeader/>}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
 
-    <View style={styles.footer}>
-      <Spacer mV={8}
-      style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-      <CreateButton
-      icon={'plus'}
-      title='add exercises'
-      onPress={() => {
-      navigation.navigate("AddExercises", {
-        workoutId: id,
-        exerciseCount: exerciseCount,
-      })
-      }
-      }/>
-      <Spacer mV={8}/>
-    </View>
+    {/* <Footer/> */}
     </>
   );
 }
@@ -96,20 +152,25 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingHorizontal: 16,
-    paddingTop: 16,
+    // paddingHorizontal: 16,
+    // paddingTop: 16,
   },
-  content: {
-    flex: 1,
+  flatlist: {
     width: '100%',
     height: '100%',
   },
+  // cell: {
+  //   marginBottom: 8,
+  //   // paddingBottom: 8,
+  //   // borderWidth: 1,
+  //   // borderColor: 'white',
+  // },
   footer: {
     width: '100%',
     alignItems: 'center',
   },
   text: {
-    color: 'white'
+    color: 'white',
   }
 })
 
