@@ -6,14 +6,14 @@ import ExerciseCard from '../components/ExerciseCard';
 import subtitle from '../temp/subTitle';
 import { useDB } from '../hooks/useDB';
 
-import { useWorkoutStore } from '../hooks/useWorkoutStore';
-import { observer } from 'mobx-react-lite'
+import { useRoutineStore } from '../hooks/useRoutineStore';
+import { observer } from 'mobx-react-lite';
 
 function Workout({ navigation, route }) {
-  const workoutStore = useWorkoutStore();
+  const routineStore = useRoutineStore();
 
   const { workouts } = useDB()
-  const { params: { id } } = route;
+  const { params: { id, workoutName } } = route;
 
   const [exercises, setExercises] = useState([]);
   const [exerciseCount, setExerciseCount] = useState(0);
@@ -35,6 +35,9 @@ function Workout({ navigation, route }) {
   }
 
   useEffect(() => {
+    routineStore.setRoutineId(id)
+    routineStore.setRoutineName(workoutName)
+
     let unsubscribeFromExercises;
     let unsubscribeFromTally;
 
@@ -47,11 +50,15 @@ function Workout({ navigation, route }) {
           ...doc.data(),
           isEditing: false
         }));
+        routineStore.setExercises(exerciseDocs)
+
+
+
+
         const reversedExerciseDocs = exerciseDocs.map(doc => doc).reverse()
         // console.log(exerciseDocs) //TODO: Save state for parent to determine count
         setExercises(reversedExerciseDocs)
 
-        workoutStore.setExercises(exerciseDocs)
 
         navigation.setParams({
           exercises: exerciseDocs,
@@ -71,6 +78,9 @@ function Workout({ navigation, route }) {
         navigation.setParams({
           exerciseIndex: tallyDoc.data().childExercise_index,
         });
+
+
+        routineStore.setNextExerciseIndex(tallyDoc.data().childExercise_index)
       })
     }
     fetchTally()
@@ -107,7 +117,14 @@ function Workout({ navigation, route }) {
         icon={'plus'}
         title='add exercises'
         onPress={() => {
-          console.log(workoutStore.exercises)
+          // console.log(route.params)
+          // console.log("Id ", routineStore.routineId)
+          // console.log("Name ", routineStore.routineName)
+          // console.log("Exercises ", routineStore.exercises)
+          // console.log(routineStore.invertedExercises)
+          // console.log(routineStore.menusAreOpen)
+          // console.log(routineStore.exerciseCount)
+          console.log(routineStore.nextExerciseIndex)
         }}/>
         <Spacer mV={8}/>
       </View>
