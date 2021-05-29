@@ -6,7 +6,12 @@ import ExerciseCard from '../components/ExerciseCard';
 import subtitle from '../temp/subTitle';
 import { useDB } from '../hooks/useDB';
 
+import { useWorkoutStore } from '../hooks/useWorkoutStore';
+import { observer } from 'mobx-react-lite'
+
 function Workout({ navigation, route }) {
+  const workoutStore = useWorkoutStore();
+
   const { workouts } = useDB()
   const { params: { id } } = route;
 
@@ -81,34 +86,37 @@ function Workout({ navigation, route }) {
     }
   }, [exercises])
 
-  function WorkoutHeader() {
+  const WorkoutHeader = observer(() => {
     return (
       <View style={{width: '100%', flexDirection: 'row', paddingVertical: 16}}>
         <Spacer mH={4} style={{backgroundColor: '#C0C0B8', borderTopLeftRadius: 2, borderBottomLeftRadius: 2}}/>
         <Spacer mH={16}/>
-        <Text style={[styles.text, {color: '#C0C0B87F'}]}>{exerciseCount} exercises</Text>
+        <Text style={[styles.text, {color: '#C0C0B87F'}]}>{workoutStore.count} exercises</Text>
+      </View>
+    )
+  })
+
+  function Footer() {
+    return (
+      <View style={styles.footer}>
+        <Spacer mV={8}
+        style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
+        <CreateButton
+        icon={'plus'}
+        title='add exercises'
+        onPress={() => {
+          workoutStore.increment(2)
+        }}/>
+        <CreateButton
+        icon={'minus'}
+        title='add exercises'
+        onPress={() => {
+          workoutStore.decrement(2)
+        }}/>
+        <Spacer mV={8}/>
       </View>
     )
   }
-
-  // function Footer() {
-  //   return (
-  //     <View style={styles.footer}>
-  //       <Spacer mV={8}
-  //       style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-  //       <CreateButton
-  //       icon={'plus'}
-  //       title='add exercises'
-  //       onPress={() => {
-  //         navigation.navigate("AddExercises", {
-  //           workoutId: id,
-  //           exerciseIndex: exerciseIndex,
-  //         })
-  //       }}/>
-  //       <Spacer mV={8}/>
-  //     </View>
-  //   )
-  // }
 
   return (
     <>
@@ -142,7 +150,7 @@ function Workout({ navigation, route }) {
       />
     </View>
 
-    {/* <Footer/> */}
+    <Footer/>
     </>
   );
 }
