@@ -108,10 +108,10 @@ function Workout({ navigation, route }) {
           workoutStore.increment(2)
         }}/>
         <CreateButton
-        icon={'minus'}
+        icon={'edit'}
         title='add exercises'
         onPress={() => {
-          workoutStore.decrement(2)
+          workoutStore.setCount(9)
         }}/>
         <Spacer mV={8}/>
       </View>
