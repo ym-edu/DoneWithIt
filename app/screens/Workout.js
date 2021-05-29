@@ -50,7 +50,9 @@ function Workout({ navigation, route }) {
         const reversedExerciseDocs = exerciseDocs.map(doc => doc).reverse()
         // console.log(exerciseDocs) //TODO: Save state for parent to determine count
         setExercises(reversedExerciseDocs)
-        
+
+        workoutStore.setExercises(exerciseDocs)
+
         navigation.setParams({
           exercises: exerciseDocs,
           workoutId: id,
@@ -86,15 +88,15 @@ function Workout({ navigation, route }) {
     }
   }, [exercises])
 
-  const WorkoutHeader = observer(() => {
+  function WorkoutHeader() {
     return (
       <View style={{width: '100%', flexDirection: 'row', paddingVertical: 16}}>
         <Spacer mH={4} style={{backgroundColor: '#C0C0B8', borderTopLeftRadius: 2, borderBottomLeftRadius: 2}}/>
         <Spacer mH={16}/>
-        <Text style={[styles.text, {color: '#C0C0B87F'}]}>{workoutStore.count} exercises</Text>
+        <Text style={[styles.text, {color: '#C0C0B87F'}]}>{exerciseCount} exercises</Text>
       </View>
     )
-  })
+  }
 
   function Footer() {
     return (
@@ -105,13 +107,7 @@ function Workout({ navigation, route }) {
         icon={'plus'}
         title='add exercises'
         onPress={() => {
-          workoutStore.increment(2)
-        }}/>
-        <CreateButton
-        icon={'edit'}
-        title='add exercises'
-        onPress={() => {
-          workoutStore.setCount(9)
+          console.log(workoutStore.exercises)
         }}/>
         <Spacer mV={8}/>
       </View>

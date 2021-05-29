@@ -18,16 +18,11 @@ import { makeAutoObservable } from 'mobx';
 // }
 
 const WorkoutStore = makeAutoObservable({
-  count: 0,
-  increment: function(multiplier) {
-    this.count += multiplier;
+  //IMPORTANT: function expressions () => {} don't have 'this'
+  exercises: [],
+  setExercises: function (exercises) {
+    this.exercises.replace(exercises)
   },
-  decrement: function(multiplier) {
-    this.count -= multiplier;
-  },
-  setCount: function(newCount) {
-    this.count = newCount;
-  }
 })
 
 const WorkoutStoreContext = createContext(null);
