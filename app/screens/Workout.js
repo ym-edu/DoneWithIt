@@ -9,14 +9,19 @@ import { useDB } from '../hooks/useDB';
 import { useRoutineStore } from '../hooks/useRoutineStore';
 import { observer } from 'mobx-react-lite';
 
-function Workout({ navigation, route }) {
+function Workout({ navigation }) {
   const routineStore = useRoutineStore();
+  //Observables & computeds can be destructured, actions must use dot.notation
+  const {
+    routineId,
+    exercises,
+    invertedExercises,
+    exerciseCount,
+  } = routineStore
 
   const { workouts } = useDB()
-  const { params: { id, workoutName } } = route;
 
-  const [exercises, setExercises] = useState([]);
-  const [exerciseCount, setExerciseCount] = useState(0);
+  // const [exerciseCount, setExerciseCount] = useState(0);
   const [menuIsOpen, setMenuIsOpen] = useState([]);
 
   const handleMenuState = (index, open) => {
@@ -35,14 +40,11 @@ function Workout({ navigation, route }) {
   }
 
   useEffect(() => {
-    routineStore.setRoutineId(id)
-    routineStore.setRoutineName(workoutName)
-
     let unsubscribeFromExercises;
     let unsubscribeFromTally;
 
     const fetchExercises = () => {
-      unsubscribeFromExercises = workouts.ref.doc(id).collection("childExercises")
+      unsubscribeFromExercises = workouts.ref.doc(routineId).collection("childExercises")
       .orderBy("position")
       .onSnapshot(snapshot => {
         const exerciseDocs = snapshot.docs.map(doc => ({
@@ -50,30 +52,25 @@ function Workout({ navigation, route }) {
           ...doc.data(),
           isEditing: false
         }));
+
         routineStore.setExercises(exerciseDocs)
-
-
-
-
-        const reversedExerciseDocs = exerciseDocs.map(doc => doc).reverse()
         // console.log(exerciseDocs) //TODO: Save state for parent to determine count
-        setExercises(reversedExerciseDocs)
 
 
         navigation.setParams({
           exercises: exerciseDocs,
-          workoutId: id,
+          workoutId: routineId,
         });
       })
     };
     fetchExercises()
 
     const fetchTally = () => {
-      unsubscribeFromTally = workouts.ref.doc(id)
+      unsubscribeFromTally = workouts.ref.doc(routineId)
       .collection("childExercises").doc("_tally")
       .onSnapshot(tallyDoc => {
         //TODO: If workout is deleted from workout page an error occurs as listener cannot find nonexistant tally doc
-        setExerciseCount(tallyDoc.data().childExercise_count)
+        // setExerciseCount(tallyDoc.data().childExercise_count)
 
         navigation.setParams({
           exerciseIndex: tallyDoc.data().childExercise_index,
@@ -124,7 +121,7 @@ function Workout({ navigation, route }) {
           // console.log(routineStore.invertedExercises)
           // console.log(routineStore.menusAreOpen)
           // console.log(routineStore.exerciseCount)
-          console.log(routineStore.nextExerciseIndex)
+          // console.log(routineStore.nextExerciseIndex)
         }}/>
         <Spacer mV={8}/>
       </View>
@@ -135,7 +132,7 @@ function Workout({ navigation, route }) {
     <>
     <View style={styles.container}>
       <FlatList style={styles.flatlist}
-        data={exercises}
+        data={invertedExercises}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item, index }) => (
           <ExerciseCard
@@ -151,7 +148,7 @@ function Workout({ navigation, route }) {
             handleMenuState={handleMenuState}
 
             index={index}
-            workoutId={id}
+            workoutId={routineId}
           />
         )}
  

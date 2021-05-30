@@ -4,8 +4,11 @@ import WorkoutCard from '../components/WorkoutCard';
 import CreateButton from '../components/CreateButton';
 import Spacer from '../components/Spacer';
 import { useDB } from '../hooks/useDB';
+import { useRoutineStore } from '../hooks/useRoutineStore';
 
 function LibraryTab({navigation}) {
+  const routineStore = useRoutineStore();
+
   const { workouts: { ref }, parentExercises: { tally } } = useDB();
   const [workouts, setWorkouts] = useState([]);
   const [exerciseCount, setExerciseCount] = useState(0);
@@ -66,10 +69,12 @@ function LibraryTab({navigation}) {
           renderItem={({item}) => (
             <WorkoutCard
             // url={item.video.url} //TODO: cloud function
-            onPress={
-              () => navigation.navigate('Workout', {id: item.id, workoutName: item.workoutName})
-              // () => null
-            }
+            onPress={() => {
+              navigation.navigate('Workout', {id: item.id, workoutName: item.workoutName})
+              
+              routineStore.setRoutineId(item.id)
+              routineStore.setRoutineName(item.workoutName)
+            }}
             title={item.workoutName}
             subTitle={item.parentExerciseCount}
             />

@@ -23,8 +23,7 @@ const RoutineStore = makeAutoObservable({
     this.exercises.replace(exercises);
   },
   get invertedExercises() {
-    // console.log("inverting...")
-    return this.exercises.reverse();
+    return this.exercises.slice().reverse();
   },
   get menusAreOpen() {
     return this.exercises.map(() => false);
