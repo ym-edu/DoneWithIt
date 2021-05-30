@@ -119,7 +119,6 @@ function Workout({ navigation }) {
             onPress={() => null}
 
             index={index}
-            workoutId={routineId}
           />
         )}
  

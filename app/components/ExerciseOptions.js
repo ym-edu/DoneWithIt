@@ -10,8 +10,9 @@ import { useLoopUpdate } from '../hooks/useLoop';
 
 import { useRoutineStore } from '../hooks/useRoutineStore';
 
-function ExerciseOptions({parent, index, data, workoutId}) {
+function ExerciseOptions({parent, index, data}) {
   const routineStore = useRoutineStore();
+  const { routineId } = routineStore;
 
   const { setData } = useLoopUpdate()
   const navigation = useNavigation();
@@ -19,7 +20,7 @@ function ExerciseOptions({parent, index, data, workoutId}) {
 
   const handleDropDownChange = (value) => {
     // console.log("WTF", value)
-    workouts.ref.doc(workoutId).collection("childExercises").doc(data.id)
+    workouts.ref.doc(routineId).collection("childExercises").doc(data.id)
     .update({
       "mode.current": value,
     })
@@ -45,8 +46,8 @@ function ExerciseOptions({parent, index, data, workoutId}) {
   const handleDeleteChild = () => {
     // console.log("Child Id: ", data.id)
     const batch = db().batch();
-    const ref = workouts.ref.doc(workoutId).collection("childExercises").doc(data.id)
-    const tally = workouts.ref.doc(workoutId)
+    const ref = workouts.ref.doc(routineId).collection("childExercises").doc(data.id)
+    const tally = workouts.ref.doc(routineId)
     .collection("childExercises").doc("_tally")
 
     batch.delete(ref)
@@ -66,7 +67,7 @@ function ExerciseOptions({parent, index, data, workoutId}) {
 
   const handleUpdateChild = () => {
     // console.log("EditPressed")
-    navigation.navigate("ChildExerciseUpdate", {exercise: data, workoutId: workoutId})
+    navigation.navigate("ChildExerciseUpdate", {exercise: data, workoutId: routineId})
   }
 
   const Icon = useIcon();

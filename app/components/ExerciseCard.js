@@ -25,8 +25,6 @@ const ExerciseCard = observer(({ //Observer required to update UI
   onLongPress = null,
   isActive = null,
   index,
-  last,
-  workoutId,
 }) => {
   const routineStore = useRoutineStore();
 
@@ -106,8 +104,6 @@ const ExerciseCard = observer(({ //Observer required to update UI
           parent={parent} //Show pickerLayer
           data={data} //Pass item Mode to picker
           index={index} //Get cell index
-          last={last} // Define last cell's index
-          workoutId={workoutId}
         />
       : null}
     </View>
