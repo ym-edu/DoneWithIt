@@ -7,7 +7,10 @@ import Spacer from './Spacer';
 import Options from './Options';
 import ExerciseOptions from './ExerciseOptions';
 
-function ExerciseCard({
+import { useRoutineStore } from '../hooks/useRoutineStore';
+import { observer } from 'mobx-react-lite'
+
+const ExerciseCard = observer(({ //Observer required to update UI
   url='', title = '', subtitle = '',
   /** mode defaults
    * 'list' | disabled: true, selected: (not selectable), hasOptions: true
@@ -23,10 +26,10 @@ function ExerciseCard({
   isActive = null,
   index,
   last,
-  menuIsOpen = false,
-  handleMenuState,
   workoutId,
-}) {
+}) => {
+  const routineStore = useRoutineStore();
+
   const [disabled, setDisabled] = useState(true);
   const [selected, setSelected] = useState(false);
   const [hasOptions, setHasOptions] = useState(true);
@@ -91,25 +94,26 @@ function ExerciseCard({
           <Details title={title} subtitle={subtitle}/>
           <Spacer mH={8}/>
           {hasOptions
-          ? <Options onPress={() => {handleMenuState(index, true)}}/> //Open menu
+          ? <Options onPress={() => {
+            routineStore.openMenu(index)
+          }}/>
           : null}
         </View>
       </TouchableWithoutFeedback>
       
-      {menuIsOpen[index] 
+      {mode === 'list' && routineStore.isMenuOpen(index)
       ? <ExerciseOptions 
           parent={parent} //Show pickerLayer
           data={data} //Pass item Mode to picker
           index={index} //Get cell index
           last={last} // Define last cell's index
-          handleMenuState={handleMenuState} // Set menuIsOpen state to false
           workoutId={workoutId}
         />
       : null}
     </View>
     </>
   );
-}
+})
 
 const styles = StyleSheet.create({
   container: {

@@ -7,7 +7,7 @@ const RoutineStore = makeAutoObservable({
   routineName: '',
   exercises: [],
   // invertedExercises: [],
-  // menusAreOpen: [],
+  menuState: [],
   // exerciseCount: 0,
   nextExerciseIndex: 0,
 
@@ -15,19 +15,37 @@ const RoutineStore = makeAutoObservable({
   setRoutineId: function(id) {
     this.routineId = id;
   },
+
   setRoutineName: function(name) {
     this.routineName = name;
   },
 
   setExercises: function(exercises) {
     this.exercises.replace(exercises);
+
+    //Set menuState observalbe
+    const initialState = exercises.map(() => false)
+    this.menuState.replace(initialState)
   },
+
   get invertedExercises() {
     return this.exercises.slice().reverse();
   },
-  get menusAreOpen() {
-    return this.exercises.map(() => false);
+
+  openMenu: function(index) {
+    this.menuState.fill(false) //Close all menus before opening menu at index
+    this.menuState.splice(index, 1, true)
   },
+
+  closeMenu: function(index) {
+    this.menuState.splice(index, 1, false)
+  },
+
+  isMenuOpen: function(index) {
+    if(index < 0 || index > this.menuState.length-1) return false
+    return this.menuState[index]
+  },
+
   get exerciseCount() {
     return this.exercises.length;
   },
@@ -35,6 +53,14 @@ const RoutineStore = makeAutoObservable({
   setNextExerciseIndex: function(index) {
     this.nextExerciseIndex = index
   },
+
+  clearStore: function() {
+    this.routineId = '';
+    this.routineName = '';
+    this.exercises.replace([]);
+    this.menuState.replace([]);
+    this.nextExerciseIndex = 0;
+  }
 })
 
 const RoutineStoreContext = createContext(null);

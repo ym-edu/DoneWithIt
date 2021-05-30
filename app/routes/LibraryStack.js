@@ -5,9 +5,14 @@ import Exercises from '../screens/Exercises';
 import Workout from '../screens/Workout';
 import Options from '../components/Options';
 
+import { HeaderBackButton } from '@react-navigation/stack';
+import { useRoutineStore } from '../hooks/useRoutineStore';
+
 const Stack = createStackNavigator();
 
 export default function LibraryStack() {
+  const routineStore = useRoutineStore();
+
   return (
       <Stack.Navigator
       initialRouteName="Library"
@@ -36,6 +41,15 @@ export default function LibraryStack() {
         options={({navigation, route: {params: {exercises, exerciseIndex, workoutName, workoutId}}}) => {
           return {
             headerTitle: workoutName,
+            headerLeft: ({ onPress }) => (
+            <HeaderBackButton
+              tintColor={'white'}
+              onPress={() => {
+                routineStore.clearStore()
+                onPress()
+              }}
+            />
+            ),
             headerRight: () => (
             <Options onPress={() => {
               // console.log(title)

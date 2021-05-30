@@ -7,7 +7,6 @@ import subtitle from '../temp/subTitle';
 import { useDB } from '../hooks/useDB';
 
 import { useRoutineStore } from '../hooks/useRoutineStore';
-import { observer } from 'mobx-react-lite';
 
 function Workout({ navigation }) {
   const routineStore = useRoutineStore();
@@ -17,27 +16,9 @@ function Workout({ navigation }) {
     exercises,
     invertedExercises,
     exerciseCount,
-  } = routineStore
+  } = routineStore;
 
   const { workouts } = useDB()
-
-  // const [exerciseCount, setExerciseCount] = useState(0);
-  const [menuIsOpen, setMenuIsOpen] = useState([]);
-
-  const handleMenuState = (index, open) => {
-    // console.log(index)
-    const i = index;
-
-    let stateArray;
-
-    if(open) {
-      stateArray = menuIsOpen.map(item => false)
-    } else stateArray = [...menuIsOpen]
-
-    stateArray[i] = !stateArray[i];
-
-    setMenuIsOpen(stateArray)
-  }
 
   useEffect(() => {
     let unsubscribeFromExercises;
@@ -88,13 +69,6 @@ function Workout({ navigation }) {
     }
   }, [])
 
-  useEffect(() => {
-    if(exercises.length > 0) {
-      const initialState = exercises.map(item => item.isEditing)
-      setMenuIsOpen(initialState)
-    }
-  }, [exercises])
-
   function WorkoutHeader() {
     return (
       <View style={{width: '100%', flexDirection: 'row', paddingVertical: 16}}>
@@ -119,7 +93,7 @@ function Workout({ navigation }) {
           // console.log("Name ", routineStore.routineName)
           // console.log("Exercises ", routineStore.exercises)
           // console.log(routineStore.invertedExercises)
-          // console.log(routineStore.menusAreOpen)
+          console.log(routineStore.menuState)
           // console.log(routineStore.exerciseCount)
           // console.log(routineStore.nextExerciseIndex)
         }}/>
@@ -143,9 +117,6 @@ function Workout({ navigation }) {
             parent={false}
             data={{id: item.id, mode: item.mode, weight: item.weight}}
             onPress={() => null}
-            
-            menuIsOpen={menuIsOpen}
-            handleMenuState={handleMenuState}
 
             index={index}
             workoutId={routineId}

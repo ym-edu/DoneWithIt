@@ -6,9 +6,13 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Spacer from './Spacer';
 import { useDB } from '../hooks/useDB';
 import { useNavigation } from '@react-navigation/native';
-import { useLoopUpdate } from '../hooks/useLoop'
+import { useLoopUpdate } from '../hooks/useLoop';
 
-function ExerciseOptions({parent, index, data, handleMenuState, workoutId}) {
+import { useRoutineStore } from '../hooks/useRoutineStore';
+
+function ExerciseOptions({parent, index, data, workoutId}) {
+  const routineStore = useRoutineStore();
+
   const { setData } = useLoopUpdate()
   const navigation = useNavigation();
   const {db, parentExercises, workouts, decrement } = useDB()
@@ -80,7 +84,7 @@ function ExerciseOptions({parent, index, data, handleMenuState, workoutId}) {
     <View style={{flexDirection: 'row'}}>
       <TouchableOpacity
         style={{flex: 1}}
-        onPress={() => handleMenuState(index)}
+        onPress={() => routineStore.closeMenu(index)}
       >
         <Icon name="close" size={20} color={'white'}/>
       </TouchableOpacity>
