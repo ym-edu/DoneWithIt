@@ -22,6 +22,8 @@ import ChildExerciseUpdate from '../screens/ChildExerciseUpdate';
 
 import { useAuth, useAuthUpdate } from '../hooks/useAuth';
 
+import TrainStack from './TrainStack';
+
 const Stack = createStackNavigator();
 
 export default function RootStack() {
@@ -130,6 +132,7 @@ export default function RootStack() {
       component={ChildExerciseUpdate}
       options={modalOptions}
       />
+      <Stack.Screen name="TrainStack" component={TrainStack} />
     </Stack.Navigator>
   );
 }
