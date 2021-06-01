@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Video from '../Video'
-import Preview from '../../temp/Preview'
-import { Previous, Next, Reset, Counter } from './';
+import Video from '../../components/Video'
+import Preview from '../Preview'
+import { Previous, Next, Reset, Counter } from '.';
 import { formatTime, milToMin, milToSec, getMil, initializeTime, initializeReps } from './utils';
 
 function Controls({state, workout}) {

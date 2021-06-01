@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { RepsSet, RepsTarget, TimeSet, TimeTarget } from './';
+import { RepsSet, RepsTarget, TimeSet, TimeTarget } from '.';
 
 export function Counter({
   display: { reps, repsCount, time, timeCount },

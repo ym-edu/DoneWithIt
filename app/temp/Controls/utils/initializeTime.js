@@ -1,4 +1,4 @@
-import { formatTime, getMil } from './'
+import { formatTime, getMil } from '.'
 
 export default function initializeTime(exercise) {
   const { data: {mode, min, sec} } = exercise
