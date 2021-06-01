@@ -1,7 +1,9 @@
 import React, { useReducer } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
+import Exercise from './Exercise';
+// import Rest from './Rest';
 
-const ACTIONS = {
+const MODES = {
   REPS_FIXED: 'repsFixed',
   TIME_FIXED: 'timeFixed',
   REPS_TARGET: 'repsTarget',
@@ -9,64 +11,78 @@ const ACTIONS = {
 }
 
 function initializer(exercises) {
-  return exercises.map(({mode}) => {
-    switch(mode.current) {
+  const items = exercises.map((exercise) => {
+    const { mode } = exercise;
 
-      case ACTIONS.REPS_FIXED:
-        return {
+    switch(mode.current) {
+      case MODES.REPS_FIXED:
+        exercise.session = {
+          // rest: true,
           isStarting: true,
           isFinished: false,
           count: mode[mode.current],
         }
+        return exercise
         
-      case ACTIONS.TIME_FIXED:
-        return {
+      case MODES.TIME_FIXED:
+        exercise.session = {
+          // rest: false,
           isStarting: true,
           isFinished: false,
           count: mode[mode.current].min * 60 * 1000 + mode[mode.current].sec * 1000
         }
+        return exercise
 
-      case ACTIONS.REPS_TARGET:
-        return {
+      case MODES.REPS_TARGET:
+        exercise.session = {
+          // rest: false,
           isStarting: true,
           isFinished: false,
           count: 0,
         }
+        return exercise
 
-      case ACTIONS.TIME_TARGET:
-        return ({
+      case MODES.TIME_TARGET:
+        exercise.session = {
+          // rest: false,
           isStarting: true,
           isFinished: false,
           count: 0
-        })
+        }
+        return exercise
     }
   });
+
+  return {
+    index: 0,
+    items,
+  }
 }
 
-function reducer(state, action) {
+function reducer(store, action) {
   switch(action.type) {
-    case ACTIONS.REPS_FIXED:
-      console.log(state)
-      return state
-    case ACTIONS.TIME_FIXED:
-      console.log(state)
-      return state
-    case ACTIONS.REPS_TARGET:
-      console.log(state)
-      return state
-    case ACTIONS.TIME_TARGET:
-      console.log(state)
-      return state
+    case 'next':
+      return {...store, index: store.index += 1}
+
+    case 'previous':
+      return {...store, index: store.index -= 1}
   }
 }
 
 function Train({navigation, route:{params:{exercises}}}) {
-  const [state, dispatch] = useReducer(reducer, exercises, initializer)
+  const [store, dispatch] = useReducer(reducer, exercises, initializer)
 
   return (
     <>
       <View style={styles.container}>
-        <Button title={'log'} onPress={() => console.log(state)}/>
+        <Exercise store={store} dispatch={dispatch}/>
+
+        <Button title={'log'} onPress={() => {
+          console.log(store)
+          // console.log(store.index)
+          // console.log(store.items.length)
+        }}/>
+
         <Button title={'back'} onPress={() => navigation.pop()}/>
       </View>
     </>
@@ -77,6 +93,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  text: {
+    color: 'white',
+  }
 })
 
 export default Train;

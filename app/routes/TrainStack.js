@@ -4,7 +4,7 @@ import Train from '../screens/Train';
 
 const Stack = createStackNavigator();
 
-export default function AuthStack() {
+export default function TrainStack() {
   return (
       <Stack.Navigator
       initialRouteName={"Train"}
