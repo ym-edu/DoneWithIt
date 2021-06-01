@@ -84,6 +84,11 @@ function Train({navigation, route:{params:{exercises}}}) {
         }}/>
 
         <Button title={'back'} onPress={() => navigation.pop()}/>
+
+        {/* <Button title={`TEST: 'action'`} onPress={() => {
+            dispatch({ type: 'action' })
+          }
+        }}/> */}
       </View>
     </>
   );
