@@ -5,9 +5,11 @@ import { useIcon } from '../layout'
 
 function Exercise({ store: {index, items}, dispatch }) {
   const Icon = useIcon();
-  const currentExercise = items[index];
-  const isFirstExercise = index === 0;
-  const isLastExercise = index === items.length - 1;
+  
+  const exercise = items[index];
+  const mode = exercise.mode.current;
+  const isFirst = index === 0;
+  const isLast = index === items.length - 1;
 
   function Controls() {
     return(
@@ -18,8 +20,8 @@ function Exercise({ store: {index, items}, dispatch }) {
               dispatch({ type: 'previous' })
             }
           }}
-          disabled={isFirstExercise}>
-          <Icon name='angle' size={32} color={isFirstExercise ? '#383B3B' : 'white'}/>
+          disabled={isFirst}>
+          <Icon name='angle' size={32} color={isFirst ? '#383B3B' : 'white'}/>
         </TouchableOpacity>
 
         <TouchableOpacity style={{transform: [{rotateY: '180deg'}]}}
@@ -28,8 +30,8 @@ function Exercise({ store: {index, items}, dispatch }) {
               dispatch({ type: 'next' })
             }
           }}
-          disabled={isLastExercise}>
-          <Icon name='angle' size={32} color={isLastExercise ? '#383B3B' : 'white'}/>
+          disabled={isLast}>
+          <Icon name='angle' size={32} color={isLast ? '#383B3B' : 'white'}/>
         </TouchableOpacity>
       </View>
     )
@@ -38,10 +40,10 @@ function Exercise({ store: {index, items}, dispatch }) {
   return (
     <>
       <View style={styles.container}>
-        <VideoLoop video={currentExercise.video}/>
+        <VideoLoop video={exercise.video}/>
         <Controls/>
         <Button title={`log`} onPress={() => {
-          console.log(currentExercise.video)
+          console.log(mode)
         }}/>
       </View>
     </>
