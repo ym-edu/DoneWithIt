@@ -1,23 +1,35 @@
 import React from 'react';
-import { Button, StyleSheet, View, Text } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
+import VideoLoop from '../components/VideoLoop'
 
-function Exercise({ store, dispatch }) {
-  return (
-    <>
-      <View style={styles.container}>
-        <Text style={styles.text}>{store.items[store.index].exerciseName}</Text>
-
+function Exercise({ store: {index, items}, dispatch }) {
+  function Buttons() {
+    return(
+      <>
         <Button title={`TEST: 'next'`} onPress={() => {
-          if(store.index < store.items.length - 1) {
+          if(index < items.length - 1) {
             dispatch({ type: 'next' })
           }
         }}/>
 
         <Button title={`TEST: 'previous'`} onPress={() => {
-          if(store.index > 0){
+          if(index > 0){
             dispatch({ type: 'previous' })
           }
         }}/>
+
+        <Button title={`log`} onPress={() => {
+          console.log(items[index].video)
+        }}/>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <View style={styles.container}>
+        <VideoLoop video={items[index].video}/>
+        <Buttons/>
       </View>
     </>
   );
