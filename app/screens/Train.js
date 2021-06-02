@@ -10,52 +10,61 @@ const MODES = {
   TIME_TARGET: 'timeTarget',
 }
 
-function initializer(exercises) {
-  const items = exercises.map((exercise) => {
-    const { mode } = exercise;
+function selector(mode, exercise) {
+  switch(mode.current) {
+    case MODES.REPS_FIXED:
+      exercise.session = {
+        // rest: true,
+        isStarting: true,
+        isFinished: false,
+        count: mode[mode.current],
+      }
+      return exercise
+      
+    case MODES.TIME_FIXED:
+      exercise.session = {
+        // rest: false,
+        isStarting: true,
+        isFinished: false,
+        count: mode[mode.current].min * 60 * 1000 + mode[mode.current].sec * 1000
+      }
+      return exercise
 
-    switch(mode.current) {
-      case MODES.REPS_FIXED:
-        exercise.session = {
-          // rest: true,
-          isStarting: true,
-          isFinished: false,
-          count: mode[mode.current],
-        }
-        return exercise
-        
-      case MODES.TIME_FIXED:
-        exercise.session = {
-          // rest: false,
-          isStarting: true,
-          isFinished: false,
-          count: mode[mode.current].min * 60 * 1000 + mode[mode.current].sec * 1000
-        }
-        return exercise
+    case MODES.REPS_TARGET:
+      exercise.session = {
+        // rest: false,
+        isStarting: true,
+        isFinished: false,
+        count: 0,
+      }
+      return exercise
 
-      case MODES.REPS_TARGET:
-        exercise.session = {
-          // rest: false,
-          isStarting: true,
-          isFinished: false,
-          count: 0,
-        }
-        return exercise
+    case MODES.TIME_TARGET:
+      exercise.session = {
+        // rest: false,
+        isStarting: true,
+        isFinished: false,
+        count: 0
+      }
+      return exercise
+  }
+}
 
-      case MODES.TIME_TARGET:
-        exercise.session = {
-          // rest: false,
-          isStarting: true,
-          isFinished: false,
-          count: 0
-        }
-        return exercise
+function initializer(data) {
+  if(Array.isArray(data)) {
+    const items = data.map((exercise) => {
+      const { mode } = exercise;
+      return selector(mode, exercise)
+    });
+
+    return {
+      index: 0,
+      items,
     }
-  });
+  } else {
+    const { mode } = data
 
-  return {
-    index: 0,
-    items,
+    return selector(mode, data)
   }
 }
 
@@ -74,6 +83,12 @@ function reducer(store, action) {
       state = [...store.items]
       element = state[store.index]
       element.session.count -= 1
+
+      return {...store, items: state}
+    
+    case 'reset':
+      state = [...store.items]
+      state[store.index] = initializer(action.payload)
 
       return {...store, items: state}
   }

@@ -14,6 +14,7 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
   const mode = exercise.mode.current;
   const isFirst = index === 0;
   const isLast = index === items.length - 1;
+  const isFinished = false
 
   function Counter() {
     switch(mode) {
@@ -30,6 +31,7 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
 
   function Controls() {
     return(
+      <>
       <View style={styles.controls}>
         <TouchableOpacity
           onPress={() => {
@@ -53,6 +55,19 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
           <Icon name='angle' size={32} color={isLast ? '#383B3B' : 'white'}/>
         </TouchableOpacity>
       </View>
+
+      <View style={styles.controls}>
+        <TouchableOpacity
+          onPress={() => {
+            if(exercise.session.count < exercise.mode[mode]) {
+              dispatch({ type: 'reset', payload: exercise })
+            }
+          }}
+          disabled={isFinished}>
+          <Icon name='close' size={24} color={isFinished ? '#383B3B' : 'white'}/>
+        </TouchableOpacity>
+      </View>
+      </>
     )
   }
 
@@ -77,7 +92,7 @@ const styles = StyleSheet.create({
   controls: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   text: {
     color: 'white',
