@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Button, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import VideoLoop from '../components/VideoLoop';
 import Spacer from '../components/Spacer';
 import { useIcon } from '../layout'
@@ -81,10 +81,22 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
     )
   }
 
+  function Title() {
+    return(
+      <>
+        <View style={styles.title}>
+          <Text style={styles.text}>{exercise.exerciseName}</Text>
+        </View>
+        <Spacer style={styles.line}/>
+      </>
+    )
+  }
+
   return (
     <>
       <View style={styles.container}>
         <VideoLoop video={exercise.video}/>
+        <Title/>
         <Spacer mV={8}/>
         <Controls/>
         <Spacer mV={8}/>
@@ -108,7 +120,17 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-  }
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  title: {
+    paddingVertical: 8,
+  },
+  line: {
+    width: '100%',
+    borderTopWidth: 1,
+    borderTopColor: '#383B3B',
+  },
 })
 
 export default Exercise;
