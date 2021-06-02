@@ -39,6 +39,7 @@ function selector(mode, exercise) {
     case MODES.TIME_FIXED:
       exercise.session = {
         // rest: false,
+        isPaused: true,
         isStarting: true,
         isFinished: false,
         start: mode[mode.current].min * 60 * 1000 + mode[mode.current].sec * 1000,
@@ -51,6 +52,7 @@ function selector(mode, exercise) {
     case MODES.TIME_TARGET:
       exercise.session = {
         // rest: false,
+        isPaused: true,
         isStarting: true,
         isFinished: false,
         start: 0,
@@ -102,6 +104,20 @@ function reducer(store, action) {
       state = [...store.items]
       element = state[store.index]
       element.session.count += 1
+
+      return {...store, items: state}
+    
+    case 'countDown':
+      state = [...store.items]
+      element = state[store.index]
+      element.session.count -= 1000
+
+      return {...store, items: state}
+
+    case 'pause':
+      state = [...store.items]
+      element = state[store.index]
+      element.session.isPaused = !element.session.isPaused
 
       return {...store, items: state}
 
