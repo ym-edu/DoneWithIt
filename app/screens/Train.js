@@ -114,6 +114,13 @@ function reducer(store, action) {
 
       return {...store, items: state}
 
+    case 'countUp':
+      state = [...store.items]
+      element = state[store.index]
+      element.session.count += 1000
+
+      return {...store, items: state}
+
     case 'pause':
       state = [...store.items]
       element = state[store.index]
