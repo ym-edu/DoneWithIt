@@ -24,18 +24,6 @@ function selector(mode, exercise) {
 
       return exercise
       
-    case MODES.TIME_FIXED:
-      exercise.session = {
-        // rest: false,
-        isStarting: true,
-        isFinished: false,
-        start: mode[mode.current].min * 60 * 1000 + mode[mode.current].sec * 1000,
-        end: 0,
-        count: mode[mode.current].min * 60 * 1000 + mode[mode.current].sec * 1000,
-      }
-
-      return exercise
-
     case MODES.REPS_TARGET:
       exercise.session = {
         // rest: false,
@@ -44,6 +32,18 @@ function selector(mode, exercise) {
         start: 0,
         end: exercise.mode[mode.current],
         count: 0,
+      }
+      
+      return exercise
+        
+    case MODES.TIME_FIXED:
+      exercise.session = {
+        // rest: false,
+        isStarting: true,
+        isFinished: false,
+        start: mode[mode.current].min * 60 * 1000 + mode[mode.current].sec * 1000,
+        end: 0,
+        count: mode[mode.current].min * 60 * 1000 + mode[mode.current].sec * 1000,
       }
 
       return exercise
@@ -95,6 +95,13 @@ function reducer(store, action) {
       state = [...store.items]
       element = state[store.index]
       element.session.count -= 1
+
+      return {...store, items: state}
+
+    case 'incrementCount':
+      state = [...store.items]
+      element = state[store.index]
+      element.session.count += 1
 
       return {...store, items: state}
 
