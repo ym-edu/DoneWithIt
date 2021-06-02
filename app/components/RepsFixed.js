@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
-function RepsSet({ session: { count }, dispatch }) {
-  const isFinished = count === 0
+function RepsFixed({ session: { end, count, isFinished }, dispatch }) {
+  useEffect(() => {
+    if((count === end) && !isFinished) {
+      dispatch({ type: 'setFinished' }) //Set isFinished to true
+    }
+  }, [count])
 
   return (
     <TouchableOpacity
@@ -36,4 +40,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default RepsSet
+export default RepsFixed

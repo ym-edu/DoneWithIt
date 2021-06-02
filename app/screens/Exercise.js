@@ -87,7 +87,7 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
         <VideoLoop video={exercise.video}/>
         <Controls/>
         <Button title={`log`} onPress={() => {
-          console.log(exercise)
+          console.log(exercise.session)
         }}/>
       </View>
     </>
