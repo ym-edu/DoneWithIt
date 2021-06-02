@@ -2,14 +2,31 @@ import React from 'react';
 import { Button, StyleSheet, View, TouchableOpacity } from 'react-native';
 import VideoLoop from '../components/VideoLoop'
 import { useIcon } from '../layout'
+import RepsFixed from '../components/RepsFixed';
+import TimeFixed from '../components/TimeFixed';
+import RepsTarget from '../components/RepsTarget';
+import TimeTarget from '../components/TimeTarget';
 
-function Exercise({ store: {index, items}, dispatch }) {
+function Exercise({ store: {index, items}, dispatch, MODES }) {
   const Icon = useIcon();
   
   const exercise = items[index];
   const mode = exercise.mode.current;
   const isFirst = index === 0;
   const isLast = index === items.length - 1;
+
+  function Counter() {
+    switch(mode) {
+      case MODES.REPS_FIXED:
+        return <RepsFixed session={exercise.session} dispatch={dispatch}/>;
+      case MODES.TIME_FIXED:
+        return <RepsTarget session={exercise.session} goal={reps} dispatch={dispatch}/>;
+      case MODES.REPS_TARGET:
+        return <TimeFixed session={exercise.session} dispatch={dispatch}/>;
+      case MODES.TIME_TARGET:
+        return <TimeTarget session={exercise.session} goal={time} dispatch={dispatch}/>;
+    }
+  }
 
   function Controls() {
     return(
@@ -23,6 +40,8 @@ function Exercise({ store: {index, items}, dispatch }) {
           disabled={isFirst}>
           <Icon name='angle' size={32} color={isFirst ? '#383B3B' : 'white'}/>
         </TouchableOpacity>
+
+        <Counter/>
 
         <TouchableOpacity style={{transform: [{rotateY: '180deg'}]}}
           onPress={() => {
@@ -43,7 +62,7 @@ function Exercise({ store: {index, items}, dispatch }) {
         <VideoLoop video={exercise.video}/>
         <Controls/>
         <Button title={`log`} onPress={() => {
-          console.log(mode)
+          console.log(exercise.session)
         }}/>
       </View>
     </>

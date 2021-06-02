@@ -60,12 +60,22 @@ function initializer(exercises) {
 }
 
 function reducer(store, action) {
+  let state;
+  let element;
+
   switch(action.type) {
     case 'next':
       return {...store, index: store.index += 1}
 
     case 'previous':
       return {...store, index: store.index -= 1}
+
+    case 'decrementCount':
+      state = [...store.items]
+      element = state[store.index]
+      element.session.count -= 1
+
+      return {...store, items: state}
   }
 }
 
@@ -75,10 +85,10 @@ function Train({navigation, route:{params:{exercises}}}) {
   return (
     <>
       <View style={styles.container}>
-        <Exercise store={store} dispatch={dispatch}/>
+        <Exercise store={store} dispatch={dispatch} MODES={MODES}/>
 
         <Button title={'log'} onPress={() => {
-          console.log(store)
+          console.log(store.items)
           // console.log(store.index)
           // console.log(store.items.length)
         }}/>
