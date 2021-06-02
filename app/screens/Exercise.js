@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, StyleSheet, View, TouchableOpacity } from 'react-native';
 import VideoLoop from '../components/VideoLoop'
 import { useIcon } from '../layout'
@@ -11,21 +11,31 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
   const Icon = useIcon();
   
   const exercise = items[index];
+  const session = exercise.session;
   const mode = exercise.mode.current;
+  
   const isFirst = index === 0;
   const isLast = index === items.length - 1;
-  const isFinished = false
+
+  useEffect(() => {
+    if((session.count !== session.start) && session.isStarting){
+      dispatch({ type: 'setStarting' }) //Set isStarting to false
+    }
+    // else if(session.count === session.end) {
+    //   dispatch({ type: 'setFinished' }) //Set isFinished to true
+    // }
+  }, [session.count])
 
   function Counter() {
     switch(mode) {
       case MODES.REPS_FIXED:
-        return <RepsFixed session={exercise.session} dispatch={dispatch}/>;
+        return <RepsFixed session={session} dispatch={dispatch}/>;
       case MODES.TIME_FIXED:
-        return <RepsTarget session={exercise.session} goal={reps} dispatch={dispatch}/>;
+        return <RepsTarget session={session} dispatch={dispatch}/>;
       case MODES.REPS_TARGET:
-        return <TimeFixed session={exercise.session} dispatch={dispatch}/>;
+        return <TimeFixed session={session} dispatch={dispatch}/>;
       case MODES.TIME_TARGET:
-        return <TimeTarget session={exercise.session} goal={time} dispatch={dispatch}/>;
+        return <TimeTarget session={session} dispatch={dispatch}/>;
     }
   }
 
@@ -59,12 +69,12 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
       <View style={styles.controls}>
         <TouchableOpacity
           onPress={() => {
-            if(exercise.session.count < exercise.mode[mode]) {
+            if(session.count < exercise.mode[mode]) {
               dispatch({ type: 'reset', payload: exercise })
             }
           }}
-          disabled={isFinished}>
-          <Icon name='close' size={24} color={isFinished ? '#383B3B' : 'white'}/>
+          disabled={session.isStarting}>
+          <Icon name='close' size={24} color={session.isStarting ? '#383B3B' : 'white'}/>
         </TouchableOpacity>
       </View>
       </>
@@ -77,7 +87,7 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
         <VideoLoop video={exercise.video}/>
         <Controls/>
         <Button title={`log`} onPress={() => {
-          console.log(exercise.session)
+          console.log(exercise)
         }}/>
       </View>
     </>

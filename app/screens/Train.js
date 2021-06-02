@@ -17,8 +17,11 @@ function selector(mode, exercise) {
         // rest: true,
         isStarting: true,
         isFinished: false,
+        start: mode[mode.current],
+        end: 0,
         count: mode[mode.current],
       }
+
       return exercise
       
     case MODES.TIME_FIXED:
@@ -26,8 +29,11 @@ function selector(mode, exercise) {
         // rest: false,
         isStarting: true,
         isFinished: false,
-        count: mode[mode.current].min * 60 * 1000 + mode[mode.current].sec * 1000
+        start: mode[mode.current].min * 60 * 1000 + mode[mode.current].sec * 1000,
+        end: 0,
+        count: mode[mode.current].min * 60 * 1000 + mode[mode.current].sec * 1000,
       }
+
       return exercise
 
     case MODES.REPS_TARGET:
@@ -35,8 +41,11 @@ function selector(mode, exercise) {
         // rest: false,
         isStarting: true,
         isFinished: false,
+        start: 0,
+        end: exercise.mode[mode.current],
         count: 0,
       }
+
       return exercise
 
     case MODES.TIME_TARGET:
@@ -44,8 +53,11 @@ function selector(mode, exercise) {
         // rest: false,
         isStarting: true,
         isFinished: false,
-        count: 0
+        start: 0,
+        end: mode[mode.current].min * 60 * 1000 + mode[mode.current].sec * 1000,
+        count: 0,
       }
+
       return exercise
   }
 }
@@ -85,7 +97,21 @@ function reducer(store, action) {
       element.session.count -= 1
 
       return {...store, items: state}
-    
+
+    case 'setStarting':
+      state = [...store.items]
+      element = state[store.index]
+      element.session.isStarting = false
+
+      return {...store, items: state}
+
+    case 'setFinished':
+      state = [...store.items]
+      element = state[store.index]
+      element.session.isFinished = true
+
+      return {...store, items: state}
+
     case 'reset':
       state = [...store.items]
       state[store.index] = initializer(action.payload)
