@@ -42,8 +42,8 @@ function TimeFixed({ session: { end, count, isFinished, isPaused }, dispatch }) 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#242626',
-    width: 96,
-    height: 48,
+    width: 80,
+    height: 40,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',

@@ -27,8 +27,8 @@ function RepsFixed({ session: { end, count, isFinished }, dispatch }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#242626',
-    width: 48,
-    height: 48,
+    width: 40,
+    height: 40,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',

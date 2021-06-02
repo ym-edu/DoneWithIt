@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Button, StyleSheet, View, TouchableOpacity } from 'react-native';
-import VideoLoop from '../components/VideoLoop'
+import VideoLoop from '../components/VideoLoop';
+import Spacer from '../components/Spacer';
 import { useIcon } from '../layout'
 import RepsFixed from '../components/RepsFixed';
 import RepsTarget from '../components/RepsTarget';
@@ -47,11 +48,13 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
             }
           }}
           disabled={isFirst}>
-          <Icon name='angle' size={32} color={isFirst ? '#383B3B' : 'white'}/>
+          <Icon style={{width: 24, height: 24}} name='angle' size={24} color={isFirst ? '#383B3B' : 'white'}/>
         </TouchableOpacity>
-
+        
+        <Spacer mH={24}/>
         <Counter/>
-
+        <Spacer mH={24}/>
+        
         <TouchableOpacity style={{transform: [{rotateY: '180deg'}]}}
           onPress={() => {
             if(index < items.length - 1) {
@@ -59,9 +62,11 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
             }
           }}
           disabled={isLast}>
-          <Icon name='angle' size={32} color={isLast ? '#383B3B' : 'white'}/>
+          <Icon style={{width: 24, height: 24}} name='angle' size={24} color={isLast ? '#383B3B' : 'white'}/>
         </TouchableOpacity>
       </View>
+
+      <Spacer mV={16}/>
 
       <View style={styles.controls}>
         <TouchableOpacity
@@ -69,7 +74,7 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
             dispatch({ type: 'reset', payload: exercise })
           }}
           disabled={session.isStarting}>
-          <Icon name='close' size={24} color={session.isStarting ? '#383B3B' : 'white'}/>
+          <Icon style={{width: 16, height: 16}} name='close' size={16} color={session.isStarting ? '#383B3B' : 'white'}/>
         </TouchableOpacity>
       </View>
       </>
@@ -80,7 +85,9 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
     <>
       <View style={styles.container}>
         <VideoLoop video={exercise.video}/>
+        <Spacer mV={8}/>
         <Controls/>
+        <Spacer mV={8}/>
         <Button title={`log`} onPress={() => {
           console.log(exercise.session)
         }}/>

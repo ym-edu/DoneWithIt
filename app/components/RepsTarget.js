@@ -34,8 +34,8 @@ function RepsTarget({ session: { end, count, isFinished }, dispatch }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#242626',
-    width: 96,
-    height: 48,
+    width: 80,
+    height: 40,
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
