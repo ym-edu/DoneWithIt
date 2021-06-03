@@ -8,7 +8,7 @@ import { useDB } from '../hooks/useDB';
 import { useNavigation } from '@react-navigation/native';
 import { useLoopUpdate } from '../hooks/useLoop'
 
-function ExerciseOptions({parent, index, data, handleMenuState, workoutId}) {
+function ExerciseOptions({variant, index, data, handleMenuState, workoutId}) {
   const { setData } = useLoopUpdate()
   const navigation = useNavigation();
   const {db, parentExercises, workouts, decrement } = useDB()
@@ -67,7 +67,7 @@ function ExerciseOptions({parent, index, data, handleMenuState, workoutId}) {
 
   const Icon = useIcon();
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(!parent && data.mode.current);
+  const [value, setValue] = useState(variant === 'childExercise' && data.mode.current);
   const [items, setItems] = useState([
     {label: 'fixed reps', value: 'repsFixed'},
     {label: 'reps to failure', value: 'repsTarget'},
@@ -90,7 +90,7 @@ function ExerciseOptions({parent, index, data, handleMenuState, workoutId}) {
         {/* <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            if(parent){
+            if(variant){
 
             } else {}
           }}
@@ -100,8 +100,7 @@ function ExerciseOptions({parent, index, data, handleMenuState, workoutId}) {
 
         <TouchableOpacity
           onPress={() => {
-            if(parent){
-              null
+            if(variant === 'parentExercise'){
               handleUpdateParent();
             } else {handleUpdateChild();}
           }}
@@ -111,7 +110,7 @@ function ExerciseOptions({parent, index, data, handleMenuState, workoutId}) {
 
         <TouchableOpacity
           onPress={() => {
-            if(parent){
+            if(variant === 'parentExercise'){
               handleDeleteParent()
             } else {handleDeleteChild()}
           }}
@@ -172,12 +171,12 @@ function ExerciseOptions({parent, index, data, handleMenuState, workoutId}) {
     <View
     style={[
       styles.childCard,
-      parent && styles.parentCard,
+      variant === 'parentExercise' && styles.parentCard,
       // index === last && { borderWidth: 1, borderRadius: 8, borderColor: 'white'}
     ]}>
       <Buttons />
       <Spacer mV={4}/>
-      {!parent && <Picker/>}
+      {variant === 'childExercise' && <Picker/>}
     </View>
   );
 }

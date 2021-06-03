@@ -7,6 +7,8 @@ import RepsFixed from '../components/RepsFixed';
 import RepsTarget from '../components/RepsTarget';
 import TimeFixed from '../components/TimeFixed';
 import TimeTarget from '../components/TimeTarget';
+import ExerciseCard from '../components/ExerciseCard';
+import subtitle from '../temp/subTitle';
 
 function Exercise({ store: {index, items}, dispatch, MODES }) {
   const Icon = useIcon();
@@ -103,6 +105,13 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
         <Button title={`log`} onPress={() => {
           console.log(exercise.session)
         }}/>
+        <ExerciseCard
+          url={exercise.video.url}
+          title={exercise.exerciseName}
+          subtitle={subtitle(exercise.mode)}
+          
+          variant={'nextExercise'}
+        />
       </View>
     </>
   );

@@ -9,33 +9,37 @@ import ExerciseOptions from './ExerciseOptions';
 
 function ExerciseCard({
   url='', title = '', subtitle = '',
-  /** mode defaults
-   * 'list' | disabled: true, selected: (not selectable), hasOptions: true
-   * 'sortableList' | disabled: true, selected: (selectable),  hasOptions: false
-   * 'selectableList' | disabled: false, selected: (selectable), hasOptions: false
+  /** types
+   * parentExercise
+   * childExercise
+   * nextExercise
+   * selectable
+   * sortable
    */
-  parent = true,
-  mode = 'list',
+  variant,
   data = null, // [(exerciseId) exerciseMode]
-  state = null, //selection
-  setState = null, //setSelection
+
+  selection = null, //selection
+  setSelection = null, //setSelection
+
   onLongPress = null,
   isActive = null,
+
   index,
-  last,
-  menuIsOpen = false,
+
+  isMenuOpen = false,
   handleMenuState,
   workoutId,
+  
+  style,
 }) {
-  const [disabled, setDisabled] = useState(true);
   const [selected, setSelected] = useState(false);
   const [hasOptions, setHasOptions] = useState(true);
 
   useEffect(() => {
-    if(mode === 'sortableList') {
+    if(variant === 'sortable') {
       setHasOptions(false)
-    } else if(mode === 'selectableList') {
-      setDisabled(false)
+    } else if(variant === 'selectable') {
       setHasOptions(false)
     }
   }, [])
@@ -43,25 +47,24 @@ function ExerciseCard({
   const handlePress = () => {
     setSelected(!selected)
 
-    if(state.includes(data.id)) { //To avoid pushing to array when deselecting an item
-      const array = [...state]
+    if(selection.includes(data.id)) { //To avoid pushing to array when deselecting an item
+      const array = [...selection]
       const index = array.indexOf(data.id)
 
       if (index !== -1) {
         array.splice(index, 1);
 
-        setState(array)
+        setSelection(array)
       }
     } else {
-      setState([...state, data.id])
+      setSelection([...selection, data.id])
     }
   }
   
   return (
     <>
-    <View style={mode === 'sortableList' && styles.sortableList}>
-
-      {mode === 'sortableList'
+    <View style={variant === 'sortable' && styles.sortableList}>
+      {variant === 'sortable'
       ? <TouchableOpacity
           style={{padding: 8}}
           onLongPress={onLongPress}
@@ -71,38 +74,45 @@ function ExerciseCard({
         </TouchableOpacity>
       : null}
 
+
+
       <TouchableWithoutFeedback
-        disabled={disabled}
+        disabled={variant !== 'selectable'}
         style={{borderRadius: 8}}
-        onPress={() => mode != 'sortableList' ? handlePress() : null}
+        onPress={() => variant !== 'sortable' ? handlePress() : null}
       >
+
         <View style={[
-          //Optimized for childExercise card
+          //childExercise
           styles.container,
-          //ParentExerciseList | SortableList
+          //parentExercise || selectable || sortable
+          (variant === 'parentExercise' || variant === 'selectable' || variant === 'sortable') && {height: 54, marginBottom: 12},
+          //selectable || sortable
           (selected || isActive) && {backgroundColor: '#242626'},
-          //SortableList
+          //sortable
           isActive && {minHeight: 63},
-          //SortableList | ParentExerciseList
-          (mode != 'list' || parent) && {height: 54, marginBottom: 12},
+          //nextExercise
+          variant === 'nextExercise' && style
         ]}>
           <Media source={url}/>
           <Spacer mH={8}/>
           <Details title={title} subtitle={subtitle}/>
           <Spacer mH={8}/>
-          {hasOptions
+          {variant === 'parentExercise' || variant === 'childExercise'
           ? <Options onPress={() => {handleMenuState(index, true)}}/> //Open menu
           : null}
         </View>
+
       </TouchableWithoutFeedback>
       
-      {menuIsOpen[index] 
+
+
+      {isMenuOpen[index]
       ? <ExerciseOptions 
-          parent={parent} //Show pickerLayer
+          variant={variant} //Show pickerLayer
           data={data} //Pass item Mode to picker
           index={index} //Get cell index
-          last={last} // Define last cell's index
-          handleMenuState={handleMenuState} // Set menuIsOpen state to false
+          handleMenuState={handleMenuState} // Set isMenuOpen state to false
           workoutId={workoutId}
         />
       : null}

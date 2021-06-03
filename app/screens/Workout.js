@@ -60,7 +60,7 @@ function Workout({ navigation, route: { params: {id}}}) {
 
 // =================================== MenuState ===================================
 
-  const [menuIsOpen, setMenuIsOpen] = useState([]);
+  const [isMenuOpen, setIsMenuOpen] = useState([]);
 
   const handleMenuState = (index, open) => {
     const i = index;
@@ -68,18 +68,18 @@ function Workout({ navigation, route: { params: {id}}}) {
     let stateArray;
 
     if(open) {
-      stateArray = menuIsOpen.map(() => false)
-    } else stateArray = [...menuIsOpen]
+      stateArray = isMenuOpen.map(() => false)
+    } else stateArray = [...isMenuOpen]
 
     stateArray[i] = !stateArray[i];
 
-    setMenuIsOpen(stateArray)
+    setIsMenuOpen(stateArray)
   }
 
   useEffect(() => {
     if(exercises.length > 0) {
       const initialMenuState = exercises.map(() => false)
-      setMenuIsOpen(initialMenuState)
+      setIsMenuOpen(initialMenuState)
     }
   }, [exercises])
 
@@ -124,11 +124,10 @@ function Workout({ navigation, route: { params: {id}}}) {
             title={item.exerciseName}
             subtitle={subtitle(item.mode)}
             
-            parent={false}
+            variant={'childExercise'}
             data={{id: item.id, mode: item.mode, weight: item.weight}}
-            onPress={() => null}
             
-            menuIsOpen={menuIsOpen}
+            isMenuOpen={isMenuOpen}
             handleMenuState={handleMenuState}
 
             index={index}
