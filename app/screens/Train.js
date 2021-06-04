@@ -153,11 +153,9 @@ function reducer(store, action) {
 function Train({navigation, route:{params:{exercises}}}) {
   const [store, dispatch] = useReducer(reducer, exercises, initializer)
 
-  return (
-    <>
-      <View style={styles.container}>
-        <Exercise store={store} dispatch={dispatch} MODES={MODES}/>
-
+  function Buttons() {
+    return (
+      <>
         <Button title={'log'} onPress={() => {
           console.log(store.items)
           // console.log(store.index)
@@ -170,6 +168,15 @@ function Train({navigation, route:{params:{exercises}}}) {
             dispatch({ type: 'action' })
           }
         }}/> */}
+      </>
+    )
+  }
+
+  return (
+    <>
+      <View style={styles.container}>
+        <Exercise store={store} dispatch={dispatch} MODES={MODES}/>
+        {/* <Buttons/> */}
       </View>
     </>
   );

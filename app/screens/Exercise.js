@@ -20,6 +20,8 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
   const isFirst = index === 0;
   const isLast = index === items.length - 1;
 
+  const nextExercise = index < items.length ? items[index + 1] : null
+
   useEffect(() => {
     if((session.count !== session.start) && session.isStarting){
       dispatch({ type: 'setStarting' }) //Set isStarting to false
@@ -94,6 +96,31 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
     )
   }
 
+  function NextExercise() {
+    return (
+      <View style={styles.nextExercise}>
+          <View style={styles.title}>
+            <Text style={[styles.text, {textAlign: 'left'}]}>Up next</Text>
+          </View>
+          <ExerciseCard
+            url={nextExercise.video.url}
+            title={nextExercise.exerciseName}
+            subtitle={subtitle(nextExercise.mode)}
+            
+            variant={'nextExercise'}
+            style={{marginBottom: 0, marginHorizontal: 0}}
+          />
+        </View>
+    )
+  }
+
+  function AdSpace() {
+    return (
+      <View style={styles.adSpace}>
+      </View>
+    )
+  }
+
   return (
     <>
       <View style={styles.container}>
@@ -102,16 +129,8 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
         <Spacer mV={8}/>
         <Controls/>
         <Spacer mV={8}/>
-        <Button title={`log`} onPress={() => {
-          console.log(exercise.session)
-        }}/>
-        <ExerciseCard
-          url={exercise.video.url}
-          title={exercise.exerciseName}
-          subtitle={subtitle(exercise.mode)}
-          
-          variant={'nextExercise'}
-        />
+        <AdSpace/>
+        {nextExercise ? <NextExercise/> : null}
       </View>
     </>
   );
@@ -131,6 +150,7 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
+    fontSize: 16,
   },
   title: {
     paddingVertical: 8,
@@ -139,6 +159,12 @@ const styles = StyleSheet.create({
     width: '100%',
     borderTopWidth: 1,
     borderTopColor: '#383B3B',
+  },
+  adSpace: {
+    flex: 1,
+  },
+  nextExercise: {
+    marginHorizontal: 16,
   },
 })
 
