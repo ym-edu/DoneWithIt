@@ -98,24 +98,6 @@ function Exercise({ store, dispatch, MODES, navigation }) {
     )
   }
 
-  function NextExercise() {
-    return (
-      <View style={styles.nextExercise}>
-          <View style={styles.title}>
-            <Text style={[styles.text, {textAlign: 'left'}]}>Up next</Text>
-          </View>
-          <ExerciseCard
-            url={nextExercise.video.url}
-            title={nextExercise.exerciseName}
-            subtitle={subtitle(nextExercise.mode)}
-            
-            variant={'nextExercise'}
-            style={{marginBottom: 0, marginHorizontal: 0}}
-          />
-        </View>
-    )
-  }
-
   function FinishWorkout() {
     return (
       <View>
@@ -146,7 +128,21 @@ function Exercise({ store, dispatch, MODES, navigation }) {
         <Controls/>
         <Spacer mV={8}/>
         <AdSpace/>
-        {nextExercise ? <NextExercise/> : <FinishWorkout/>}
+        {nextExercise
+        ? <View style={styles.nextExercise}>
+            <View style={styles.title}>
+              <Text style={[styles.text, {textAlign: 'left'}]}>Up next</Text>
+            </View>
+            <ExerciseCard
+              url={nextExercise.video.url}
+              title={nextExercise.exerciseName}
+              subtitle={subtitle(nextExercise.mode)}
+              
+              variant={'nextExercise'}
+              style={{marginBottom: 0, marginHorizontal: 0}}
+            />
+          </View>
+        : <FinishWorkout/>}
       </View>
     </>
   );
