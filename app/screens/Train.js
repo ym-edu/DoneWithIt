@@ -175,7 +175,7 @@ function Train({navigation, route:{params:{exercises}}}) {
   return (
     <>
       <View style={styles.container}>
-        <Exercise store={store} dispatch={dispatch} MODES={MODES}/>
+        <Exercise navigation={navigation} store={store} dispatch={dispatch} MODES={MODES}/>
         {/* <Buttons/> */}
       </View>
     </>

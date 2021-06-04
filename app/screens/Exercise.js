@@ -9,9 +9,11 @@ import TimeFixed from '../components/TimeFixed';
 import TimeTarget from '../components/TimeTarget';
 import ExerciseCard from '../components/ExerciseCard';
 import subtitle from '../temp/subTitle';
+import TextButton from '../components/TextButton'
 
-function Exercise({ store: {index, items}, dispatch, MODES }) {
+function Exercise({ store, dispatch, MODES, navigation }) {
   const Icon = useIcon();
+  const { index, items } = store;
   
   const exercise = items[index];
   const session = exercise.session;
@@ -114,6 +116,20 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
     )
   }
 
+  function FinishWorkout() {
+    return (
+      <View>
+        <Spacer mV={8} style={styles.line}/>
+        <TextButton onPress={() => {
+          navigation.navigate("TrainComplete", { items: items })
+        }}>
+          finish workout
+        </TextButton>
+        <Spacer mV={8}/>
+      </View>
+    )
+  }
+
   function AdSpace() {
     return (
       <View style={styles.adSpace}>
@@ -130,7 +146,7 @@ function Exercise({ store: {index, items}, dispatch, MODES }) {
         <Controls/>
         <Spacer mV={8}/>
         <AdSpace/>
-        {nextExercise ? <NextExercise/> : null}
+        {nextExercise ? <NextExercise/> : <FinishWorkout/>}
       </View>
     </>
   );

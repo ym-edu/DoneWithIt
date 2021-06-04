@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Train from '../screens/Train';
+import TrainComplete from '../screens/TrainComplete';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ export default function TrainStack() {
       }}
       >
         <Stack.Screen name="Train" component={Train}/>
+        <Stack.Screen name="TrainComplete" component={TrainComplete}/>
       </Stack.Navigator>
   );
 }
