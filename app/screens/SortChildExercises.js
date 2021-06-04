@@ -57,7 +57,8 @@ function SortChildExercises({ navigation, route: { params: { exercises, workoutI
           title={item.exerciseName}
           subtitle={subtitle(item.mode)}
 
-          mode={"sortableList"}
+          // mode={"sortableList"}
+          variant={'sortable'}
 
           onLongPress={drag}
           isActive={isActive}

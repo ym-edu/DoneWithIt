@@ -5,10 +5,10 @@ import ExerciseCard from '../components/ExerciseCard';
 // import subtitle from '../temp/subTitle'; //Children exercises
 import { useDB } from '../hooks/useDB';
 
-function ExerciseList({ mode = 'list', state, setState }) {
+function ExerciseList({ variant, selection, setSelection }) {
   const { parentExercises } = useDB();
   const [exercises, setExercises] = useState([]);
-  const [menuIsOpen, setMenuIsOpen] = useState([]);
+  const [isMenuOpen, setIsMenuOpen] = useState([]);
 
   const handleMenuState = (index, open) => {
     // console.log(index)
@@ -17,12 +17,12 @@ function ExerciseList({ mode = 'list', state, setState }) {
     let stateArray;
 
     if(open) {
-      stateArray = menuIsOpen.map(item => false)
-    } else stateArray = [...menuIsOpen]
+      stateArray = isMenuOpen.map(item => false)
+    } else stateArray = [...isMenuOpen]
 
     stateArray[i] = !stateArray[i];
 
-    setMenuIsOpen(stateArray)
+    setIsMenuOpen(stateArray)
   }
 
   useEffect(() => {
@@ -43,7 +43,7 @@ function ExerciseList({ mode = 'list', state, setState }) {
   useEffect(() => {
     if(exercises.length > 0) {
       const initialState = exercises.map(item => item.isEditing)
-      setMenuIsOpen(initialState)
+      setIsMenuOpen(initialState)
     }
   }, [exercises])
 
@@ -57,17 +57,15 @@ function ExerciseList({ mode = 'list', state, setState }) {
             <ExerciseCard
               url={item.video.url}
               title={item.exerciseName}
-              // subtitle={mode === 'list'
-              // ? `Included in ${item.children_count} workouts`
-              // : null}
+       
+              variant={variant}
 
-              mode={mode}
               data={{id: item.id, name: item.exerciseName, video: item.video}}
               
-              state={state}
-              setState={setState}
+              selection={selection}
+              setSelection={setSelection}
 
-              menuIsOpen={menuIsOpen}
+              isMenuOpen={isMenuOpen}
               handleMenuState={handleMenuState}
 
               index={index}

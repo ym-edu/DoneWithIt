@@ -66,9 +66,9 @@ function AddExercises({ navigation, route }) {
   return (
     <>
       <ExerciseList
-      mode={'selectableList'}
-      state={selection}
-      setState={setSelection}
+      variant={'selectable'}
+      selection={selection}
+      setSelection={setSelection}
       />
 
       <View style={styles.footer}>

@@ -1,33 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
 import Spacer from '../components/Spacer';
-import CreateButton from '../components/CreateButton';
+import TextButton from '../components/TextButton';
 import ExerciseCard from '../components/ExerciseCard';
 import subtitle from '../temp/subTitle';
 import { useDB } from '../hooks/useDB';
 
-function Workout({ navigation, route }) {
+function Workout({ navigation, route: { params: {id}}}) {
   const { workouts } = useDB()
-  const { params: { id } } = route;
 
   const [exercises, setExercises] = useState([]);
+  const [invertedExercises, setInvertedExercises] = useState([]);
   const [exerciseCount, setExerciseCount] = useState(0);
-  const [menuIsOpen, setMenuIsOpen] = useState([]);
-
-  const handleMenuState = (index, open) => {
-    // console.log(index)
-    const i = index;
-
-    let stateArray;
-
-    if(open) {
-      stateArray = menuIsOpen.map(item => false)
-    } else stateArray = [...menuIsOpen]
-
-    stateArray[i] = !stateArray[i];
-
-    setMenuIsOpen(stateArray)
-  }
 
   useEffect(() => {
     let unsubscribeFromExercises;
@@ -40,11 +24,11 @@ function Workout({ navigation, route }) {
         const exerciseDocs = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
-          isEditing: false
         }));
-        const reversedExerciseDocs = exerciseDocs.map(doc => doc).reverse()
+        const invertedExerciseDocs = exerciseDocs.map(doc => doc).reverse()
         // console.log(exerciseDocs) //TODO: Save state for parent to determine count
-        setExercises(reversedExerciseDocs)
+        setExercises(exerciseDocs)
+        setInvertedExercises(invertedExerciseDocs)
         
         navigation.setParams({
           exercises: exerciseDocs,
@@ -74,10 +58,28 @@ function Workout({ navigation, route }) {
     }
   }, [])
 
+// =================================== MenuState ===================================
+
+  const [isMenuOpen, setIsMenuOpen] = useState([]);
+
+  const handleMenuState = (index, open) => {
+    const i = index;
+
+    let stateArray;
+
+    if(open) {
+      stateArray = isMenuOpen.map(() => false)
+    } else stateArray = [...isMenuOpen]
+
+    stateArray[i] = !stateArray[i];
+
+    setIsMenuOpen(stateArray)
+  }
+
   useEffect(() => {
     if(exercises.length > 0) {
-      const initialState = exercises.map(item => item.isEditing)
-      setMenuIsOpen(initialState)
+      const initialMenuState = exercises.map(() => false)
+      setIsMenuOpen(initialMenuState)
     }
   }, [exercises])
 
@@ -86,35 +88,35 @@ function Workout({ navigation, route }) {
       <View style={{width: '100%', flexDirection: 'row', paddingVertical: 16}}>
         <Spacer mH={4} style={{backgroundColor: '#C0C0B8', borderTopLeftRadius: 2, borderBottomLeftRadius: 2}}/>
         <Spacer mH={16}/>
-        <Text style={[styles.text, {color: '#C0C0B87F'}]}>{exerciseCount} exercises</Text>
+        <Text style={[styles.text, {color: '#C0C0B87F'}]}>
+          {exerciseCount} {exerciseCount === 1 ? 'exercise' : 'exercises'}
+        </Text>
       </View>
     )
   }
 
-  // function Footer() {
-  //   return (
-  //     <View style={styles.footer}>
-  //       <Spacer mV={8}
-  //       style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-  //       <CreateButton
-  //       icon={'plus'}
-  //       title='add exercises'
-  //       onPress={() => {
-  //         navigation.navigate("AddExercises", {
-  //           workoutId: id,
-  //           exerciseIndex: exerciseIndex,
-  //         })
-  //       }}/>
-  //       <Spacer mV={8}/>
-  //     </View>
-  //   )
-  // }
+  function Footer() {
+    return (
+      <View style={styles.footer}>
+        <Spacer mV={8}
+        style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
+        <TextButton onPress={() => {
+          navigation.navigate("TrainStack", {
+            screen: "Train", params: { exercises: exercises }
+          })
+        }}>
+          start workout
+        </TextButton>
+        <Spacer mV={8}/>
+      </View>
+    )
+  }
 
   return (
     <>
     <View style={styles.container}>
       <FlatList style={styles.flatlist}
-        data={exercises}
+        data={invertedExercises}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item, index }) => (
           <ExerciseCard
@@ -122,11 +124,10 @@ function Workout({ navigation, route }) {
             title={item.exerciseName}
             subtitle={subtitle(item.mode)}
             
-            parent={false}
+            variant={'childExercise'}
             data={{id: item.id, mode: item.mode, weight: item.weight}}
-            onPress={() => null}
             
-            menuIsOpen={menuIsOpen}
+            isMenuOpen={isMenuOpen}
             handleMenuState={handleMenuState}
 
             index={index}
@@ -142,7 +143,7 @@ function Workout({ navigation, route }) {
       />
     </View>
 
-    {/* <Footer/> */}
+    <Footer/>
     </>
   );
 }

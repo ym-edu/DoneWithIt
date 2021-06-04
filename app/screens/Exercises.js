@@ -7,7 +7,7 @@ import ExerciseList from '../components/ExerciseList';
 function Exercises({ navigation }) {
   return (
     <>
-      <ExerciseList main={true}/>
+      <ExerciseList variant={'parentExercise'}/>
       <View style={styles.footer}>
         <Spacer mV={8}
         style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>

@@ -24,7 +24,7 @@ function Media({ source, square = false, directSource }) {
     fetchMedia()
 
     return () => { isMounted = false }
-  }, []);
+  }, [source]);
 
   function Thumbnail() {
     return (
