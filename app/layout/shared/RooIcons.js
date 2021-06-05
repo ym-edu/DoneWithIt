@@ -3,27 +3,33 @@
  * Usage: <RooIcons name="icon-name" size={20} color="#4F8EF7" />
  */
 
-import { createIconSet } from '@expo/vector-icons';
+ import { createIconSet } from '@expo/vector-icons';
 const glyphMap = {
   "angle": 59392,
-  "close": 59393,
-  "edit-page": 59394,
-  "edit": 59395,
-  "explore": 59396,
-  "flex": 59397,
-  "grip": 59398,
-  "home": 59399,
-  "layer-minus": 59400,
-  "layer-plus": 59401,
-  "layer": 59402,
-  "lock": 59403,
-  "media-empty": 59404,
-  "minus": 59405,
-  "plus": 59406,
-  "search": 59407,
-  "stats": 59408,
-  "stopwatch": 59409,
-  "trash": 59410
+  "arrow": 59393,
+  "close": 59394,
+  "dots": 59395,
+  "edit-page": 59396,
+  "edit": 59397,
+  "exercises": 59398,
+  "explore": 59399,
+  "flex": 59400,
+  "grip": 59401,
+  "history": 59402,
+  "home": 59403,
+  "medal": 59404,
+  "layer-minus": 59405,
+  "layer-plus": 59406,
+  "layer": 59407,
+  "lock": 59408,
+  "media-empty": 59409,
+  "minus": 59410,
+  "plus": 59411,
+  "redo": 59412,
+  "search": 59413,
+  "stats": 59414,
+  "stopwatch": 59415,
+  "trash": 59416
 };
 
 const iconSet = createIconSet(glyphMap, 'RooIcons');

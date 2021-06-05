@@ -80,7 +80,7 @@ function Exercise({ store, dispatch, MODES, navigation }) {
             dispatch({ type: 'reset', payload: exercise })
           }}
           disabled={session.isStarting}>
-          <Icon style={{width: 16, height: 16}} name='close' size={16} color={session.isStarting ? '#383B3B' : 'white'}/>
+          <Icon style={{width: 16, height: 16}} name='redo' size={16} color={session.isStarting ? '#383B3B' : 'white'}/>
         </TouchableOpacity>
       </View>
       </>
