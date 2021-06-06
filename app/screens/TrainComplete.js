@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Button, Text } from 'react-native';
 import { useIcon } from '../layout';
 import Spacer from '../components/Spacer';
+import moment from 'moment';
+import momentDurationFormatSetup from 'moment-duration-format';
 
-function TrainComplete({route: {params: {items}}}) {
+const formatTime = (millis) => {
+  const formatedTime = moment.duration(millis, "milliseconds").format("hh:mm:ss").padStart(4, "0:0");
+  return formatedTime
+}
+
+function TrainComplete({route: {params: {items, sessionStart}}}) {
   const Icon = useIcon();
+  const [tally, setTally] = useState(0);
+  const [time, setTime] = useState('');
+  const [sessionEnd, setSessionEnd] = useState(0);
+
+  useEffect(() => {
+    const millis = Date.now() - sessionStart;
+
+    const itemsCount = items.length
+    const completedItemsCount = items.filter(item => {
+      return item.session.isFinished
+    }).length
+
+    setSessionEnd(millis)
+    setTime(formatTime(millis))
+    setTally(`${completedItemsCount} / ${itemsCount}`)
+  }, [])
 
   function Header() {
     return (
@@ -22,11 +45,11 @@ function TrainComplete({route: {params: {items}}}) {
         <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 16, alignItems: 'center'}}>
           <View>
             <Text style={[styles.heading, {fontSize: 16}]}>Exercises Completed</Text>
-            <Text style={[styles.heading, {fontSize: 24}]}>34 / 43</Text>
+            <Text style={[styles.heading, {fontSize: 24}]}>{tally}</Text>
           </View>
           <View>
-            <Text style={[styles.heading, {fontSize: 16}]}>Time Worked</Text>
-            <Text style={[styles.heading, {fontSize: 24}]}>34 / 43</Text>
+            <Text style={[styles.heading, {fontSize: 16}]}>Completed In</Text>
+            <Text style={[styles.heading, {fontSize: 24}]}>{time}</Text>
           </View>
         </View>
 
@@ -40,7 +63,6 @@ function TrainComplete({route: {params: {items}}}) {
       <Header/>
       <View style={styles.container}>
         {/* <Button title={'log'} onPress={() => {
-          console.log(items)
         }}/> */}
       </View>
     </>

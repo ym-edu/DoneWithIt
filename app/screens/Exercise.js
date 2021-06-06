@@ -13,7 +13,7 @@ import TextButton from '../components/TextButton'
 
 function Exercise({ store, dispatch, MODES, navigation }) {
   const Icon = useIcon();
-  const { index, items } = store;
+  const { index, items, time } = store;
   
   const exercise = items[index];
   const session = exercise.session;
@@ -103,7 +103,7 @@ function Exercise({ store, dispatch, MODES, navigation }) {
       <View>
         <Spacer mV={8} style={styles.line}/>
         <TextButton onPress={() => {
-          navigation.navigate("TrainComplete", { items: items })
+          navigation.navigate("TrainComplete", { items: items, sessionStart: time })
         }}>
           finish workout
         </TextButton>

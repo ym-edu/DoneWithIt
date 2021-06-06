@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import Exercise from './Exercise';
 // import Rest from './Rest';
@@ -74,6 +74,7 @@ function initializer(data) {
     return {
       index: 0,
       items,
+      time: 0,
     }
   } else {
     const { mode } = data
@@ -147,11 +148,18 @@ function reducer(store, action) {
       state[store.index] = initializer(action.payload)
 
       return {...store, items: state}
+
+    case 'time':
+      return {...store, time: Date.now()}
   }
 }
 
 function Train({navigation, route:{params:{exercises}}}) {
-  const [store, dispatch] = useReducer(reducer, exercises, initializer)
+  const [store, dispatch] = useReducer(reducer, exercises, initializer);
+
+  useEffect(() => {
+    dispatch({ type: 'time' })
+  }, [])
 
   function Buttons() {
     return (
