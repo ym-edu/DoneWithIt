@@ -44,7 +44,7 @@ function Media({ source, square = false, directSource }) {
   return (
     <View style={square && styles.container}>
       {source ? <Thumbnail/>
-      : square ? <Icon name='media-empty' size={40}/>
+      : square ? <Icon name='exercises' size={64}/>
         : <Thumbnail/>}
     </View>
   );
