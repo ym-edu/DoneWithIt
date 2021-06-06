@@ -6,7 +6,7 @@ import ExerciseCard from '../components/ExerciseCard';
 import subtitle from '../temp/subTitle';
 import { useDB } from '../hooks/useDB';
 
-function Workout({ navigation, route: { params: {id}}}) {
+function Workout({ navigation, route: { params: {id, workoutName}}}) {
   const { workouts } = useDB()
 
   const [exercises, setExercises] = useState([]);
@@ -102,7 +102,7 @@ function Workout({ navigation, route: { params: {id}}}) {
         style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
         <TextButton onPress={() => {
           navigation.navigate("TrainStack", {
-            screen: "Train", params: { exercises: exercises }
+            screen: "Train", params: {exercises: exercises, routineName: workoutName}
           })
         }}>
           start workout

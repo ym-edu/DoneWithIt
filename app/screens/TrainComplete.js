@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Button, Text } from 'react-native';
+import { StyleSheet, View, Button, Text, FlatList } from 'react-native';
 import { useIcon } from '../layout';
 import Spacer from '../components/Spacer';
 import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
+import subtitle from '../temp/subTitle';
+import ExerciseCard from '../components/ExerciseCard';
+import TextButton from '../components/TextButton'
 
 const formatTime = (millis) => {
   const formatedTime = moment.duration(millis, "milliseconds").format("hh:mm:ss").padStart(4, "0:0");
   return formatedTime
 }
 
-function TrainComplete({route: {params: {items, sessionStart}}}) {
+function TrainComplete({navigation, route: {params: {items, sessionStart, routineName}}}) {
   const Icon = useIcon();
   const [tally, setTally] = useState(0);
   const [time, setTime] = useState('');
@@ -44,7 +47,7 @@ function TrainComplete({route: {params: {items, sessionStart}}}) {
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 16, alignItems: 'center'}}>
           <View>
-            <Text style={[styles.heading, {fontSize: 16}]}>Exercises Completed</Text>
+            <Text style={[styles.heading, {fontSize: 16}]}>Total Exercises</Text>
             <Text style={[styles.heading, {fontSize: 24}]}>{tally}</Text>
           </View>
           <View>
@@ -61,9 +64,42 @@ function TrainComplete({route: {params: {items, sessionStart}}}) {
   return (
     <>
       <Header/>
-      <View style={styles.container}>
-        {/* <Button title={'log'} onPress={() => {
+      {/* <Button title={'log'} onPress={() => {
         }}/> */}
+      <View style={{flex: 1}}>
+        <FlatList style={{flex: 1}}
+          data={items}
+          keyExtractor={item => item.id.toString()}
+
+          renderItem={({ item }) => (
+            <ExerciseCard
+              url={item.video.url}
+              title={item.exerciseName}
+              subtitle={subtitle(item.mode)}
+
+              variant={'stats'}
+              completed={item.session.isFinished}
+            />
+          )}
+          contentContainerStyle={{marginHorizontal: 16, flexGrow: 1}}
+          // ItemSeparatorComponent={() => <Spacer mV={8}/>}
+          ListHeaderComponent={() => (
+            <>
+              <Spacer mV={16}/>
+              <Text style={[styles.heading, {fontSize: 16}]}>{`Results for: ${routineName}`}</Text>
+              <Spacer mV={16}/>
+            </>
+          )}
+          ListFooterComponent={() => (
+            <TextButton onPress={() => {
+              navigation.navigate("Library")
+            }}>
+              done
+            </TextButton>
+          )}
+          ListFooterComponentStyle={{flex: 1, justifyContent: 'flex-end', marginBottom: 8}}
+          showsVerticalScrollIndicator={false}
+        />
       </View>
     </>
   );

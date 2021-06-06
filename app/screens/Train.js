@@ -154,7 +154,7 @@ function reducer(store, action) {
   }
 }
 
-function Train({navigation, route:{params:{exercises}}}) {
+function Train({navigation, route:{params:{exercises, routineName}}}) {
   const [store, dispatch] = useReducer(reducer, exercises, initializer);
 
   useEffect(() => {
@@ -183,7 +183,7 @@ function Train({navigation, route:{params:{exercises}}}) {
   return (
     <>
       <View style={styles.container}>
-        <Exercise navigation={navigation} store={store} dispatch={dispatch} MODES={MODES}/>
+        <Exercise navigation={navigation} store={store} dispatch={dispatch} MODES={MODES} routineName={routineName}/>
         {/* <Buttons/> */}
       </View>
     </>

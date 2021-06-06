@@ -11,7 +11,7 @@ import ExerciseCard from '../components/ExerciseCard';
 import subtitle from '../temp/subTitle';
 import TextButton from '../components/TextButton'
 
-function Exercise({ store, dispatch, MODES, navigation }) {
+function Exercise({ store, dispatch, MODES, navigation, routineName }) {
   const Icon = useIcon();
   const { index, items, time } = store;
   
@@ -103,7 +103,7 @@ function Exercise({ store, dispatch, MODES, navigation }) {
       <View>
         <Spacer mV={8} style={styles.line}/>
         <TextButton onPress={() => {
-          navigation.navigate("TrainComplete", { items: items, sessionStart: time })
+          navigation.navigate("TrainComplete", { items: items, sessionStart: time, routineName: routineName })
         }}>
           finish workout
         </TextButton>
