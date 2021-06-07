@@ -9,9 +9,12 @@ import TimeFixed from '../components/TimeFixed';
 import TimeTarget from '../components/TimeTarget';
 import ExerciseCard from '../components/ExerciseCard';
 import subtitle from '../temp/subTitle';
-import TextButton from '../components/TextButton'
+import TextButton from '../components/TextButton';
+import { useDB } from '../hooks/useDB';
 
-function Exercise({ store, dispatch, MODES, navigation, routineName }) {
+function Exercise({ store, dispatch, MODES, navigation, routineName, routineId }) {
+  const {db, workouts, timestamp } = useDB()
+
   const Icon = useIcon();
   const { index, items, time } = store;
   
@@ -98,12 +101,48 @@ function Exercise({ store, dispatch, MODES, navigation, routineName }) {
     )
   }
 
+  const handlePress = () => {
+    const millis = Date.now() - time;
+    const itemsCount = items.length;
+    const completedItemsCount = items.filter(item => {
+      return item.session.isFinished
+    }).length
+
+    const batch = db().batch();
+    const newRef = workouts.ref.doc(routineId).collection("routineSessions").doc();
+
+    batch.set(newRef, {
+      created: timestamp,
+      duration: millis,
+      completedItemsCount,
+    }, { merge: true });
+    
+    items.forEach(item => {
+      batch.set(newRef, {
+        exercises: db.FieldValue.arrayUnion({
+          exerciseName: item.exerciseName,
+          parentExercise_ref: item.parentExercise_ref,
+          childExercise_ref: item.id,
+          mode: item.mode.current,
+          [item.weight.current]: item.weight[item.weight.current],
+          isCompleted: item.session.isFinished,
+          goal: item.session.end,
+          result: item.session.count,
+        }),
+      }, { merge: true })
+    })
+
+    batch.commit();
+
+    return { duration: millis, completedItemsCount, itemsCount }
+  }
+
   function FinishWorkout() {
     return (
       <View>
         <Spacer mV={8} style={styles.line}/>
         <TextButton onPress={() => {
-          navigation.navigate("TrainComplete", { items: items, sessionStart: time, routineName: routineName })
+          navigation.navigate("TrainComplete", { items: items, routineName: routineName, stats: handlePress() })
         }}>
           finish workout
         </TextButton>

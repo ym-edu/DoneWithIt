@@ -102,7 +102,7 @@ function Workout({ navigation, route: { params: {id, workoutName}}}) {
         style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
         <TextButton onPress={() => {
           navigation.navigate("TrainStack", {
-            screen: "Train", params: {exercises: exercises, routineName: workoutName}
+            screen: "Train", params: {exercises: exercises, routineName: workoutName, routineId: id}
           })
         }}>
           start workout

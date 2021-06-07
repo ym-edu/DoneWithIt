@@ -13,24 +13,8 @@ const formatTime = (millis) => {
   return formatedTime
 }
 
-function TrainComplete({navigation, route: {params: {items, sessionStart, routineName}}}) {
+function TrainComplete({navigation, route: {params: {items, stats, routineName}}}) {
   const Icon = useIcon();
-  const [tally, setTally] = useState(0);
-  const [time, setTime] = useState('');
-  const [sessionEnd, setSessionEnd] = useState(0);
-
-  useEffect(() => {
-    const millis = Date.now() - sessionStart;
-
-    const itemsCount = items.length
-    const completedItemsCount = items.filter(item => {
-      return item.session.isFinished
-    }).length
-
-    setSessionEnd(millis)
-    setTime(formatTime(millis))
-    setTally(`${completedItemsCount} / ${itemsCount}`)
-  }, [])
 
   function Header() {
     return (
@@ -48,11 +32,11 @@ function TrainComplete({navigation, route: {params: {items, sessionStart, routin
         <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 16, alignItems: 'center'}}>
           <View>
             <Text style={[styles.heading, {fontSize: 16}]}>Total Exercises</Text>
-            <Text style={[styles.heading, {fontSize: 24}]}>{tally}</Text>
+            <Text style={[styles.heading, {fontSize: 24}]}>{`${stats.completedItemsCount} / ${stats.itemsCount}`}</Text>
           </View>
           <View>
             <Text style={[styles.heading, {fontSize: 16}]}>Completed In</Text>
-            <Text style={[styles.heading, {fontSize: 24}]}>{time}</Text>
+            <Text style={[styles.heading, {fontSize: 24}]}>{formatTime(stats.duration)}</Text>
           </View>
         </View>
 
