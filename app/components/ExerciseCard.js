@@ -95,7 +95,7 @@ function ExerciseCard({
           //nextExercise
           variant === 'nextExercise' && style,
           variant === 'stats'
-          ? completed ? styles.complete : styles.incomplete
+          ? [style, completed ? styles.complete : styles.incomplete]
           : null
         ]}>
           <Media source={url}/>

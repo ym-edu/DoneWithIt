@@ -6,14 +6,15 @@ import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
 import subtitle from '../temp/subTitle';
 import ExerciseCard from '../components/ExerciseCard';
-import TextButton from '../components/TextButton'
+import TextButton from '../components/TextButton';
+import sizes from '../config/constants/sizes';
 
 const formatTime = (millis) => {
   const formatedTime = moment.duration(millis, "milliseconds").format("hh:mm:ss").padStart(4, "0:0");
   return formatedTime
 }
 
-function TrainComplete({navigation, route: {params: {items, stats, routineName}}}) {
+function TrainComplete({navigation, route: {params: {items, stats, workoutName}}}) {
   const Icon = useIcon();
 
   function Header() {
@@ -65,23 +66,26 @@ function TrainComplete({navigation, route: {params: {items, stats, routineName}}
               completed={item.session.isFinished}
             />
           )}
-          contentContainerStyle={{marginHorizontal: 16, flexGrow: 1}}
+          contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1}}
           // ItemSeparatorComponent={() => <Spacer mV={8}/>}
           ListHeaderComponent={() => (
             <>
               <Spacer mV={16}/>
-              <Text style={[styles.heading, {fontSize: 16}]}>{`Results for: ${routineName}`}</Text>
+              <Text style={[styles.heading, {fontSize: 16}]}>{`Results for: ${workoutName}`}</Text>
               <Spacer mV={16}/>
             </>
           )}
           ListFooterComponent={() => (
-            <TextButton onPress={() => {
-              navigation.navigate("Library")
-            }}>
-              done
-            </TextButton>
+            <>
+              <Spacer mV={4} style={styles.line}/>
+              <TextButton onPress={() => {
+                navigation.navigate("Library")
+              }}>
+                done
+              </TextButton>
+            </>
           )}
-          ListFooterComponentStyle={{flex: 1, justifyContent: 'flex-end', marginBottom: 8}}
+          ListFooterComponentStyle={{flex: 1, justifyContent: 'flex-end', marginBottom: 8, marginTop: 32}}
           showsVerticalScrollIndicator={false}
         />
       </View>
@@ -109,6 +113,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  line: {
+    width: sizes.screenWidth,
+    left: -16,
+    borderTopWidth: 1,
+    borderTopColor: '#383B3B',
+    position: 'absolute',
+    bottom: 40,
   },
 })
 

@@ -157,7 +157,7 @@ function reducer(store, action) {
   }
 }
 
-function Train({navigation, route:{params:{exercises, routineName, routineId}}}) {
+function Train({navigation, route:{params:{exercises, workoutName, workoutId}}}) {
   const {db, workouts, timestamp } = useDB()
 
   const [store, dispatch] = useReducer(reducer, exercises, initializer);
@@ -193,7 +193,7 @@ function Train({navigation, route:{params:{exercises, routineName, routineId}}})
     }).length
 
     const batch = db().batch();
-    const newRef = workouts.ref.doc(routineId).collection("routineSessions").doc();
+    const newRef = workouts.ref.doc(workoutId).collection("workoutSessions").doc();
 
     batch.set(newRef, {
       created: timestamp,
@@ -226,7 +226,7 @@ function Train({navigation, route:{params:{exercises, routineName, routineId}}})
       <View>
         <Spacer mV={8} style={styles.line}/>
         <TextButton onPress={() => {
-          navigation.navigate("TrainComplete", { items: store.items, routineName: routineName, stats: handleSubmit() })
+          navigation.navigate("TrainComplete", { items: store.items, workoutName: workoutName, stats: handleSubmit() })
         }}>
           finish workout
         </TextButton>
