@@ -158,7 +158,7 @@ function reducer(store, action) {
 }
 
 function Train({navigation, route:{params:{exercises, workoutName, workoutId}}}) {
-  const {db, workouts, timestamp } = useDB()
+  const {db, parentExercises, workouts, timestamp } = useDB()
 
   const [store, dispatch] = useReducer(reducer, exercises, initializer);
 
@@ -193,26 +193,34 @@ function Train({navigation, route:{params:{exercises, workoutName, workoutId}}})
     }).length
 
     const batch = db().batch();
+    const timeCreated = timestamp
     const newRef = workouts.ref.doc(workoutId).collection("workoutSessions").doc();
 
     batch.set(newRef, {
-      created: timestamp,
+      created: timeCreated,
       duration: millis,
       completedItemsCount,
     }, { merge: true });
     
     store.items.forEach(item => {
+      const obj = {
+        exerciseName: item.exerciseName,
+        parentExercise_ref: item.parentExercise_ref,
+        childExercise_ref: item.id,
+        mode: item.mode.current,
+        [item.weight.current]: item.weight[item.weight.current],
+        isCompleted: item.session.isFinished,
+        goal: item.session.end,
+        result: item.session.count,
+      }
+
       batch.set(newRef, {
-        exercises: db.FieldValue.arrayUnion({
-          exerciseName: item.exerciseName,
-          parentExercise_ref: item.parentExercise_ref,
-          childExercise_ref: item.id,
-          mode: item.mode.current,
-          [item.weight.current]: item.weight[item.weight.current],
-          isCompleted: item.session.isFinished,
-          goal: item.session.end,
-          result: item.session.count,
-        }),
+        exercises: db.FieldValue.arrayUnion(obj),
+      }, { merge: true })
+
+      batch.set(parentExercises.ref.doc(item.parentExercise_ref).collection("exerciseSessions").doc(), {
+        ...obj,
+        created: timeCreated,
       }, { merge: true })
     })
 
