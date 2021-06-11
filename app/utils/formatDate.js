@@ -28,15 +28,15 @@ const days = [
   ];
 
 export const formatMD = (DATE) => {
-  const day = days[DATE.getDay()];
-  const month = months[DATE.getMonth()];
-  const date = DATE.getDate().toString();
+  const day = days[DATE?.getDay()];
+  const month = months[DATE?.getMonth()];
+  const date = DATE?.getDate().toString();
   
   const modules = {
     month,
-    abrMonth: month.substr(0,3),
+    abrMonth: month?.substr(0,3),
     day,
-    abrDay: day.substr(0,3),
+    abrDay: day?.substr(0,3),
     date,
   }
 
