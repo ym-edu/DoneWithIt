@@ -15,13 +15,15 @@ export default function DBProvider({ children }) {
   const userRef = firestore().collection("users").doc(user);
   const parentExercisesRef = userRef.collection("parentExercises");
   const workoutsRef = userRef.collection("workouts");
-  
+  const workoutSessionsRef = userRef.collection("workoutSessions");
+
   const increment = firestore.FieldValue.increment(1);
   const decrement = firestore.FieldValue.increment(-1);
   const timestamp = firestore.FieldValue.serverTimestamp();
 
   const parentExercisesTally = parentExercisesRef.doc("_tally");
   const workoutsTally = workoutsRef.doc("_tally")
+  const workoutSessionsTally = workoutSessionsRef.doc("_tally");
 
   const getDB = {
     db,
@@ -33,6 +35,10 @@ export default function DBProvider({ children }) {
     workouts: {
       ref: workoutsRef,
       tally: workoutsTally,
+    },
+    workoutSessions: {
+      ref: workoutSessionsRef,
+      tally: workoutSessionsTally,
     },
     increment,
     decrement,

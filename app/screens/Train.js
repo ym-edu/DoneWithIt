@@ -77,7 +77,8 @@ function initializer(data) {
     return {
       index: 0,
       items,
-      time: 0,
+      sessionStart: 0,
+      sessionEnd: 0,
     }
   } else {
     const { mode } = data
@@ -152,18 +153,18 @@ function reducer(store, action) {
 
       return {...store, items: state}
 
-    case 'time':
-      return {...store, time: Date.now()}
+    case 'setTime':
+      return {...store, sessionStart: new Date()}
   }
 }
 
 function Train({navigation, route:{params:{exercises, workoutName, workoutId}}}) {
-  const {db, parentExercises, workouts, timestamp } = useDB()
+  const {db, parentExercises, workoutSessions, timestamp: TIMESTAMP, increment } = useDB()
 
   const [store, dispatch] = useReducer(reducer, exercises, initializer);
 
   useEffect(() => {
-    dispatch({ type: 'time' })
+    dispatch({ type: 'setTime' })
   }, [])
 
   function Buttons() {
@@ -186,41 +187,50 @@ function Train({navigation, route:{params:{exercises, workoutName, workoutId}}})
   }
 
   const handleSubmit = () => {
-    const millis = Date.now() - store.time;
+    const millis = Date.now() - store.sessionStart.valueOf();
     const itemsCount = store.items.length;
     const completedItemsCount = store.items.filter(item => {
       return item.session.isFinished
     }).length
 
     const batch = db().batch();
-    const timeCreated = timestamp
-    const newRef = workouts.ref.doc(workoutId).collection("workoutSessions").doc();
+    const timestamp = TIMESTAMP;
+    const newWorkoutSessionRef = workoutSessions.ref.doc();
 
-    batch.set(newRef, {
-      created: timeCreated,
+    batch.set(newWorkoutSessionRef, {
+      createdOn: timestamp,
+      workoutName: workoutName,
+      sessionStart: store.sessionStart,
+      sessionEnd: new Date(),
+      exerciseCount: itemsCount,
+      completedExercisesCount: completedItemsCount,
       duration: millis,
-      completedItemsCount,
-    }, { merge: true });
-    
+    }, { merge: true })
+
+    batch.set(workoutSessions.tally, {
+      workoutSession_count: increment,
+    }, { merge: true })
+
     store.items.forEach(item => {
-      const obj = {
+      const newExerciseSessionRef = parentExercises.ref.doc(item.parentExercise_ref).collection("exerciseSessions").doc()
+
+      const exerciseStats = {
         exerciseName: item.exerciseName,
-        parentExercise_ref: item.parentExercise_ref,
-        childExercise_ref: item.id,
         mode: item.mode.current,
+
+        start: item.session.start,
+        end: item.session.end,
+        count: item.session.count,
         [item.weight.current]: item.weight[item.weight.current],
-        isCompleted: item.session.isFinished,
-        goal: item.session.end,
-        result: item.session.count,
       }
 
-      batch.set(newRef, {
-        exercises: db.FieldValue.arrayUnion(obj),
+      batch.set(newExerciseSessionRef, {
+        createdOn: timestamp,
+        ...exerciseStats,
       }, { merge: true })
 
-      batch.set(parentExercises.ref.doc(item.parentExercise_ref).collection("exerciseSessions").doc(), {
-        ...obj,
-        created: timeCreated,
+      batch.set(newWorkoutSessionRef, {
+        exercises: db.FieldValue.arrayUnion(exerciseStats),
       }, { merge: true })
     })
 
