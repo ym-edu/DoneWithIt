@@ -4,9 +4,9 @@
 
 export const formatAMPM = (DATE) => {
   let hours = DATE.getHours();
+  const period = hours >= 12 ? 'pm' : 'am';
   hours = hours % 12 || 12;
   let minutes = DATE.getMinutes();
-  const period = hours >= 12 ? 'pm' : 'am';
 
   hours = hours.toString();
   minutes = minutes.toString();
