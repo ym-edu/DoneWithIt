@@ -9,9 +9,8 @@ import TimeFixed from '../components/TimeFixed';
 import TimeTarget from '../components/TimeTarget';
 import ExerciseCard from '../components/ExerciseCard';
 import subtitle from '../temp/subTitle';
-import TextButton from '../components/TextButton'
 
-function Exercise({ store, dispatch, MODES, navigation }) {
+function Exercise({ store, dispatch, MODES}) {
   const Icon = useIcon();
   const { index, items } = store;
   
@@ -80,7 +79,7 @@ function Exercise({ store, dispatch, MODES, navigation }) {
             dispatch({ type: 'reset', payload: exercise })
           }}
           disabled={session.isStarting}>
-          <Icon style={{width: 16, height: 16}} name='close' size={16} color={session.isStarting ? '#383B3B' : 'white'}/>
+          <Icon style={{width: 16, height: 16}} name='redo' size={16} color={session.isStarting ? '#383B3B' : 'white'}/>
         </TouchableOpacity>
       </View>
       </>
@@ -95,20 +94,6 @@ function Exercise({ store, dispatch, MODES, navigation }) {
         </View>
         <Spacer style={styles.line}/>
       </>
-    )
-  }
-
-  function FinishWorkout() {
-    return (
-      <View>
-        <Spacer mV={8} style={styles.line}/>
-        <TextButton onPress={() => {
-          navigation.navigate("TrainComplete", { items: items })
-        }}>
-          finish workout
-        </TextButton>
-        <Spacer mV={8}/>
-      </View>
     )
   }
 
@@ -142,7 +127,7 @@ function Exercise({ store, dispatch, MODES, navigation }) {
               style={{marginBottom: 0, marginHorizontal: 0}}
             />
           </View>
-        : <FinishWorkout/>}
+        : null}
       </View>
     </>
   );

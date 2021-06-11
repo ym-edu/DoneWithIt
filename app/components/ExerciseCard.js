@@ -16,22 +16,23 @@ function ExerciseCard({
    * selectable
    * sortable
    */
-  variant,
   data = null, // [(exerciseId) exerciseMode]
-
+  
   selection = null, //selection
   setSelection = null, //setSelection
-
+  
   onLongPress = null,
   isActive = null,
-
+  
   index,
-
+  
   isMenuOpen = false,
   handleMenuState,
   workoutId,
   
+  variant,
   style,
+  completed = false,
 }) {
   const [selected, setSelected] = useState(false);
   const [hasOptions, setHasOptions] = useState(true);
@@ -92,7 +93,10 @@ function ExerciseCard({
           //sortable
           isActive && {minHeight: 63},
           //nextExercise
-          variant === 'nextExercise' && style
+          variant === 'nextExercise' && style,
+          variant === 'stats'
+          ? [style, completed ? styles.complete : styles.incomplete]
+          : null
         ]}>
           <Media source={url}/>
           <Spacer mH={8}/>
@@ -137,6 +141,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     overflow: 'hidden',
+  },
+  complete: {
+    borderWidth: 1,
+    borderColor: '#2fcfaf',
+  },
+  incomplete: {
+    borderWidth: 1,
+    borderColor: '#D03050',
   },
 })
 

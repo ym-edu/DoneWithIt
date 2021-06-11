@@ -1,6 +1,9 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import Exercise from './Exercise';
+import Spacer from '../components/Spacer';
+import TextButton from '../components/TextButton';
+import { useDB } from '../hooks/useDB';
 // import Rest from './Rest';
 
 const MODES = {
@@ -74,6 +77,7 @@ function initializer(data) {
     return {
       index: 0,
       items,
+      time: 0,
     }
   } else {
     const { mode } = data
@@ -147,11 +151,20 @@ function reducer(store, action) {
       state[store.index] = initializer(action.payload)
 
       return {...store, items: state}
+
+    case 'time':
+      return {...store, time: Date.now()}
   }
 }
 
-function Train({navigation, route:{params:{exercises}}}) {
-  const [store, dispatch] = useReducer(reducer, exercises, initializer)
+function Train({navigation, route:{params:{exercises, workoutName, workoutId}}}) {
+  const {db, parentExercises, workouts, timestamp } = useDB()
+
+  const [store, dispatch] = useReducer(reducer, exercises, initializer);
+
+  useEffect(() => {
+    dispatch({ type: 'time' })
+  }, [])
 
   function Buttons() {
     return (
@@ -172,11 +185,70 @@ function Train({navigation, route:{params:{exercises}}}) {
     )
   }
 
+  const handleSubmit = () => {
+    const millis = Date.now() - store.time;
+    const itemsCount = store.items.length;
+    const completedItemsCount = store.items.filter(item => {
+      return item.session.isFinished
+    }).length
+
+    const batch = db().batch();
+    const timeCreated = timestamp
+    const newRef = workouts.ref.doc(workoutId).collection("workoutSessions").doc();
+
+    batch.set(newRef, {
+      created: timeCreated,
+      duration: millis,
+      completedItemsCount,
+    }, { merge: true });
+    
+    store.items.forEach(item => {
+      const obj = {
+        exerciseName: item.exerciseName,
+        parentExercise_ref: item.parentExercise_ref,
+        childExercise_ref: item.id,
+        mode: item.mode.current,
+        [item.weight.current]: item.weight[item.weight.current],
+        isCompleted: item.session.isFinished,
+        goal: item.session.end,
+        result: item.session.count,
+      }
+
+      batch.set(newRef, {
+        exercises: db.FieldValue.arrayUnion(obj),
+      }, { merge: true })
+
+      batch.set(parentExercises.ref.doc(item.parentExercise_ref).collection("exerciseSessions").doc(), {
+        ...obj,
+        created: timeCreated,
+      }, { merge: true })
+    })
+
+    batch.commit();
+
+    return { duration: millis, completedItemsCount, itemsCount }
+  }
+
+  function FinishWorkout() {
+    return (
+      <View>
+        <Spacer mV={8} style={styles.line}/>
+        <TextButton onPress={() => {
+          navigation.navigate("TrainComplete", { items: store.items, workoutName: workoutName, stats: handleSubmit() })
+        }}>
+          finish workout
+        </TextButton>
+        <Spacer mV={8}/>
+      </View>
+    )
+  }
+
   return (
     <>
       <View style={styles.container}>
-        <Exercise navigation={navigation} store={store} dispatch={dispatch} MODES={MODES}/>
+        <Exercise store={store} dispatch={dispatch} MODES={MODES}/>
         {/* <Buttons/> */}
+        {store.index === store.items.length - 1 ? <FinishWorkout/> : null}
       </View>
     </>
   );
@@ -188,7 +260,12 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-  }
+  },
+  line: {
+    width: '100%',
+    borderTopWidth: 1,
+    borderTopColor: '#383B3B',
+  },
 })
 
 export default Train;

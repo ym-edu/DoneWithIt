@@ -18,13 +18,14 @@ export default function DBProvider({ children }) {
   
   const increment = firestore.FieldValue.increment(1);
   const decrement = firestore.FieldValue.increment(-1);
+  const timestamp = firestore.FieldValue.serverTimestamp();
 
   const parentExercisesTally = parentExercisesRef.doc("_tally");
   const workoutsTally = workoutsRef.doc("_tally")
 
   const getDB = {
-    db: db,
-    userRef: userRef,
+    db,
+    userRef,
     parentExercises: {
       ref: parentExercisesRef,
       tally: parentExercisesTally
@@ -33,8 +34,9 @@ export default function DBProvider({ children }) {
       ref: workoutsRef,
       tally: workoutsTally,
     },
-    increment: increment,
-    decrement: decrement,
+    increment,
+    decrement,
+    timestamp,
   }
 
   return (
