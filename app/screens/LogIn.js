@@ -5,6 +5,7 @@ import { InterstitialAd, TestIds, AdEventType } from '@react-native-firebase/adm
 import crashlytics from '@react-native-firebase/crashlytics';
 // ----------------------------------------------------------------------------
 import { useAuthUpdate } from '../hooks/useAuth'
+import auth from '@react-native-firebase/auth';
 // ----------------------------------------------------------------------------
 
 
@@ -67,6 +68,7 @@ function LogIn({ navigation }) {
       <Button title="Test Crash" onPress={() => crashlytics().crash()} />
       <Text style={{color: 'white', alignSelf: 'center'}}>FS OUTPUT</Text>
       <Text style={{color: 'white', alignSelf: 'center'}}>FS OUTPUT</Text>
+      <Button title="LOG" onPress={() => console.log(auth().currentUser.uid)} />
     </>
   );
 }

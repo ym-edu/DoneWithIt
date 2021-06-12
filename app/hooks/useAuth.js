@@ -1,5 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const AuthContext = React.createContext();
 const AuthUpdateContext = React.createContext();
@@ -13,31 +15,65 @@ export function useAuthUpdate() {
 }
 
 export default function AuthProvider({ children }) {
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [userToken, setUserToken] = React.useState(null);
+  const [initializing, setInitializing] = React.useState(true);
+  const [user, setUser] = React.useState(null);
 
   const getAuth = {
-    loading: isLoading,
-    user: userToken,
+    loading: initializing,
+    user: user,
   }
+
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  const EMAIL = 'example4@email.com'
+  const PASSWORD = '123456'
+  const USERNAME = 'NYM'
 
   const setAuth = React.useMemo(() => {
     return {
       load: () => {
         // setIsLoading(!isLoading);
-        setIsLoading(false);
+        setInitializing(false);
       },
-      logIn: () => {
-        setIsLoading(false);
-        setUserToken('user-2'); //TEMP //TODO: Set up user authentication
+      logIn: async (email = EMAIL, password = PASSWORD) => {
+        // setUser('user-2'); //TEMP //TODO: Set up user authentication
+
+        try {
+          await auth().signInWithEmailAndPassword(email, password)
+        } catch(error) {
+          console.log(error)
+        }
       },
-      signUp: () => {
-        setIsLoading(false);
-        setUserToken('user-2'); //TEMP //TODO: Set up user authentication
+      signUp: async (email = EMAIL, password = PASSWORD, userName = USERNAME) => {
+        // setUser('user-2'); //TEMP //TODO: Set up user authentication
+
+        try {
+          await auth().createUserWithEmailAndPassword(email, password)
+          .then(token => {
+            // console.log("TOKEN: ", token.user.uid)
+            firestore().collection("users").doc(token.user.uid).set({
+              userName,
+              userName_std: userName.toLowerCase(),
+            })
+          })
+        } catch (error) {
+          console.log(error)
+        }
       },
-      logOut: () => {
-        setIsLoading(true);
-        setUserToken(null);
+      logOut: async () => {
+        try {
+          await auth().signOut()
+        } catch (error) {
+          console.log(error)
+        }
       },
       resetPassword: (navigation) => Alert.alert(
         "Simulating Password Reset",
