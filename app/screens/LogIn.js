@@ -91,10 +91,14 @@ function LogIn({ navigation }) {
     <Formik
       validationSchema={loginValidationSchema}
       initialValues={{ email: '', password: '' }}
-      onSubmit={values => logIn(values)}
+      onSubmit={(values, { setErrors, resetForm }) => {
+        logIn(values, setErrors)
+      }}
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid }) => (
         <View style={styles.form}>
+          {errors.db &&
+          <Text style={{fontSize: 12, color: '#D03050'}}>{errors.db}</Text>}
           <View>
             <Text style={styles.heading}>Fitter, healthier, happier</Text>
           <Spacer mV={8}/>

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import AuthErrors from '../config/constants/authErrors';
 
 const AuthContext = React.createContext();
 const AuthUpdateContext = React.createContext();
@@ -39,13 +40,15 @@ export default function AuthProvider({ children }) {
         // setIsLoading(!isLoading);
         setInitializing(false);
       },
-      logIn: async ({email, password}) => {
+      logIn: async ({email, password}, setErrors) => {
         // setUser('user-2'); //TEMP //TODO: Set up user authentication
 
         try {
           await auth().signInWithEmailAndPassword(email, password)
         } catch(error) {
           console.log(error)
+          // console.log(AuthErrors[error.code])
+          setErrors({ db: AuthErrors[error.code] })
         }
       },
       signUp: async (email = EMAIL, password = PASSWORD, userName = USERNAME) => {
