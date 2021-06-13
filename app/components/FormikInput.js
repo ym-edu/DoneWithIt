@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import colors from '../config/constants/colors'
 
-function Input({onChangeText, onBlur, value, label}) {
+function Input({onChangeText, onBlur, value, label, secureTextEntry, keyboardType}) {
   const theme = {
     colors: {
       placeholder: colors.secondaryDarker,
@@ -23,6 +23,8 @@ function Input({onChangeText, onBlur, value, label}) {
     value={value}
     onChangeText={onChangeText}
     onBlur={onBlur}
+    secureTextEntry={secureTextEntry}
+    keyboardType={keyboardType}
     />
   );
 }

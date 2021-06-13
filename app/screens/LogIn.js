@@ -12,6 +12,7 @@ import FormikInput from '../components/FormikInput';
 import { Formik } from 'formik';
 import Spacer from '../components/Spacer';
 import { sizes } from '../config/constants';
+import * as yup from 'yup'
 
 // ============================================================================
 const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-2742026173933447~7286128693';
@@ -75,12 +76,24 @@ function LogIn({ navigation }) {
     )
   }
 
+  const loginValidationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email("Please enter valid email")
+      .required('Email Address is Required'),
+    password: yup
+      .string()
+      .min(6, ({ min }) => `Password must be at least ${min} characters`)
+      .required('Password is required'),
+  })
+
   const LoginForm = props => (
     <Formik
-      initialValues={{ email: '' }}
+      validationSchema={loginValidationSchema}
+      initialValues={{ email: '', password: '' }}
       onSubmit={values => logIn(values)}
     >
-      {({ handleChange, handleBlur, handleSubmit, values }) => (
+      {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid }) => (
         <View style={styles.form}>
           <View>
             <Text style={styles.heading}>Fitter, healthier, happier</Text>
@@ -89,18 +102,25 @@ function LogIn({ navigation }) {
             <Text style={{color: 'white', fontWeight: 'bold'}}>Log in to continue</Text>
           </View>
           <Spacer mV={16}/>
+          {(errors.email && touched.email) &&
+          <Text style={{fontSize: 12, color: '#D03050'}}>{errors.email}</Text>}
           <FormikInput
             onChangeText={handleChange('email')}
             onBlur={handleBlur('email')}
             value={values.email}
             label={'Email'}
+            keyboardType='email-address'
           />
           <Spacer mV={16}/>
+          {(errors.password && touched.password) &&
+          <Text style={{fontSize: 12, color: '#D03050'}}>{errors.password}</Text>}
           <FormikInput
             onChangeText={handleChange('password')}
             onBlur={handleBlur('password')}
             value={values.password}
             label={'Password'}
+            secureTextEntry
+            keyboardType='default'
           />
           <Spacer mV={64}/>
           <CreateButton
@@ -108,6 +128,7 @@ function LogIn({ navigation }) {
           onPress={handleSubmit}
           titleStyle={{fontSize: 24}}
           style={{ alignSelf: 'flex-start' }}
+          disabled={!isValid}
           />
         </View>
       )}
@@ -122,14 +143,14 @@ function LogIn({ navigation }) {
           title='Sign Up'
           style={{}}
           onPress={() => {
-            navigation.navigate("SignUp")
+            navigation.replace("SignUp")
           }}
           />
           <CreateButton
           title='Forgot Password?'
           style={{}}
           onPress={() => {
-            navigation.navigate("ResetPassword")
+            navigation.replace("ResetPassword")
           }}
           />
         </View>
