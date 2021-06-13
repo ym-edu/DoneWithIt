@@ -33,17 +33,13 @@ export default function AuthProvider({ children }) {
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  const EMAIL = 'example4@email.com'
-  const PASSWORD = '123456'
-  const USERNAME = 'NYM'
-
   const setAuth = React.useMemo(() => {
     return {
       load: () => {
         // setIsLoading(!isLoading);
         setInitializing(false);
       },
-      logIn: async (email = EMAIL, password = PASSWORD) => {
+      logIn: async ({email, password}) => {
         // setUser('user-2'); //TEMP //TODO: Set up user authentication
 
         try {

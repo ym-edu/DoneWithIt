@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text } from 'react-native';
+import { StyleSheet, View, Button, Text, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import analytics from '@react-native-firebase/analytics';
 import { InterstitialAd, TestIds, AdEventType } from '@react-native-firebase/admob';
 import crashlytics from '@react-native-firebase/crashlytics';
@@ -7,8 +7,11 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import { useAuthUpdate } from '../hooks/useAuth'
 import auth from '@react-native-firebase/auth';
 // ----------------------------------------------------------------------------
-
-
+import CreateButton from '../components/CreateButton';
+import FormikInput from '../components/FormikInput';
+import { Formik } from 'formik';
+import Spacer from '../components/Spacer';
+import { sizes } from '../config/constants';
 
 // ============================================================================
 const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-2742026173933447~7286128693';
@@ -49,8 +52,9 @@ function LogIn({ navigation }) {
   //   return null;
   // }
 
-  return (
-    <>
+  function Buttons() {
+    return (
+      <>
       <Button title="Log In" onPress={() => {
         // interstitial.show();
         logIn()
@@ -66,11 +70,120 @@ function LogIn({ navigation }) {
         }
       />
       <Button title="Test Crash" onPress={() => crashlytics().crash()} />
-      <Text style={{color: 'white', alignSelf: 'center'}}>FS OUTPUT</Text>
-      <Text style={{color: 'white', alignSelf: 'center'}}>FS OUTPUT</Text>
-      <Button title="LOG" onPress={() => console.log(auth().currentUser.uid)} />
+      <Button title="Current User" onPress={() => console.log(auth().currentUser.uid)} />
+    </>
+    )
+  }
+
+  const LoginForm = props => (
+    <Formik
+      initialValues={{ email: '' }}
+      onSubmit={values => logIn(values)}
+    >
+      {({ handleChange, handleBlur, handleSubmit, values }) => (
+        <View style={styles.form}>
+          <View>
+            <Text style={styles.heading}>Fitter, healthier, happier</Text>
+          <Spacer mV={8}/>
+
+            <Text style={{color: 'white', fontWeight: 'bold'}}>Log in to continue</Text>
+          </View>
+          <Spacer mV={16}/>
+          <FormikInput
+            onChangeText={handleChange('email')}
+            onBlur={handleBlur('email')}
+            value={values.email}
+            label={'Email'}
+          />
+          <Spacer mV={16}/>
+          <FormikInput
+            onChangeText={handleChange('password')}
+            onBlur={handleBlur('password')}
+            value={values.password}
+            label={'Password'}
+          />
+          <Spacer mV={64}/>
+          <CreateButton
+          title='Log In'
+          onPress={handleSubmit}
+          titleStyle={{fontSize: 24}}
+          style={{ alignSelf: 'flex-start' }}
+          />
+        </View>
+      )}
+    </Formik>
+  );
+
+  function Redirects() {
+    return (
+      <>
+        <View style={styles.redirects}>
+          <CreateButton
+          title='Sign Up'
+          style={{}}
+          onPress={() => {
+            navigation.navigate("SignUp")
+          }}
+          />
+          <CreateButton
+          title='Forgot Password?'
+          style={{}}
+          onPress={() => {
+            navigation.navigate("ResetPassword")
+          }}
+          />
+        </View>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={"padding"}
+      keyboardVerticalOffset={
+        Platform.select({
+          ios: () => 0,
+          android: () => - sizes.windowHeight
+        })()
+      }
+      // enabled={true}
+      >
+      <ScrollView style={styles.container}
+      contentContainerStyle={{height: sizes.windowHeight, justifyContent: 'space-between'}}
+      >
+        <Text></Text>
+        <LoginForm/>
+        <Redirects/>
+      </ScrollView>
+      </KeyboardAvoidingView>
+      {/* <Buttons/> */}
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  form: {
+    // borderWidth: 1,
+    // borderColor: 'white',
+    // marginTop: -64,
+  },
+  redirects: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  heading: {
+    color: 'white',
+    fontSize: 32,
+    fontWeight: 'bold',
+    // marginTop: 32,
+  },
+})
 
 export default LogIn;
