@@ -51,10 +51,11 @@ export default function AuthProvider({ children }) {
           setErrors({ db: AuthErrors[error.code] })
         }
       },
-      signUp: async (email = EMAIL, password = PASSWORD, userName = USERNAME) => {
+      signUp: async ({email, password, userName}, setErrors) => {
         // setUser('user-2'); //TEMP //TODO: Set up user authentication
 
         try {
+          console.log("Creating your account ...")
           await auth().createUserWithEmailAndPassword(email, password)
           .then(token => {
             // console.log("TOKEN: ", token.user.uid)
@@ -65,6 +66,7 @@ export default function AuthProvider({ children }) {
           })
         } catch (error) {
           console.log(error)
+          setErrors({ db: AuthErrors[error.code] })
         }
       },
       logOut: async () => {

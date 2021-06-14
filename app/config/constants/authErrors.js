@@ -59,7 +59,8 @@ const FIREBASE_AUTH_ERRORS = {
 //   "auth/unauthorized-continue-uri$:": 'The domain of the continue URL is not whitelisted. Whitelist the domain in the Firebase Console.',
 //   "auth/user-not-found$:*": 'There is no existing user record corresponding to the provided identifier.',
 //   "auth/wrong-password$:+$:*": 'The password is invalid or the user does not have a password.',
-  // "auth/too-many-requests$:+$:*": 'We have blocked all requests from this device due to unusual activity. Try again later.' +' Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.'
+//   "auth/too-many-requests$:+$:*": 'We have blocked all requests from this device due to unusual activity. Try again later.' +' Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.',
+//   "auth/email-already-in-use$:+": 'The email address is already in use by another account.',
 }
 
 export default {
@@ -118,5 +119,6 @@ export default {
   "auth/unauthorized-continue-uri": 'The domain of the continue URL is not whitelisted. Whitelist the domain in the Firebase Console.',
   "auth/user-not-found": 'User not found.',
   "auth/wrong-password": 'Incorrect password.',
-  "auth/too-many-requests":  'Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.'
+  "auth/too-many-requests":  'Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.',
+  "auth/email-already-in-use": 'The email address is already in use by another account.',
 }

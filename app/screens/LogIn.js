@@ -83,7 +83,8 @@ function LogIn({ navigation }) {
       .required('Email Address is Required'),
     password: yup
       .string()
-      .min(6, ({ min }) => `Password must be at least ${min} characters`)
+      //TODO: Action URL should link to an interface for users to complete tasks (sign up confirmation, password resets, email address changes)
+      // .min(8, ({ min }) => `Password must be at least ${min} characters`)
       .required('Password is required'),
   })
 
