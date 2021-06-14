@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import AuthErrors from '../config/constants/authErrors';
+import Alert from '../screens/ResetPasswordAlert';
 
 const AuthContext = React.createContext();
 const AuthUpdateContext = React.createContext();
@@ -76,15 +76,18 @@ export default function AuthProvider({ children }) {
           console.log(error)
         }
       },
-      resetPassword: (navigation) => Alert.alert(
-        "Simulating Password Reset",
-        "//TODO resetPassword( )",
-        [{
-          text: 'Return to previous screen',
-          onPress: () => navigation.pop()
-        }],
-        {cancelable: false},
-      ),
+      resetPassword: async ({email}, setErrors, navigation) => {
+        try {
+          console.log("Check your email")
+          await auth().sendPasswordResetEmail(email)
+          .then(() => {
+            navigation.navigate("ResetPasswordAlert")
+          })
+        } catch (error) {
+          console.log(error)
+          setErrors({ db: AuthErrors[error.code] })
+        }
+      }
     }
   }, []);
 

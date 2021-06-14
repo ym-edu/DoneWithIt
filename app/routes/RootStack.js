@@ -22,6 +22,8 @@ import ChildExerciseUpdate from '../screens/ChildExerciseUpdate';
 
 import { useAuth, useAuthUpdate } from '../hooks/useAuth';
 
+import ResetPasswordAlert from '../screens/ResetPasswordAlert';
+
 import TrainStack from './TrainStack';
 
 const Stack = createStackNavigator();
@@ -133,6 +135,13 @@ export default function RootStack() {
       options={modalOptions}
       />
       <Stack.Screen name="TrainStack" component={TrainStack} />
+      <Stack.Screen
+      name="ResetPasswordAlert"
+      component={ResetPasswordAlert}
+      options={{...modalOptions, 
+        cardStyle: { backgroundColor: Platform.OS === 'android' ? '#0000001A' : '#0000001A' }
+      }}
+      />
     </Stack.Navigator>
   );
 }
