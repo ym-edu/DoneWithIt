@@ -90,9 +90,8 @@ function ResetPassword({ navigation }) {
       // enabled={true}
       >
       <ScrollView style={styles.container}
-      contentContainerStyle={{height: sizes.windowHeight, justifyContent: 'space-between'}}
+      contentContainerStyle={{height: sizes.windowHeight, justifyContent: 'space-around'}}
       >
-        <Text></Text>
         <LoginForm/>
         <Redirects/>
       </ScrollView>

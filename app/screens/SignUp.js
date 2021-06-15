@@ -119,9 +119,9 @@ function SignUp({ navigation }) {
       // enabled={true}
       >
       <ScrollView style={styles.container}
-      contentContainerStyle={{height: sizes.windowHeight, justifyContent: 'space-between'}}
+      contentContainerStyle={{height: sizes.screenHeight, justifyContent: 'space-around'}}
+      alwaysBounceVertical={false}
       >
-        <Text></Text>
         <LoginForm/>
         <Redirects/>
       </ScrollView>
