@@ -4,16 +4,14 @@ import { useIcon } from '../layout'
 import Spacer from '../components/Spacer'
 // import { TouchableOpacity } from 'react-native-gesture-handler'; //WTF: somehow this makes button clickable from any screen
 
-function CreateButton({icon, title, style, onPress}) {
+function CreateButton({icon, title, style, onPress, titleStyle}) {
   const Icon = useIcon()
 
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={[styles.container, style]}>
-        <Icon name={icon} fill={true} style={{borderRadius: 4}}/>
+    <TouchableOpacity onPress={onPress} style={[styles.container, style]}>
+        {icon ? <Icon name={icon} fill={true} style={{borderRadius: 4}}/> : null}
         <Spacer mH={8}/>
-        <Text style={styles.title}>{title}</Text>
-      </View>
+        <Text style={[styles.title, titleStyle]}>{title}</Text>
     </TouchableOpacity>
   );
 }
