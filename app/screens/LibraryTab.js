@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, Text } from 'react-native';
 import WorkoutCard from '../components/WorkoutCard';
 import CreateButton from '../components/CreateButton';
 import Spacer from '../components/Spacer';
@@ -25,6 +25,8 @@ function LibraryTab({navigation}) {
           ...doc.data(),
         }));
         setWorkouts(workoutDocs)
+      }, (error) => {
+      console.log(error)
       });
     };
     fetchWorkouts();
@@ -32,8 +34,10 @@ function LibraryTab({navigation}) {
     const getParentExerciseCount = () => {
       unsubscribeFromParentExercises = tally
       .onSnapshot(snapshot => {
-        const tallyDoc = snapshot.data()
+        const tallyDoc = snapshot?.data()
         setExerciseCount(tallyDoc.parentExercise_count) //TODO: Pass count to CreateWorkout as next workout index (spotify like default naming)
+      }, (error) => {
+        console.log(error)
       });
     };
     getParentExerciseCount();
@@ -44,21 +48,8 @@ function LibraryTab({navigation}) {
     };
   }, []);
 
-  return (
-    <>
-      <View style={styles.header}>
-          <WorkoutCard
-          title={'Exercises'}
-          subTitle={exerciseCount}
-          onPress={() => navigation.navigate('Exercises')}
-          />
-          <Spacer mV={32}/>
-          <CreateButton icon={'plus'} title='create workout' onPress={
-            // () => null
-            () => navigation.navigate('CreateWorkout')
-          }/>
-      </View>
-
+  function Content() {
+    return (
       <View style={styles.content}>
         <FlatList
           data={workouts}
@@ -80,6 +71,34 @@ function LibraryTab({navigation}) {
           showsVerticalScrollIndicator={false}
         />
       </View>
+    )
+  }
+
+  function Empty() {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={styles.message}>Looks like you don't have any workouts yet</Text>
+        <Text style={[styles.message, styles.subMessage]}>Create a workout so you can start training for a fitter, healthier body</Text>
+      </View>
+    )
+  }
+
+  return (
+    <>
+      <View style={styles.header}>
+          <WorkoutCard
+          title={'Exercises'}
+          subTitle={exerciseCount}
+          onPress={() => navigation.navigate('Exercises')}
+          />
+          <Spacer mV={32}/>
+          <CreateButton icon={'plus'} title='create workout' onPress={
+            // () => null
+            () => navigation.navigate('CreateWorkout')
+          }/>
+      </View>
+
+      {workouts.length > 0 ? <Content/> : <Empty/>}
     </>
   );
 }
@@ -97,6 +116,17 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 16,
+  },
+  message: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginHorizontal: 16,
+    textAlign: 'center'
+  },
+  subMessage: {
+    color: '#C0C0B87F',
+    fontSize: 16,
   },
 })
 

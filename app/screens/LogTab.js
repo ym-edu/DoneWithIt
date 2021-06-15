@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, FlatList, Button } from 'react-native';
+import { StyleSheet, View, FlatList, Button, Text } from 'react-native';
 import WorkoutSessionCard from '../components/WorkoutSessionCard';
 import Spacer from '../components/Spacer';
 import { useDB } from '../hooks/useDB';
@@ -17,13 +17,15 @@ function LogTab() {
         ...doc.data(),
       }));
       setSessions(workoutSessionDocs)
+    }, (error) => {
+      console.log(error)
     });
     
     return () => unsubscribe()
   }, []);
 
-  return (
-    <View style={styles.container}>
+  function List() {
+    return (
       <FlatList
       data={sessions}
       keyExtractor={item => item.id.toString()}
@@ -38,11 +40,26 @@ function LogTab() {
         duration={item.duration}
         />
       )}
-      contentContainerStyle={{paddingTop: 32, marginHorizontal: 16}}
+      contentContainerStyle={{paddingTop: 32, marginHorizontal: 16, backgroundColor: 'red'}}
       ItemSeparatorComponent={() => <Spacer mV={16}/>}
       ListFooterComponent={() => <Spacer mV={64}/>}
       showsVerticalScrollIndicator={false}
       />
+    )
+  }
+
+  function Empty() {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={styles.message}>Track and compare your workouts</Text>
+        <Text style={[styles.message, styles.subMessage]}>Complete a workout and view your progress here</Text>
+      </View>
+    )
+  }
+
+  return (
+    <View style={styles.container}>
+      {sessions.length > 0 ? <List/> : <Empty/>}
       {/* <Button title='log' onPress={() => {
         console.log(sessions[0].createdOn.toDate())
         console.log(sessions[0].sessionStart.toDate())
@@ -56,6 +73,17 @@ function LogTab() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  message: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginHorizontal: 16,
+    textAlign: 'center'
+  },
+  subMessage: {
+    color: '#C0C0B87F',
+    fontSize: 16,
   },
 })
 
