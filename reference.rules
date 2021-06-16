@@ -1,0 +1,87 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // User auth claims & global level permissions
+    // function getUserEmail() {
+    //   return request.auth.token.email;
+    // }
+    // function isUserVerified() {
+    //   return request.auth.token.email_verified;
+    // }
+    // function customAuthClaim() { //Not likely to be used
+    //   // App Level Permissions
+    //   // - Sign out, sign in || 1hr wait, required to set claims
+    //   // - Limit
+    //   // - Server code (cloud function)
+    //   // server call: admin.auth().setCustomUserClaims(uid, {payedUser: true})
+
+    //   request.auth.token.payedUser == true
+    }
+
+    // Type check incoming data
+    // function isNumber(property) {
+    //   return request.resource.data[property] is number; //null not allowed
+    //   // Additional validation - numeric range
+    //   request.resource.data[property] > 0
+    //   && request.resource.data[property] <= 10;
+    // }
+    // function isString(property) {
+    //   return request.resource.data[property] is string; //null not allowed
+    //   // Aditional validation - character range
+    //   request.resource.data[property].size() > 2
+    //   && request.resource.data[property].size() < 200;
+    // }
+
+    // User signs as official author (cannot write a doc to DB as some other user)
+    // function isCurrentUserAuthor(propertyId) {
+    //   // Create - User creates doc as the owner with their own Id
+    //   request.resource.data[propertyId] == request.auth.uid;
+    //   // Update - User can only update existing doc if it specifies them as the owner
+    //   resource.data[propertyId] == request.auth.uid;
+    // }
+
+    // // User cannot update a property (inmutable property)
+    // function inmutableProperty(property) {
+    //   request.resource.data[property] == resource.data[property];
+    // }
+
+
+
+    function isLoggedIn() {
+      // Does the request come from authorized user
+      return request.auth != null;
+    }
+    function isCurrentUser(userId) {
+      // Does the request's user Id match the doc id being created?
+      return request.auth.uid == userId;
+    }
+
+
+    // Open up database - DEVELOPMENT
+    // match /{document=**} {
+    //   allow read, write;
+    // }
+
+    // Lock down database - PRODUCTION
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+
+    // Create new user doc @ /root
+    match /users/{userId} {
+      allow read: if isLoggedIn();
+      allow create: if isCurrentUser(userId);
+
+
+      match /parentExercises/{parentExerciseId} {
+
+      }
+
+      match /workouts/{workoutId} {
+
+      }
+    }
+
+  }
+}

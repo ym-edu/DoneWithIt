@@ -1,11 +1,38 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-   
-    match /{document=**} {
-      allow read;
-      allow write: if false
+    function isLoggedIn() {
+      // Does the request come from authorized user
+      return request.auth != null;
     }
+    function isCurrentUser(userId) {
+      // Does the request's user Id match the doc id being created?
+      return request.auth.uid == userId;
+    }
+
+
     
+    match /users/{userId} {//@ /root/users
+      allow read: if isLoggedIn();
+      allow create: if isCurrentUser(userId);
+
+
+      match /parentExercises/{parentExerciseId} {//@ /root/users/parentExercises
+        allow read: if isLoggedIn() && isCurrentUser(userId);
+        allow write: if false;
+      }
+
+      match /workouts/{workoutId} {//@ /root/users/workouts
+        allow read: if isLoggedIn() && isCurrentUser(userId);
+        allow write: if false;
+      }
+
+      match /workoutSessions/{workoutSessionId} {//@ /root/users/workoutSessions
+        allow read: if isLoggedIn() && isCurrentUser(userId);
+        allow write: if false;
+      }
+    }
+
+
   }
 }
