@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import { useAuth } from './useAuth';
 
 const DBContext = React.createContext();
 
@@ -9,9 +10,10 @@ export function useDB() {
 }
 
 export default function DBProvider({ children }) {
+  const { user } = useAuth()
   const db = firestore;
 
-  const userRef = firestore().collection("users").doc(auth().currentUser ? auth().currentUser.uid : null);
+  const userRef = firestore().collection("users").doc(user ? auth().currentUser.uid : null);
   const parentExercisesRef = userRef.collection("parentExercises");
   const workoutsRef = userRef.collection("workouts");
   const workoutSessionsRef = userRef.collection("workoutSessions");

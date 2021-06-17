@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import AuthErrors from '../config/constants/authErrors';
-import Alert from '../screens/ResetPasswordAlert';
 
 const AuthContext = React.createContext();
 const AuthUpdateContext = React.createContext();
