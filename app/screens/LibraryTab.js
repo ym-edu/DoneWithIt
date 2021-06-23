@@ -35,7 +35,7 @@ function LibraryTab({navigation}) {
       unsubscribeFromParentExercises = tally
       .onSnapshot(snapshot => {
         if (snapshot.data() !== undefined) {
-          console.log("snapshot", snapshot)
+          // console.log("snapshot", snapshot)
           const tallyDoc = snapshot?.data()
           setExerciseCount(tallyDoc.parentExercise_count) //TODO: Pass count to CreateWorkout as next workout index (spotify like default naming)
         }
