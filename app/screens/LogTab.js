@@ -40,7 +40,7 @@ function LogTab() {
         duration={item.duration}
         />
       )}
-      contentContainerStyle={{paddingTop: 32, marginHorizontal: 16, backgroundColor: 'red'}}
+      contentContainerStyle={{flexGrow: 1, paddingTop: 32, marginHorizontal: 16, backgroundColor: 'transparent'}}
       ItemSeparatorComponent={() => <Spacer mV={16}/>}
       ListFooterComponent={() => <Spacer mV={64}/>}
       showsVerticalScrollIndicator={false}
