@@ -6,33 +6,46 @@ service cloud.firestore {
       return request.auth != null;
     }
     function isCurrentUser(userId) {
-      // Does the request's user Id match the doc id being created?
+      // Does the request's user Id match the user doc's Id?
       return request.auth.uid == userId;
     }
 
 
-    
-    match /users/{userId} {//@ /root/users
+
+    match /users/{userId=**} {//@ /root/users/...
       allow read: if isLoggedIn();
-      allow create: if isCurrentUser(userId);
+    }
+    
+    match /users/{userDocId} {//@ /root/users
+    	allow get: if isCurrentUser(userDocId);
+      allow create: if isCurrentUser(userDocId);
 
 
       match /parentExercises/{parentExerciseId} {//@ /root/users/parentExercises
-        allow read: if isLoggedIn() && isCurrentUser(userId);
-        allow write: if false;
+        allow read: if isCurrentUser(userDocId);
+        allow write: if isCurrentUser(userDocId);
+        
+        
+        match /exerciseSessions/{exerciseSessionId} {
+        	allow read: if isCurrentUser(userDocId);
+        	allow write: if isCurrentUser(userDocId);
+        }
       }
 
       match /workouts/{workoutId} {//@ /root/users/workouts
-        allow read: if isLoggedIn() && isCurrentUser(userId);
-        allow write: if false;
+        allow read: if isCurrentUser(userDocId);
+        allow write: if isCurrentUser(userDocId);
+        
+        match /childExercises/{childExerciseId} {//@ /root/users/workouts/childExercises
+        	allow read: if isCurrentUser(userDocId);
+        	allow write: if isCurrentUser(userDocId);
+        }
       }
 
       match /workoutSessions/{workoutSessionId} {//@ /root/users/workoutSessions
-        allow read: if isLoggedIn() && isCurrentUser(userId);
-        allow write: if false;
+        allow read: if isCurrentUser(userDocId);
+        allow write: if isCurrentUser(userDocId);
       }
     }
-
-
   }
 }
