@@ -1,0 +1,78 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Unlock database - DEVELOPMENT
+    match /{document=**} {
+      allow read, write;
+    }
+
+    // Lock database - PRODUCTION
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+
+
+    // Utility variables
+    function utils() {
+      // App level permissions
+      let isLoggedIn = request.auth.uid != null;
+
+      let isOwner = request.auth.uid == $(USER_ID);
+
+
+      // Auth claims
+      let getUserEmail = request.auth.token.email;
+
+      let isUserVerified = request.auth.token.email_verified;
+
+      let customAuthClaim = request.auth.token.paidUser == true;
+
+
+      // Type validation
+      let isNumber = request.resource.data["PROPERTY"] is number;
+        let isNumberInRange = request.resource.data["PROPERTY"] > 0 && request.resource.data["PROPERTY"] <= 10;
+      
+      let isString = request.resource.data["PROPERTY"] is string;
+        let isStringInRange = request.resource.data["PROPERTY"].size() > 0 && request.resource.data["PROPERTY"].size() < 255;
+
+      let isPresentTime = request.time == request.resource.data["TIMESTAMP_FIELD"];
+
+
+      // Field Validation
+      let isAuthor = request.auth.uid == request.resource.data["UID_FIELD"]; // CREATE
+
+      let belongsTo = request.auth.uid == resource.data["UID_FIELD"]; // UPDATE
+
+
+      // Immutable properties/fields
+      let isFieldUnchanged = request.resource.data["IMMUTABLE_PROPERTY"] = resource.data["IMMUTABLE_PROPERTY"];
+
+      let hasValidFieldUpdates = request.resource.data.keys().hasOnly(["MUTABLE_FIELD_1", "MUTABLE_FIELD_2"]);
+
+
+      // Doc access
+      let DOC_PATH = /databases/$(database)/documents/COLLECTION/$(DOCUMENT_ID);
+
+      let docExists = exists(DOC_PATH);
+
+      let getDoc = get(DOC_PATH);
+        let validateDocProperty = get(DOC_PATH).data["PROPERTY"] == true || get(DOC_PATH).data["PROPERTY"] == 'VALUE';
+
+
+      // Query validation
+      let limitQuery = request.query.limit <= 20;
+
+      let orderQuery = request.query.orderBy["FIELD"] == 'ASC'; // || 'DESC'
+    }
+
+
+
+    // Utility functions
+    function isPaidUser() {
+      return exists(
+        /databases/$(database)/documents/paidUsers/$(request.auth.uid);
+      ) == true;
+    }
+  }
+}
