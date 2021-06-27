@@ -5,17 +5,27 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    function incrementsByOne(field) {
+      let logTitle = debug("** FieldValue Increment **");
+      return debug(request.resource.data[field]) == debug(resource.data[field] + 1);
+    }
+
     match /users/{userId} {//1 @ /root/users/
-      allow read: if request.auth.uid == userId;
+      allow get: if isOwner(userId);
 
-
-      // match /parentExercises/{docId} {//2 @ /root/users/parentExercises
-        // allow read: if true;
+      match /parentExercises/{_tally} {
+        allow create, update: if incrementsByOne("parentExercise_count");
+      }
+      match /parentExercises/{docId} {//2 @ /root/users/parentExercises
+        allow create: if isOwner(userId);
 
     //     match /exerciseSessions/{docId} {//3 @ /root/users/parentExercises/exerciseSessions
 
     //     }
-      // }
+      }
 
     //   match /workouts/{docId} {//2 @ /root/users/workouts
 

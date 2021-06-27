@@ -20,6 +20,9 @@ const mockData = {
   [`users/${mockUser.uid}/parentExercises/exercise-1`]: {
     exerciseName: 'Exercise One',
   },
+  [`users/${mockUser.uid}/parentExercises/_tally`]: {
+    parentExercise_count: 6, // Limit for free users 
+  }
 };
 
 describe('Security Rules', () => {
@@ -35,9 +38,8 @@ describe('Security Rules', () => {
   });
 
   test.todo("FOLLOW CONVENTION: deny/allow (who) to read/write to (what/where)");
-
-
-  test.skip("deny unauthorized users to read/write to any collection", async () => {
+  //================================================================================
+  test("deny unauthorized users to read/write to any collection", async () => {
     const usersRef = db_.collection("users");
 
     const parentExercisesRef = usersRef.doc(mockUser.uid).collection("parentExercises");
@@ -71,15 +73,73 @@ describe('Security Rules', () => {
 
     await Promise.all(promises);
   });
-
-
+  //================================================================================
   test("allow our user to read their own userDoc", async () => {
-    const ref = db.collection("users").doc(mockUser.uid);
-    expect(await assertSucceeds(ref.get()));
+    const ref = db.collection("users");
+    expect(await assertSucceeds(ref.doc(mockUser.uid).get())); // get
   });
 
   test("deny our user to read a userDoc that is not their own", async () => {
-    const ref = db.collection("users").doc(otherId);
-    expect(await assertFails(ref.get()));
+    const ref = db.collection("users");
+    expect(await assertFails(ref.doc(otherId).get())); // get
+    expect(await assertFails(ref.get())); // list
   });
+  //================================================================================
+  /** @ CreateExercise.js
+   * NOTE: each test must run in isolation
+   * unauthorized users (i.e. not logged in or not owner) are denied request by default
+   * delete requests for a _tally doc are denied by default
+   * free users are limited to a parentExercise_count of 6
+   * if a client tries to bypass that limit by setting the count <= 6, the write will fail because each request requires that the count be incremented by 1
+   * if a write to the _tally doc is denied, the whole batch write fails, thus preventing the creation of a new parentExercise
+  */
+
+  test("deny any user ability to delete a parentExercise _tally doc", async () => {
+    const myUser = db.collection("users").doc(mockUser.uid)
+    .collection("parentExercises").doc("_tally");
+    const otherUser = db.collection("users").doc(otherId)
+    .collection("parentExercises").doc("_tally");
+    const nullUser = db_.collection("users").doc(otherId)
+    .collection("parentExercises").doc("_tally");
+
+    const promises = [myUser, otherUser, nullUser].map(async (ref) => {
+      await assertFails(ref.delete())
+    })
+
+    await Promise.all(promises);
+  });
+
+  // This test passing is equivalent to a batch write succeeding
+  test("allow our user to create their own parentExercise only if tally increments by 1", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("parentExercises");
+    expect(await assertSucceeds(ref.add({
+      children_count: 0,
+      exerciseName: 'Exercise One',
+      exerciseName_std: 'Exercise One'.toLowerCase(),
+      video: {
+        endTimeSec: 5,
+        startTimeSec: 10,
+        url: 'ytURL',
+      },
+    })));
+    expect(await assertSucceeds(ref.doc("_tally").set({
+      parentExercise_count: 7,
+    })));
+  });
+  // This test passing is equivalent to a batch write failing
+  test.only("deny our user to create a parentExercise if tally does not increment by 1", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("parentExercises");
+    expect(await assertFails(ref.doc("_tally").set({
+      parentExercise_count: 5,
+    })));
+    expect(await assertFails(ref.doc("_tally").set({
+      parentExercise_count: 6,
+    })));
+    expect(await assertFails(ref.doc("_tally").set({
+      parentExercise_count: 8,
+    })));
+  });
+  //================================================================================
 });
