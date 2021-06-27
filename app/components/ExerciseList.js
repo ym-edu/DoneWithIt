@@ -1,3 +1,6 @@
+/**Security Rules Requirements ✅
+ * onSnapshot() -list- @ parentExercises | allow read: if isOwner
+*/
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
 import Spacer from '../components/Spacer';

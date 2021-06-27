@@ -13,29 +13,29 @@ service cloud.firestore {
       return debug(request.resource.data[field]) == debug(resource.data[field] + 1);
     }
 
-    match /users/{userId} {//1 @ /root/users/
+    match /users/{userId} {//L1 @ /root/users/
       allow get: if isOwner(userId);
 
-      match /parentExercises/{_tally} {
+      match /parentExercises/{_tally} {//L2 @ /root/users/parentExercises/_tally
         allow create, update: if incrementsByOne("parentExercise_count");
       }
-      match /parentExercises/{docId} {//2 @ /root/users/parentExercises
-        allow create: if isOwner(userId);
+      match /parentExercises/{docId} {//L2 @ /root/users/parentExercises
+        allow create, list: if isOwner(userId);
 
-    //     match /exerciseSessions/{docId} {//3 @ /root/users/parentExercises/exerciseSessions
+    //     match /exerciseSessions/{docId} {//L3 @ /root/users/parentExercises/exerciseSessions
 
     //     }
       }
 
-    //   match /workouts/{docId} {//2 @ /root/users/workouts
+    //   match /workouts/{docId} {//L2 @ /root/users/workouts
 
 
-    //     match /childExercises/{docId} {//3 @ /root/users/workouts/childExercises
+    //     match /childExercises/{docId} {//L3 @ /root/users/workouts/childExercises
 
     //     }
     //   }
 
-    //   match /workoutSessions/{docId} {//2 @ /root/users/workoutSessions
+    //   match /workoutSessions/{docId} {//L2 @ /root/users/workoutSessions
 
     //   }
     }

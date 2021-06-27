@@ -32,13 +32,17 @@ describe('Security Rules', () => {
   beforeAll(async () => {
     ({ db, db_ } = await setup(mockUser, mockData));
   });
-
   afterAll(async () => {
     await teardown();
   });
 
+  //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Tests >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   test.todo("FOLLOW CONVENTION: deny/allow (who) to read/write to (what/where)");
   //================================================================================
+  /** @ /root/...
+   * deny all requests to unauthorized users (i.e. non authenticated || not logged in)
+   * deny authorized users any requests to collections/docs that are not their own
+   */
   test("deny unauthorized users to read/write to any collection", async () => {
     const usersRef = db_.collection("users");
 
@@ -61,32 +65,69 @@ describe('Security Rules', () => {
 
     const promises = refs.map(async (ref) => {
       // Read requests
-      await assertFails(ref.doc(mockUser.uid).get()); // get
-      await assertFails(ref.get()); // list
+      await assertFails(ref.doc(mockUser.uid).get()); //get
+      await assertFails(ref.get()); //list
 
       // Write requests
-      await assertFails(ref.add({test: "testing"})); // create
-      await assertFails(ref.doc(mockUser.uid).set({test: "testing"})); // create
-      await assertFails(ref.doc(mockUser.uid).update({test: "testing"})); // update
-      await assertFails(ref.doc(mockUser.uid).delete()); // delete
+      await assertFails(ref.add({test: "testing"})); //create
+      await assertFails(ref.doc(mockUser.uid).set({test: "testing"})); //create
+      await assertFails(ref.doc(mockUser.uid).update({test: "testing"})); //update
+      await assertFails(ref.doc(mockUser.uid).delete()); //delete
+    });
+
+    await Promise.all(promises);
+  });
+
+  test("deny authorized users to read/write to any collection that is not their own", async () => {
+    const usersRef = db.collection("users");
+
+    const parentExercisesRef = usersRef.doc(otherId).collection("parentExercises");
+    const exerciseSessionsRef = parentExercisesRef.doc("exercise-1").collection("exerciseSessions");
+
+    const workoutsRef = usersRef.doc(otherId).collection("workouts");
+    const childExercisesRef = workoutsRef.doc("workout-1").collection("childExercises");
+
+    const workoutSessionsRef = usersRef.doc(otherId).collection("workoutSessions");
+
+    const refs = [
+      usersRef,
+      parentExercisesRef,
+      exerciseSessionsRef,
+      workoutsRef,
+      childExercisesRef,
+      workoutSessionsRef,
+    ];
+
+    const promises = refs.map(async (ref) => {
+      // Read requests
+      await assertFails(ref.doc(otherId).get()); //get
+      await assertFails(ref.get()); //list
+
+      // Write requests
+      await assertFails(ref.add({test: "testing"})); //create
+      await assertFails(ref.doc(otherId).set({test: "testing"})); //create
+      await assertFails(ref.doc(otherId).update({test: "testing"})); //update
+      await assertFails(ref.doc(otherId).delete()); //delete
     });
 
     await Promise.all(promises);
   });
   //================================================================================
+  /** @ /root/users
+   * 
+   */
   test("allow our user to read their own userDoc", async () => {
     const ref = db.collection("users");
-    expect(await assertSucceeds(ref.doc(mockUser.uid).get())); // get
+    expect(await assertSucceeds(ref.doc(mockUser.uid).get())); //get
   });
 
   test("deny our user to read a userDoc that is not their own", async () => {
     const ref = db.collection("users");
-    expect(await assertFails(ref.doc(otherId).get())); // get
-    expect(await assertFails(ref.get())); // list
+    expect(await assertFails(ref.doc(otherId).get())); //get
+    expect(await assertFails(ref.get())); //list
   });
   //================================================================================
-  /** @ CreateExercise.js
-   * NOTE: each test must run in isolation
+  /** @ /root/users/parentExercises - CreateExercise.js
    * unauthorized users (i.e. not logged in or not owner) are denied request by default
    * delete requests for a _tally doc are denied by default
    * free users are limited to a parentExercise_count of 6
@@ -94,26 +135,32 @@ describe('Security Rules', () => {
    * if a write to the _tally doc is denied, the whole batch write fails, thus preventing the creation of a new parentExercise
   */
 
-  test("deny any user ability to delete a parentExercise _tally doc", async () => {
-    const myUser = db.collection("users").doc(mockUser.uid)
-    .collection("parentExercises").doc("_tally");
-    const otherUser = db.collection("users").doc(otherId)
-    .collection("parentExercises").doc("_tally");
-    const nullUser = db_.collection("users").doc(otherId)
-    .collection("parentExercises").doc("_tally");
+  test("deny our user ability to delete their parentExercise _tally doc", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("parentExercises").doc("_tally");
+    expect(await assertFails(ref.delete()))
+  });
 
-    const promises = [myUser, otherUser, nullUser].map(async (ref) => {
-      await assertFails(ref.delete())
-    })
-
-    await Promise.all(promises);
+  // This test passing is equivalent to a batch write failing
+  test("deny our user to create a parentExercise if tally does not increment by 1", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("parentExercises");
+    expect(await assertFails(ref.doc("_tally").set({ //create
+      parentExercise_count: 5,
+    })));
+    expect(await assertFails(ref.doc("_tally").set({ //create
+      parentExercise_count: 6,
+    })));
+    expect(await assertFails(ref.doc("_tally").set({ //create
+      parentExercise_count: 8,
+    })));
   });
 
   // This test passing is equivalent to a batch write succeeding
   test("allow our user to create their own parentExercise only if tally increments by 1", async () => {
     const ref = db.collection("users").doc(mockUser.uid)
                   .collection("parentExercises");
-    expect(await assertSucceeds(ref.add({
+    expect(await assertSucceeds(ref.add({ //create
       children_count: 0,
       exerciseName: 'Exercise One',
       exerciseName_std: 'Exercise One'.toLowerCase(),
@@ -123,23 +170,18 @@ describe('Security Rules', () => {
         url: 'ytURL',
       },
     })));
-    expect(await assertSucceeds(ref.doc("_tally").set({
+    expect(await assertSucceeds(ref.doc("_tally").set({ //create
       parentExercise_count: 7,
     })));
   });
-  // This test passing is equivalent to a batch write failing
-  test.only("deny our user to create a parentExercise if tally does not increment by 1", async () => {
+  //================================================================================
+  /** @ /root/users/parentExercises - ExerciseList.js
+   * user can only list their own parentExercises
+   * TODO: lazy load or limit request payload
+  */
+  test("allow our user to read their own list of parentExercises", async () => {
     const ref = db.collection("users").doc(mockUser.uid)
                   .collection("parentExercises");
-    expect(await assertFails(ref.doc("_tally").set({
-      parentExercise_count: 5,
-    })));
-    expect(await assertFails(ref.doc("_tally").set({
-      parentExercise_count: 6,
-    })));
-    expect(await assertFails(ref.doc("_tally").set({
-      parentExercise_count: 8,
-    })));
+    expect(await assertSucceeds(ref.get())) //list
   });
-  //================================================================================
 });
