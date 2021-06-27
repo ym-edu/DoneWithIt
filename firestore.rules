@@ -6,7 +6,7 @@ service cloud.firestore {
     }
 
     match /users/{userId} {//1 @ /root/users/
-      allow read, write: if false;
+      allow read: if request.auth.uid == userId;
 
 
       // match /parentExercises/{docId} {//2 @ /root/users/parentExercises

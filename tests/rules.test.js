@@ -1,8 +1,8 @@
 import { assertFails, assertSucceeds } from "@firebase/rules-unit-testing";
 import { setup, teardown } from './helpers';
 
-const myId = "valid-user";
-const theirId = "invalid-user";
+const myId = "my-user";
+const otherId = "other-user";
 
 const mockUser = {
   uid: myId,
@@ -12,7 +12,10 @@ const mockUser = {
 // Each key represents a path in the database - "COLLECTION/DOC": {DATA_PAYLOAD}
 const mockData = {
   [`users/${mockUser.uid}`]: {
-    userName: 'Test User',
+    userName: 'My User',
+  },
+  [`users/${otherId}`]: {
+    userName: 'Other User',
   },
   [`users/${mockUser.uid}/parentExercises/exercise-1`]: {
     exerciseName: 'Exercise One',
@@ -20,21 +23,22 @@ const mockData = {
 };
 
 describe('Security Rules', () => {
-  let db, udb; // db for authorized requests (i.e. logged in user), otherwise udb
+  let db, db_; // db for authorized requests (i.e. logged in user), otherwise db_
 
   // Applies only to tests in this describe block
   beforeAll(async () => {
-    ({ db, udb } = await setup(mockUser, mockData));
+    ({ db, db_ } = await setup(mockUser, mockData));
   });
 
   afterAll(async () => {
     await teardown();
   });
 
-  test.todo("FOLLOW CONVENTION: deny/allow (who) read/write to (where)");
+  test.todo("FOLLOW CONVENTION: deny/allow (who) to read/write to (what/where)");
 
-  test.only("deny unauthorized users read/write to any collection", async () => {
-    const usersRef = udb.collection("users");
+
+  test.skip("deny unauthorized users to read/write to any collection", async () => {
+    const usersRef = db_.collection("users");
 
     const parentExercisesRef = usersRef.doc(mockUser.uid).collection("parentExercises");
     const exerciseSessionsRef = parentExercisesRef.doc("exercise-1").collection("exerciseSessions");
@@ -66,5 +70,16 @@ describe('Security Rules', () => {
     });
 
     await Promise.all(promises);
+  });
+
+
+  test("allow our user to read their own userDoc", async () => {
+    const ref = db.collection("users").doc(mockUser.uid);
+    expect(await assertSucceeds(ref.get()));
+  });
+
+  test("deny our user to read a userDoc that is not their own", async () => {
+    const ref = db.collection("users").doc(otherId);
+    expect(await assertFails(ref.get()));
   });
 });

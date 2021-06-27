@@ -17,7 +17,7 @@ export const setup = async (auth, data) => { // auth: mock user, data: mock data
   const db = authorizedClient.firestore();
 
   const unauthorizedClient = initializeTestApp({ projectId: PROJECT_ID });
-  const udb = unauthorizedClient.firestore();
+  const db_ = unauthorizedClient.firestore();
 
   // Seed DB before applying rules
   if (data) {
@@ -35,7 +35,7 @@ export const setup = async (auth, data) => { // auth: mock user, data: mock data
     rules: readFileSync('firestore.rules', 'utf8'),
   });
 
-  return { db, udb };
+  return { db, db_ };
 };
 
 // Delete app when done
