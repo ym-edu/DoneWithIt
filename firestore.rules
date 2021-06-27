@@ -1,49 +1,33 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isLoggedIn() {
-      return request.auth.uid != null;
-    }
-    function isOwner(userId) {
-      return request.auth.uid == userId;
+    match /{document=**} {//0 @ /root/...
+      allow read, write: if false;
     }
 
+    match /users/{userId} {//1 @ /root/users/
+      allow read, write: if false;
 
 
-    match /users/{userId=**} {//@ /root/users/...
-      allow read: if isLoggedIn();
-    }
-    
-    match /users/{userDocId} {//@ /root/users
-    	allow get: if isOwner(userDocId);
-      allow create: if isOwner(userDocId);
+      // match /parentExercises/{docId} {//2 @ /root/users/parentExercises
+        // allow read: if true;
+
+    //     match /exerciseSessions/{docId} {//3 @ /root/users/parentExercises/exerciseSessions
+
+    //     }
+      // }
+
+    //   match /workouts/{docId} {//2 @ /root/users/workouts
 
 
-      match /parentExercises/{parentExerciseId} {//@ /root/users/parentExercises
-        allow read: if isOwner(userDocId);
-        allow write: if isOwner(userDocId);
-        
-        
-        match /exerciseSessions/{exerciseSessionId} {//@ /root/users/parentExercises/exerciseSessions
-        	allow read: if isOwner(userDocId);
-        	allow write: if isOwner(userDocId);
-        }
-      }
+    //     match /childExercises/{docId} {//3 @ /root/users/workouts/childExercises
 
-      match /workouts/{workoutId} {//@ /root/users/workouts
-        allow read: if isOwner(userDocId);
-        allow write: if isOwner(userDocId);
-        
-        match /childExercises/{childExerciseId} {//@ /root/users/workouts/childExercises
-        	allow read: if isOwner(userDocId);
-        	allow write: if isOwner(userDocId);
-        }
-      }
+    //     }
+    //   }
 
-      match /workoutSessions/{workoutSessionId} {//@ /root/users/workoutSessions
-        allow read: if isOwner(userDocId);
-        allow write: if isOwner(userDocId);
-      }
+    //   match /workoutSessions/{docId} {//2 @ /root/users/workoutSessions
+
+    //   }
     }
   }
 }
