@@ -326,12 +326,35 @@ describe('Security Rules', () => {
    * TODO: validate fields
   */
 
- test("allow user to update their own workout", async () => {
-  const ref = db.collection("users").doc(mockUser.uid)
-                .collection("workouts");
+  test("allow user to update their own workout", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("workouts");
 
-  expect(await assertSucceeds(ref.doc("workout-1").update({ //update
-    workoutName: "Workout One Updated",
-  })));
- });
+    expect(await assertSucceeds(ref.doc("workout-1").update({ //update
+      workoutName: "Workout One Updated",
+    })));
+  });
+  //================================================================================
+  /** @ /root/users/workouts - ExerciseOptions.js
+   * IMPORTANT: Requires Cloud Function to truly prevent workout_count bypass
+   * unauthorized users (i.e. not logged in or not owner) are denied request by default
+   * user can only delete their own workouts
+   * each request requires that the count be decremented by 1
+   * if a write to the _tally doc is denied, the whole batch write fails, thus preventing the deletion of a new parentExercise
+  */
+
+   test("allow our user to delete their own parentExercises only if tally decrements by 1", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("workouts");
+                  
+    //Check for invalid update
+    expect(await assertFails(ref.doc("_tally").update({
+      workout_count: 4,
+    })));
+    
+    expect(await assertSucceeds(ref.doc("workout-1").delete())); //delete
+    expect(await assertSucceeds(ref.doc("_tally").update({
+      workout_count: 3,
+    })));
+  });
 });
