@@ -309,12 +309,29 @@ describe('Security Rules', () => {
    test("allow our user to read their own list of workouts", async () => {
     const ref = db.collection("users").doc(mockUser.uid)
                   .collection("workouts");
+
     expect(await assertSucceeds(ref.get())) //list
   });
-  
+
   test("allow our user to read their own exercise total", async () => {
     const ref = db.collection("users").doc(mockUser.uid)
                   .collection("parentExercises").doc("_tally");
+
     expect(await assertSucceeds(ref.get())) //get
   });
+  //================================================================================
+  /** @ /root/users/workouts - UpdateWorkout.js
+   * user can only update their own workouts
+   * all fields are mutable
+   * TODO: validate fields
+  */
+
+ test("allow user to update their own workout", async () => {
+  const ref = db.collection("users").doc(mockUser.uid)
+                .collection("workouts");
+
+  expect(await assertSucceeds(ref.doc("workout-1").update({ //update
+    workoutName: "Workout One Updated",
+  })));
+ });
 });

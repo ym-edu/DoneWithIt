@@ -42,6 +42,7 @@ service cloud.firestore {
       }
       match /workouts/{workoutId} {//L2 @ /root/users/workouts
         allow create, read: if isOwner(userId);
+        allow update: if isOwner(userId) && notTallyDoc(workoutId);
 
         match /childExercises/{docId} {//L3 @ /root/users/workouts/childExercises
           allow create: if isOwner(userId);
