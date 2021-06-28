@@ -1,3 +1,7 @@
+/**Security Rules Requirements ✅
+ * onSnapshot() -list- @ workouts | allow list: if is owner 
+ * onSnapshot() -get- @ parentExercises/_tally | allow get: if is owner
+*/
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
 import WorkoutCard from '../components/WorkoutCard';

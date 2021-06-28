@@ -299,4 +299,22 @@ describe('Security Rules', () => {
       childExercise_index: 0,
     })));
   });
+  //================================================================================
+  /** @ /root/users/workouts - LibraryTab.js
+   * user can only list their own workouts
+   * user can only get their total exercise count
+   * TODO: validate that data requested is in ascending order
+  */
+
+   test("allow our user to read their own list of workouts", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("workouts");
+    expect(await assertSucceeds(ref.get())) //list
+  });
+  
+  test("allow our user to read their own exercise total", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("parentExercises").doc("_tally");
+    expect(await assertSucceeds(ref.get())) //get
+  });
 });

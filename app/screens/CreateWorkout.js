@@ -1,5 +1,5 @@
 /**Security Rules Requirements ✅
- * set() -create- @ worktous | allow create: if isOwner
+ * set() -create- @ workouts | allow create: if isOwner
  * set() -create,update- @ workouts/_tally | allow create/update: if incrementsByOne
  * set() -create,update- @ childExercises/_tally | allow create/update: if incrementsByOne
 */

@@ -29,7 +29,7 @@ service cloud.firestore {
         || decrementsByOne("parentExercise_count");
       }
       match /parentExercises/{parentExerciseId} {//L2 @ /root/users/parentExercises
-        allow create, list: if isOwner(userId);
+        allow create, list, get: if isOwner(userId);
         allow update, delete: if isOwner(userId) && notTallyDoc(parentExerciseId);
     //     match /exerciseSessions/{docId} {//L3 @ /root/users/parentExercises/exerciseSessions
 
@@ -41,7 +41,7 @@ service cloud.firestore {
         || decrementsByOne("workout_count");
       }
       match /workouts/{workoutId} {//L2 @ /root/users/workouts
-        allow create: if isOwner(userId);
+        allow create, read: if isOwner(userId);
 
         match /childExercises/{docId} {//L3 @ /root/users/workouts/childExercises
           allow create: if isOwner(userId);
