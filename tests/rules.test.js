@@ -147,13 +147,13 @@ describe('Security Rules', () => {
                   .collection("parentExercises");
     expect(await assertFails(ref.doc("_tally").set({ //create
       parentExercise_count: 5,
-    })));
+    }, { merge: true })));
     expect(await assertFails(ref.doc("_tally").set({ //create
       parentExercise_count: 6,
-    })));
+    }, { merge: true })));
     expect(await assertFails(ref.doc("_tally").set({ //create
       parentExercise_count: 8,
-    })));
+    }, { merge: true })));
   });
 
   // This test passing is equivalent to a batch write succeeding
@@ -177,6 +177,7 @@ describe('Security Rules', () => {
   //================================================================================
   /** @ /root/users/parentExercises - ExerciseList.js
    * user can only list their own parentExercises
+   * TODO: validate that data requested is in ascending order
    * TODO: lazy load or limit request payload
   */
   test("allow our user to read their own list of parentExercises", async () => {
@@ -184,4 +185,17 @@ describe('Security Rules', () => {
                   .collection("parentExercises");
     expect(await assertSucceeds(ref.get())) //list
   });
+  //================================================================================
+  /** @ /root/users/parentExercises - ParentExerciseUpdate.js
+   * user can only update their own parentExercises
+   * all fields are mutable
+   * TODO: validate fields
+  */
+ test("allow user to update their own parentExercise", async () => {
+  const ref = db.collection("users").doc(mockUser.uid)
+                .collection("parentExercises");
+  expect(await assertSucceeds(ref.doc("exercise-1").update({ //update
+    exerciseName: "Exercise One Updated"
+  })));
+ });
 });

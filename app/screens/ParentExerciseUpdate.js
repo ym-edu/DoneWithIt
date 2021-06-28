@@ -1,3 +1,7 @@
+/**Security Rules Requirements ✅
+ * update() -update- @ parentExercises | allow update: if isOwner
+ * TODO: consider implementing type validation
+*/
 import React from 'react';
 import { useKeyboard } from '@react-native-community/hooks';
 import { StyleSheet, View, ScrollView, Platform } from 'react-native';
