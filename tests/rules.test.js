@@ -128,6 +128,7 @@ describe('Security Rules', () => {
   });
   //================================================================================
   /** @ /root/users/parentExercises - CreateExercise.js
+   * * IMPORTANT: Requires Cloud Function to truly prevent parentExercise_count bypass
    * unauthorized users (i.e. not logged in or not owner) are denied request by default
    * delete requests for a _tally doc are denied by default
    * free users are limited to a parentExercise_count of 6
@@ -141,8 +142,8 @@ describe('Security Rules', () => {
     expect(await assertFails(ref.delete()))
   });
 
-  // This test passing is equivalent to a batch write failing
-  test("deny our user to create a parentExercise if tally does not increment by 1", async () => {
+  //CLOUD FUNCTION REQUIRED - This test passing is equivalent to a batch write failing
+  test.skip("deny our user to create a parentExercise if tally does not increment by 1", async () => {
     const ref = db.collection("users").doc(mockUser.uid)
                   .collection("parentExercises");
     expect(await assertFails(ref.doc("_tally").set({ //create
@@ -160,6 +161,12 @@ describe('Security Rules', () => {
   test("allow our user to create their own parentExercise only if tally increments by 1", async () => {
     const ref = db.collection("users").doc(mockUser.uid)
                   .collection("parentExercises");
+
+    //Check for invalid update
+    expect(await assertFails(ref.doc("_tally").update({
+      parentExercise_count: 6,
+    })));
+
     expect(await assertSucceeds(ref.add({ //create
       children_count: 0,
       exerciseName: 'Exercise One',
@@ -180,6 +187,7 @@ describe('Security Rules', () => {
    * TODO: validate that data requested is in ascending order
    * TODO: lazy load or limit request payload
   */
+
   test("allow our user to read their own list of parentExercises", async () => {
     const ref = db.collection("users").doc(mockUser.uid)
                   .collection("parentExercises");
@@ -191,6 +199,7 @@ describe('Security Rules', () => {
    * all fields are mutable
    * TODO: validate fields
   */
+
  test("allow user to update their own parentExercise", async () => {
   const ref = db.collection("users").doc(mockUser.uid)
                 .collection("parentExercises");
@@ -198,4 +207,43 @@ describe('Security Rules', () => {
     exerciseName: "Exercise One Updated"
   })));
  });
+ //================================================================================
+  /** @ /root/users/parentExercises - ExerciseOptions.js
+   * IMPORTANT: Requires Cloud Function to truly prevent parentExercise_count bypass
+   * unauthorized users (i.e. not logged in or not owner) are denied request by default
+   * user can only delete their own parentExercises
+   * each request requires that the count be decremented by 1
+   * if a write to the _tally doc is denied, the whole batch write fails, thus preventing the deletion of a new parentExercise
+  */
+  
+  //CLOUD FUNCTION REQUIRED - This test passing is equivalent to a batch write failing
+  test.skip("deny our user updates to a parentExercise if tally does not decrement by 1", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+    .collection("parentExercises").doc("_tally");
+
+    expect(await assertFails(ref.update({ //update
+      parentExercise_count: 5,
+    })));
+    expect(await assertFails(ref.update({ //update
+      parentExercise_count: 7,
+    })));
+    expect(await assertFails(ref.update({ //update
+      parentExercise_count: 8,
+    })));
+  });
+
+  test("allow our user to delete their own parentExercises only if tally decrements by 1", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("parentExercises");
+                  
+    //Check for invalid update
+    expect(await assertFails(ref.doc("_tally").update({
+      parentExercise_count: 7,
+    })));
+    
+    expect(await assertSucceeds(ref.doc("exercise-1").delete())); //delete
+    expect(await assertSucceeds(ref.doc("_tally").update({
+      parentExercise_count: 6,
+    })));
+  });
 });

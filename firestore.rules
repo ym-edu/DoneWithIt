@@ -12,6 +12,10 @@ service cloud.firestore {
       let logTitle = debug("** FieldValue Increment **");
       return debug(request.resource.data[field]) == debug(resource.data[field] + 1);
     }
+    function decrementsByOne(field) {
+      let logTitle = debug("** FieldValue Decrement **");
+      return debug(request.resource.data[field]) == debug(resource.data[field] - 1);
+    }
     function notTallyDoc(docId) {
       let logTitle = debug("** Current Document Id **");
       return debug(docId) != "_tally";
@@ -21,12 +25,12 @@ service cloud.firestore {
       allow get: if isOwner(userId);
 
       match /parentExercises/{_tally} {//L2 @ /root/users/parentExercises/_tally
-        allow create, update: if incrementsByOne("parentExercise_count");
+        allow update: if incrementsByOne("parentExercise_count")
+        || decrementsByOne("parentExercise_count");
       }
       match /parentExercises/{parentExerciseId} {//L2 @ /root/users/parentExercises
         allow create, list: if isOwner(userId);
-        allow update: if isOwner(userId) && notTallyDoc(parentExerciseId);
-
+        allow update, delete: if isOwner(userId) && notTallyDoc(parentExerciseId);
     //     match /exerciseSessions/{docId} {//L3 @ /root/users/parentExercises/exerciseSessions
 
     //     }
