@@ -35,14 +35,18 @@ service cloud.firestore {
 
     //     }
       }
+      
+      match /workouts/{_tally} {
+        allow update: if incrementsByOne("workout_count")
+        || decrementsByOne("workout_count");
+      }
+      match /workouts/{workoutId} {//L2 @ /root/users/workouts
+        allow create: if isOwner(userId);
 
-    //   match /workouts/{docId} {//L2 @ /root/users/workouts
-
-
-    //     match /childExercises/{docId} {//L3 @ /root/users/workouts/childExercises
-
-    //     }
-    //   }
+        match /childExercises/{docId} {//L3 @ /root/users/workouts/childExercises
+          allow create: if isOwner(userId);
+        }
+      }
 
     //   match /workoutSessions/{docId} {//L2 @ /root/users/workoutSessions
 
