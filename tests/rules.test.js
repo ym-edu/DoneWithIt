@@ -28,17 +28,20 @@ const mockData = {
   [`users/${mockUser.uid}/workouts/workout-1`]: {
     workoutName: 'Exercise One',
   },
+  [`users/${mockUser.uid}/workouts/workout-2`]: {
+    workoutName: 'Exercise One',
+  },
   [`users/${mockUser.uid}/workouts/_tally`]: {
     workout_count: 3, // Limit for free users 
   },
 
-  // [`users/${mockUser.uid}/workouts/workout-1/childExercises/exercise-1`]: {
-  //   childExerciseName: 'Exercise One',
-  // },
-  // [`users/${mockUser.uid}/workouts/workout-1/childExercises/_tally`]: {
-  //   childExercise_count: 10, // Limit for free users
-  //   childExercise_index: 10,
-  // },
+  [`users/${mockUser.uid}/workouts/workout-2/childExercises/exercise-1`]: {
+    childExerciseName: 'Exercise One',
+  },
+  [`users/${mockUser.uid}/workouts/workout-2/childExercises/_tally`]: {
+    childExercise_count: 0, // Limit for free users
+    childExercise_index: 0,
+  },
 };
 
 describe('Security Rules', () => {
@@ -356,5 +359,69 @@ describe('Security Rules', () => {
     expect(await assertSucceeds(ref.doc("_tally").update({
       workout_count: 3,
     })));
+  });
+  //================================================================================
+  /** @ /root/users/childExercises - AddExercises.js
+   * * IMPORTANT: Requires Cloud Function to truly prevent childExercise_count bypass
+   * unauthorized users (i.e. not logged in or not owner) are denied request by default
+   * delete requests for a _tally doc are denied by default
+   * free users are limited to a childExercise_count of 10
+   * if a client tries to bypass that limit by setting the count <= 10, the write will fail because each request requires that the count be incremented by 1
+   * if a write to the _tally doc is denied, the whole batch write fails, thus preventing the creation of a new parentExercise
+   * TODO: validate that index is equal to current index of iteration
+  */
+
+   test("deny our user ability to delete their childExercise _tally doc", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("workouts").doc("workout-2")
+                  .collection("childExercises").doc("_tally");
+    expect(await assertFails(ref.delete()))
+  });
+
+  // This test passing is equivalent to a batch write succeeding
+  test("allow our user to add their own childExercises only if tally increments by 1", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("workouts").doc("workout-2")
+                  .collection("childExercises");
+
+    let promises = [];
+
+    for (let i = 1; i <= 10; i++) {
+      // Check for invalid update
+      promises.push(await assertFails(ref.doc("_tally").update({
+        childExercise_count: i - 1,
+      })));
+
+      promises.push(await assertSucceeds(ref.add({ //create
+        exerciseName: `Exercise ${i}`,
+        exerciseName_std: `Exercise ${i}`.toLowerCase(),
+        video: {
+          endTimeSec: 5,
+          startTimeSec: 10,
+          url: 'ytURL',
+        },
+        mode: {
+          current: "fixedReps",
+          fixedReps: 8,
+          repsToFailure: 12,
+          fixedTime: 30000,
+          timeToFailure: 90000,
+        },
+        parentExercise_ref: "parentExercise-1",
+        position: i - 1,
+        weight: {
+          current: "kg",
+          kg: 5,
+          lb: 12,
+        }
+      })));
+
+      promises.push(await assertSucceeds(ref.doc("_tally").set({ //create
+        childExercise_count: 0 + i,
+        childExercise_index: i - 1,
+      })));
+    }
+
+    await Promise.all(promises);
   });
 });
