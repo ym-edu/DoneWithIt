@@ -49,7 +49,7 @@ service cloud.firestore {
         || decrementsByOne("childExercise_count");
         }
         match /childExercises/{childExerciseId} {//L3 @ /root/users/workouts/childExercises
-          allow create: if isOwner(userId);
+          allow create, list, get: if isOwner(userId);
           allow update: if isOwner(userId) && notTallyDoc(childExerciseId);
         }
       }

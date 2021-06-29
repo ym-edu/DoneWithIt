@@ -309,7 +309,7 @@ describe('Security Rules', () => {
    * TODO: validate that data requested is in ascending order
   */
 
-   test("allow our user to read their own list of workouts", async () => {
+  test("allow our user to read their own list of workouts", async () => {
     const ref = db.collection("users").doc(mockUser.uid)
                   .collection("workouts");
 
@@ -423,5 +423,27 @@ describe('Security Rules', () => {
     }
 
     await Promise.all(promises);
+  });
+  //================================================================================
+  /** @ /root/users/childExercises - Workout.js
+   * user can only list their own childExercises
+   * user can only get their total childExercise_count
+   * TODO: validate that data requested is in ascending order
+  */
+
+   test("allow our user to read their own list of childExercises", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("workouts").doc("workout-2")
+                  .collection("childExercises");
+
+    expect(await assertSucceeds(ref.get())) //list
+  });
+
+  test("allow our user to read their own childExercise_count", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("workouts").doc("workout-2")
+                  .collection("childExercises").doc("_tally");
+
+    expect(await assertSucceeds(ref.get())) //get
   });
 });
