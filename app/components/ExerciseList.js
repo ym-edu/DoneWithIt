@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, Text } from 'react-native';
 import Spacer from '../components/Spacer';
 import ExerciseCard from '../components/ExerciseCard';
 // import subtitle from '../temp/subTitle'; //Children exercises
@@ -35,6 +35,8 @@ function ExerciseList({ variant, selection, setSelection }) {
         isEditing: false,
       }));
       setExercises(exerciseDocs)
+    }, (error) => {
+      console.log(error)
     });
     
     return () => unsubscribe() //IMPORTANT: Never return function without callback
@@ -47,7 +49,8 @@ function ExerciseList({ variant, selection, setSelection }) {
     }
   }, [exercises])
 
-  return (
+  function Content() {
+    return (
       <View style={{flex: 1}}>
         <FlatList style={styles.flatlist}
           data={exercises}
@@ -77,6 +80,22 @@ function ExerciseList({ variant, selection, setSelection }) {
           showsVerticalScrollIndicator={false}
         />
       </View>
+    )
+  }
+
+  function Empty() {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={styles.message}>Limitless exercises to choose from</Text>
+        <Text style={[styles.message, styles.subMessage]}>Create an exercise from any youtube video snippet and add it to your workout</Text>
+      </View>
+    )
+  }
+
+  return (
+    <>
+      {exercises.lenth > 0 ? <Content/> : <Empty/>}
+    </>
   );
 }
 
@@ -88,6 +107,17 @@ const styles = StyleSheet.create({
     flex: 1,
     // width: '100%',
     // height: '100%',
+  },
+  message: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginHorizontal: 16,
+    textAlign: 'center'
+  },
+  subMessage: {
+    color: '#C0C0B87F',
+    fontSize: 16,
   },
 })
 
