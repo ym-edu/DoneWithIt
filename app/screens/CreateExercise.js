@@ -1,3 +1,7 @@
+/**Security Rules Requirements ✅
+ * set() -create- @ parentExercises | allow create: if isOwner
+ * set() -create,update- @ parentExercises/_tally | allow create/update: if incrementsByOne
+*/
 import React from 'react';
 import { useKeyboard } from '@react-native-community/hooks';
 import { StyleSheet, View, ScrollView, Platform, Text } from 'react-native';

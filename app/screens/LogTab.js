@@ -1,3 +1,8 @@
+/**Security Rules Requirements ☑️ TODO
+ * onSnapshot() -list- @ workoutSessions/tally |
+ * set() -create- @ exerciseSessions |
+ * set() -create- @ workoutSessions |
+*/
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, FlatList, Button, Text } from 'react-native';
 import WorkoutSessionCard from '../components/WorkoutSessionCard';

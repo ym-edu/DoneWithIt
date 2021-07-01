@@ -1,3 +1,8 @@
+/**Security Rules Requirements ✅
+ * set() -create- @ workouts | allow create: if isOwner
+ * set() -create,update- @ workouts/_tally | allow create/update: if incrementsByOne
+ * set() -create,update- @ childExercises/_tally | allow create/update: if incrementsByOne
+*/
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, KeyboardAvoidingView } from 'react-native';
 import TextInput from '../components/TextInput';

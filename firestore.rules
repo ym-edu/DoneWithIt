@@ -1,48 +1,77 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isLoggedIn() {
-      return request.auth.uid != null;
+    match /{document=**} {//0 @ /root/...
+      allow read, write: if false;
     }
+
     function isOwner(userId) {
       return request.auth.uid == userId;
     }
-
-
-
-    match /users/{userId=**} {//@ /root/users/...
-      allow read: if isLoggedIn();
+    function incrementsByOne(field) {
+      // let logTitle = debug("** FieldValue Increment **");
+      return debug(request.resource.data[field]) == debug(resource.data[field] + 1);
     }
-    
-    match /users/{userDocId} {//@ /root/users
-    	allow get: if isOwner(userDocId);
-      allow create: if isOwner(userDocId);
+    function decrementsByOne(field) {
+      // let logTitle = debug("** FieldValue Decrement **");
+      return debug(request.resource.data[field]) == debug(resource.data[field] - 1);
+    }
+    function notTallyDoc(docId) {
+      // let logTitle = debug("** Current Document Id **");
+      return debug(docId) != "_tally";
+    }
+    function hasValidFieldUpdates(fields) {
+      // let logTitle = debug("** List Affected Keys **");
+      let affectedKeys = request.resource.data.diff(resource.data).affectedKeys();
+      return debug(affectedKeys).hasOnly(fields);
+    }
+    function isPresentTime(field) {
+      // let logTitle = debug("** Timestamp Comparison Log **");
+      return request.time == request.resource.data[field];
+    }
 
+    match /users/{userId} {//L1 @ /root/users/
+      allow get: if isOwner(userId);
 
-      match /parentExercises/{parentExerciseId} {//@ /root/users/parentExercises
-        allow read: if isOwner(userDocId);
-        allow write: if isOwner(userDocId);
-        
-        
-        match /exerciseSessions/{exerciseSessionId} {//@ /root/users/parentExercises/exerciseSessions
-        	allow read: if isOwner(userDocId);
-        	allow write: if isOwner(userDocId);
+      match /parentExercises/{_tally} {//L2 @ /root/users/parentExercises/_tally
+        allow update: if incrementsByOne("parentExercise_count")
+        || decrementsByOne("parentExercise_count");
+      }
+      match /parentExercises/{parentExerciseId} {//L2 @ /root/users/parentExercises
+        allow create, list, get: if isOwner(userId);
+        allow update, delete: if isOwner(userId) && notTallyDoc(parentExerciseId);
+
+        match /exerciseSessions/{docId} {//L3 @ /root/users/parentExercises/exerciseSessions
+          allow create, read: if isOwner(userId);
+        }
+      }
+      
+      match /workouts/{_tally} {
+        allow update: if incrementsByOne("workout_count")
+        || decrementsByOne("workout_count");
+      }
+      match /workouts/{workoutId} {//L2 @ /root/users/workouts
+        allow create, read: if isOwner(userId);
+        allow update, delete: if isOwner(userId) && notTallyDoc(workoutId);
+
+        match /childExercises/{_tally} {
+          allow update: if incrementsByOne("childExercise_count")
+        || decrementsByOne("childExercise_count");
+        }
+        match /childExercises/{childExerciseId} {//L3 @ /root/users/workouts/childExercises
+          allow create, list, get: if isOwner(userId);
+          allow update: if isOwner(userId) && notTallyDoc(childExerciseId) && hasValidFieldUpdates(["weight", "mode", "position"]);
+          allow delete: if isOwner(userId) && notTallyDoc(childExerciseId);
         }
       }
 
-      match /workouts/{workoutId} {//@ /root/users/workouts
-        allow read: if isOwner(userDocId);
-        allow write: if isOwner(userDocId);
-        
-        match /childExercises/{childExerciseId} {//@ /root/users/workouts/childExercises
-        	allow read: if isOwner(userDocId);
-        	allow write: if isOwner(userDocId);
-        }
+      match /workoutSessions/{_tally} {
+        allow update: if incrementsByOne("workoutSession_count")
+        || decrementsByOne("workoutSession_count");
       }
-
-      match /workoutSessions/{workoutSessionId} {//@ /root/users/workoutSessions
-        allow read: if isOwner(userDocId);
-        allow write: if isOwner(userDocId);
+      match /workoutSessions/{workoutSessionId} {//L2 @ /root/users/workoutSessions
+        allow create: if isOwner(userId) && isPresentTime("createdOn");
+        allow read: if isOwner(userId);
       }
     }
   }

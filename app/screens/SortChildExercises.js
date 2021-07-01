@@ -1,3 +1,6 @@
+/**Security Rules Requirements ✅
+ * update() -update- @ childExercises | allow update: if is owner
+*/
 import React, { useState, useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import DraggableFlatList from "react-native-draggable-flatlist";

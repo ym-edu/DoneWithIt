@@ -1,3 +1,7 @@
+/**Security Rules Requirements ✅
+ * delete() -delete- @ workouts | allow delete: if is owner
+ * update() -update- @ workouts/_tally | allow update: if is owner && decrementsByOne
+*/
 import React, { useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import TextButton from '../components/TextButton';

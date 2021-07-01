@@ -1,3 +1,10 @@
+/**Security Rules Requirements ✅
+ * delete() -delete- @ parentExercises | allow delete: if isOwner
+ * update() -update- @ parentExercises/_tally | allow update: if decrementsByOne
+ * 
+ * delete() -delete- @ childExercises | allow delete: if isOwner
+ * update() -update- @ childExercises/_tally | allow update: if decrementsByOne
+*/
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 import { useIcon } from '../layout';

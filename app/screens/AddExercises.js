@@ -1,3 +1,7 @@
+/**Security Rules Requirements ✅
+ * set() -create- @ childExercises | allow create: if is owner
+ * set() -update- @ childExercises/_tally | allow update: if is owner && incrementsByOne
+*/
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import TextButton from '../components/TextButton';
