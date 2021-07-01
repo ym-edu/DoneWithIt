@@ -1,3 +1,8 @@
+/**Security Rules Requirements ☑️
+ * set() -create,update- @ workoutSessions/tally |
+ * set() -create- @ exerciseSessions |
+ * set() -create- @ workoutSessions |
+*/
 import React, { useReducer, useEffect } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import Exercise from './Exercise';

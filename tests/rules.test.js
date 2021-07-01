@@ -1,4 +1,5 @@
 import { assertFails, assertSucceeds } from "@firebase/rules-unit-testing";
+import { date } from "yup";
 import { setup, teardown } from './helpers';
 
 const myId = "my-user";
@@ -548,4 +549,44 @@ describe('Security Rules', () => {
       childExercise_count: 9,
     })));
   });
+  //================================================================================
+  /** @ /root/users/workoutSessions - Train.js //UNFINISHED
+   * * IMPORTANT: Requires Cloud Function to truly prevent workoutSession_count bypass
+   * unauthorized users (i.e. not logged in or not owner) are denied request by default
+   * delete requests for a _tally doc are denied by default
+   * free users are limited to a workoutSession_count of 6
+   * if a client tries to bypass that limit by setting the count <= 6, the write will fail because each request requires that the count be incremented by 1
+   * if a write to the _tally doc is denied, the whole batch write fails, thus preventing the creation of a new parentExercise
+  */
+
+  //  test.only("deny our user ability to delete their workoutSessions _tally doc", async () => {
+  //   const ref = db.collection("users").doc(mockUser.uid)
+  //                 .collection("workoutSessions").doc("_tally");
+  //   expect(await assertFails(ref.delete()))
+  // });
+
+  // // This test passing is equivalent to a batch write succeeding
+  // test.only("allow our user to create their own workoutSession only if tally increments by 1", async () => {
+  //   const ref = db.collection("users").doc(mockUser.uid)
+  //                 .collection("workoutSessions");
+
+  //   //Check for invalid update
+  //   expect(await assertFails(ref.doc("_tally").update({
+  //     workoutSession_count: 5,
+  //   })));
+
+  //   expect(await assertSucceeds(ref.add({ //create
+  //     completedExercisesCount: 1,
+  //     createdOn: new Date(),
+  //     duration: 30000,
+  //     exerciseCount: 6,
+  //     exercises: [{exerciseName: "Exercise One"}],
+  //     sessionEnd: Date.now(),
+  //     sessionStart: Date.now()
+  //   })));
+
+  //   expect(await assertSucceeds(ref.doc("_tally").set({ //create
+  //     workoutSession_count: 6,
+  //   })));
+  // });
 });

@@ -9,21 +9,25 @@ service cloud.firestore {
       return request.auth.uid == userId;
     }
     function incrementsByOne(field) {
-      let logTitle = debug("** FieldValue Increment **");
+      // let logTitle = debug("** FieldValue Increment **");
       return debug(request.resource.data[field]) == debug(resource.data[field] + 1);
     }
     function decrementsByOne(field) {
-      let logTitle = debug("** FieldValue Decrement **");
+      // let logTitle = debug("** FieldValue Decrement **");
       return debug(request.resource.data[field]) == debug(resource.data[field] - 1);
     }
     function notTallyDoc(docId) {
-      let logTitle = debug("** Current Document Id **");
+      // let logTitle = debug("** Current Document Id **");
       return debug(docId) != "_tally";
     }
     function hasValidFieldUpdates(fields) {
-      let logTitle = debug("** List Affected Keys **");
+      // let logTitle = debug("** List Affected Keys **");
       let affectedKeys = request.resource.data.diff(resource.data).affectedKeys();
       return debug(affectedKeys).hasOnly(fields);
+    }
+    function isPresentTime(field) {
+      // let logTitle = debug("** Timestamp Comparison Log **");
+      return request.time == request.resource.data[field];
     }
 
     match /users/{userId} {//L1 @ /root/users/
@@ -36,9 +40,10 @@ service cloud.firestore {
       match /parentExercises/{parentExerciseId} {//L2 @ /root/users/parentExercises
         allow create, list, get: if isOwner(userId);
         allow update, delete: if isOwner(userId) && notTallyDoc(parentExerciseId);
-    //     match /exerciseSessions/{docId} {//L3 @ /root/users/parentExercises/exerciseSessions
 
-    //     }
+        match /exerciseSessions/{docId} {//L3 @ /root/users/parentExercises/exerciseSessions
+          allow create, read: if isOwner(userId);
+        }
       }
       
       match /workouts/{_tally} {
@@ -60,9 +65,14 @@ service cloud.firestore {
         }
       }
 
-    //   match /workoutSessions/{docId} {//L2 @ /root/users/workoutSessions
-
-    //   }
+      match /workoutSessions/{_tally} {
+        allow update: if incrementsByOne("workoutSession_count")
+        || decrementsByOne("workoutSession_count");
+      }
+      match /workoutSessions/{workoutSessionId} {//L2 @ /root/users/workoutSessions
+        allow create: if isOwner(userId) && isPresentTime("createdOn");
+        allow read: if isOwner(userId);
+      }
     }
   }
 }
