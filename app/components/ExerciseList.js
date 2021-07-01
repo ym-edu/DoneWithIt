@@ -35,8 +35,6 @@ function ExerciseList({ variant, selection, setSelection }) {
         isEditing: false,
       }));
       setExercises(exerciseDocs)
-    }, (error) => {
-      console.log(error)
     });
     
     return () => unsubscribe() //IMPORTANT: Never return function without callback
@@ -49,40 +47,6 @@ function ExerciseList({ variant, selection, setSelection }) {
     }
   }, [exercises])
 
-  function Content() {
-    return (
-      <View style={{flex: 1}}>
-        <FlatList style={styles.flatlist}
-          data={exercises}
-          keyExtractor={data => data.id.toString()}
-
-          renderItem={({ item, index }) => (
-            <ExerciseCard
-              url={item.video.url}
-              title={item.exerciseName}
-       
-              variant={variant}
-
-              data={{id: item.id, name: item.exerciseName, video: item.video}}
-              
-              selection={selection}
-              setSelection={setSelection}
-
-              isMenuOpen={isMenuOpen}
-              handleMenuState={handleMenuState}
-
-              index={index}
-            />
-          )}
-          contentContainerStyle={{paddingTop: 16, marginHorizontal: 16}}
-          // ItemSeparatorComponent={() => <Spacer mV={8}/>}
-          ListFooterComponent={() => <Spacer mV={64}/>}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
-    )
-  }
-
   function Empty() {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -93,9 +57,37 @@ function ExerciseList({ variant, selection, setSelection }) {
   }
 
   return (
-    <>
-      {exercises.lenth > 0 ? <Content/> : <Empty/>}
-    </>
+      <View style={{flex: 1}}>
+        {exercises.length > 0 ? 
+          <FlatList style={styles.flatlist}
+            data={exercises}
+            keyExtractor={data => data.id.toString()}
+
+            renderItem={({ item, index }) => (
+              <ExerciseCard
+                url={item.video.url}
+                title={item.exerciseName}
+        
+                variant={variant}
+
+                data={{id: item.id, name: item.exerciseName, video: item.video}}
+                
+                selection={selection}
+                setSelection={setSelection}
+
+                isMenuOpen={isMenuOpen}
+                handleMenuState={handleMenuState}
+
+                index={index}
+              />
+            )}
+            contentContainerStyle={{paddingTop: 16, marginHorizontal: 16}}
+            // ItemSeparatorComponent={() => <Spacer mV={8}/>}
+            ListFooterComponent={() => <Spacer mV={64}/>}
+            showsVerticalScrollIndicator={false}
+          /> :
+          <Empty/>}
+      </View>
   );
 }
 
