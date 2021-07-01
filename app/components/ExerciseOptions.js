@@ -1,4 +1,4 @@
-/**Security Rules Requirements ☑️
+/**Security Rules Requirements ✅
  * delete() -delete- @ parentExercises | allow delete: if isOwner
  * update() -update- @ parentExercises/_tally | allow update: if decrementsByOne
  * 

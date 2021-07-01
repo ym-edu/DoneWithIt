@@ -56,6 +56,7 @@ service cloud.firestore {
         match /childExercises/{childExerciseId} {//L3 @ /root/users/workouts/childExercises
           allow create, list, get: if isOwner(userId);
           allow update: if isOwner(userId) && notTallyDoc(childExerciseId) && hasValidFieldUpdates(["weight", "mode", "position"]);
+          allow delete: if isOwner(userId) && notTallyDoc(childExerciseId);
         }
       }
 

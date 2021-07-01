@@ -516,12 +516,36 @@ describe('Security Rules', () => {
         fixedTime: 90000,
         timeToFailure: 30000,
       },
-      position: 1,
+      position: 11,
       weight: {
         current: "lb",
         kg: 12,
         lb: 6,
       },
+    })));
+  });
+  //================================================================================
+  /** @ /root/users/workouts/workout-2/childExercises - ExerciseOptions.js
+   * IMPORTANT: Requires Cloud Function to truly prevent workout_count bypass
+   * unauthorized users (i.e. not logged in or not owner) are denied request by default
+   * user can only delete their own childExercises
+   * each request requires that the count be decremented by 1
+   * if a write to the _tally doc is denied, the whole batch write fails, thus preventing the deletion of a new parentExercise
+  */
+
+  test("allow our user to delete their own childExercises only if tally decrements by 1", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("workouts").doc("workout-2")
+                  .collection("childExercises");
+                  
+    //Check for invalid update
+    expect(await assertFails(ref.doc("_tally").update({
+      childExercise_count: 10,
+    })));
+    
+    expect(await assertSucceeds(ref.doc("exercise-1").delete())); //delete
+    expect(await assertSucceeds(ref.doc("_tally").update({
+      childExercise_count: 9,
     })));
   });
 });
