@@ -36,7 +36,27 @@ const mockData = {
   },
 
   [`users/${mockUser.uid}/workouts/workout-2/childExercises/exercise-1`]: {
-    childExerciseName: 'Exercise One',
+    exerciseName: `Exercise One`,
+    exerciseName_std: `Exercise One`.toLowerCase(),
+    video: {
+      endTimeSec: 5,
+      startTimeSec: 10,
+      url: 'ytURL',
+    },
+    mode: {
+      current: "fixedReps",
+      fixedReps: 8,
+      repsToFailure: 12,
+      fixedTime: 30000,
+      timeToFailure: 90000,
+    },
+    parentExercise_ref: "parentExercise-1",
+    position: 10,
+    weight: {
+      current: "kg",
+      kg: 6,
+      lb: 12,
+    },
   },
   [`users/${mockUser.uid}/workouts/workout-2/childExercises/_tally`]: {
     childExercise_count: 0, // Limit for free users
@@ -361,7 +381,7 @@ describe('Security Rules', () => {
     })));
   });
   //================================================================================
-  /** @ /root/users/childExercises - AddExercises.js
+  /** @ /root/users/workouts/workout-2/childExercises - AddExercises.js
    * * IMPORTANT: Requires Cloud Function to truly prevent childExercise_count bypass
    * unauthorized users (i.e. not logged in or not owner) are denied request by default
    * delete requests for a _tally doc are denied by default
@@ -425,7 +445,7 @@ describe('Security Rules', () => {
     await Promise.all(promises);
   });
   //================================================================================
-  /** @ /root/users/childExercises - Workout.js
+  /** @ /root/users/workouts/workout-2/childExercises - Workout.js
    * user can only list their own childExercises
    * user can only get their total childExercise_count
    * TODO: validate that data requested is in ascending order
@@ -445,5 +465,63 @@ describe('Security Rules', () => {
                   .collection("childExercises").doc("_tally");
 
     expect(await assertSucceeds(ref.get())) //get
+  });
+  //================================================================================
+  /** @ /root/users/workouts/workout-2/childExercises - ChildExerciseUpdate.js && SortChildExercises.js
+   * user can only update their own childExercises
+   * IMPORTANT: not all fields are mutable
+   * TODO: validate fields
+  */
+
+  test("deny user updates to childExercise immutable fields", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("workouts").doc("workout-2")
+                  .collection("childExercises").doc("exercise-1");
+
+    expect(await assertFails(ref.update({ //update
+      exerciseName: `Test Exercise`,
+      exerciseName_std: `Test Exercise`.toLowerCase(),
+      video: {
+        endTimeSec: 10,
+        startTimeSec: 15,
+        url: 'YTurl',
+      },
+      mode: {
+        current: "fixedTime",
+        fixedReps: 12,
+        repsToFailure: 8,
+        fixedTime: 90000,
+        timeToFailure: 30000,
+      },
+      parentExercise_ref: "parentExercise-2",
+      position: 1,
+      weight: {
+        current: "lb",
+        kg: 12,
+        lb: 6,
+      },
+    })));
+  });
+
+  test("allow user updates to childExercise mutable fields", async () => {
+    const ref = db.collection("users").doc(mockUser.uid)
+                  .collection("workouts").doc("workout-2")
+                  .collection("childExercises").doc("exercise-1");
+
+    expect(await assertSucceeds(ref.update({ //update
+      mode: {
+        current: "fixedTime",
+        fixedReps: 12,
+        repsToFailure: 8,
+        fixedTime: 90000,
+        timeToFailure: 30000,
+      },
+      position: 1,
+      weight: {
+        current: "lb",
+        kg: 12,
+        lb: 6,
+      },
+    })));
   });
 });

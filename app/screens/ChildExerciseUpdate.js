@@ -1,3 +1,6 @@
+/**Security Rules Requirements ✅
+ * update() -update- @ childExercises | allow update: if is owner
+*/
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, KeyboardAvoidingView } from 'react-native';
 import TextButton from '../components/TextButton';

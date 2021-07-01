@@ -20,6 +20,11 @@ service cloud.firestore {
       let logTitle = debug("** Current Document Id **");
       return debug(docId) != "_tally";
     }
+    function hasValidFieldUpdates(fields) {
+      let logTitle = debug("** List Affected Keys **");
+      let affectedKeys = request.resource.data.diff(resource.data).affectedKeys();
+      return debug(affectedKeys).hasOnly(fields);
+    }
 
     match /users/{userId} {//L1 @ /root/users/
       allow get: if isOwner(userId);
@@ -50,7 +55,7 @@ service cloud.firestore {
         }
         match /childExercises/{childExerciseId} {//L3 @ /root/users/workouts/childExercises
           allow create, list, get: if isOwner(userId);
-          allow update: if isOwner(userId) && notTallyDoc(childExerciseId);
+          allow update: if isOwner(userId) && notTallyDoc(childExerciseId) && hasValidFieldUpdates(["weight", "mode", "position"]);
         }
       }
 
