@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextInput, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { useEffect } from 'react/cjs/react.development';
 
 function WeightInput({style, data, setWeightState, reset}) {
   const [value, setValue] = useState('');

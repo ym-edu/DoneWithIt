@@ -2,7 +2,7 @@
  * update() -update- @ parentExercises | allow update: if isOwner
  * TODO: consider implementing type validation
 */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useKeyboard } from '@react-native-community/hooks';
 import { StyleSheet, View, ScrollView, Platform } from 'react-native';
 import Spacer from '../components/Spacer';
@@ -14,7 +14,6 @@ import TextInput from '../components/TextInput';
 import sizes from '../config/constants/sizes';
 
 import { useDB } from '../hooks/useDB';
-import { useEffect } from 'react/cjs/react.development';
 
 function CreateExercise({ navigation, route: {params: {exercise}}}) {
   const { parentExercises } = useDB();
