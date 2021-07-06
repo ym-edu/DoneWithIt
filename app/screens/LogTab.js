@@ -4,10 +4,11 @@
  * set() -create- @ workoutSessions |
 */
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, FlatList, Button, Text } from 'react-native';
+import { StyleSheet, View, FlatList, Button, Text, SectionList } from 'react-native';
 import WorkoutSessionCard from '../components/WorkoutSessionCard';
 import Spacer from '../components/Spacer';
 import { useDB } from '../hooks/useDB';
+import dayjs from 'dayjs';
 
 function LogTab() {
   const { workoutSessions } = useDB();
@@ -62,14 +63,72 @@ function LogTab() {
     )
   }
 
+  function groupBy(list, unit = 'day', field) {
+    const group = {};
+
+    for(let session of list) {
+      const unix = dayjs.unix(session[field]["seconds"]).startOf(unit).unix();
+      const date = new Date(unix * 1000);
+      const yy = date.getFullYear().toString().padStart(2, "0");
+      const mm = date.getMonth().toString().padStart(2, "0");
+      const dd = date.getDate().toString().padStart(2, "0");
+
+      const key = '' + yy + '-' + mm + '-' + dd;
+
+      if(group[key] == null) {
+        group[key] = [];
+      }
+      group[key].push(session);
+    }
+
+    return group;
+  }
+
+  function section(data) {
+    const groups = groupBy(data, 'day', 'sessionEnd');
+
+    const keys = Object.keys(groups);
+
+    const sections = keys.map(key => {
+      return { title: key, data: groups[key] }
+    });
+
+    return sections
+  }
+
+  // function SectionedList() {
+  //   return (
+  //     <SectionList
+  //     sections={section(sessions)}
+  //     keyExtractor={(item, index) => item + index}
+  //     renderItem={({ item }) => (
+  //       <WorkoutSessionCard
+  //       createdOn={item.createdOn?.toDate()}
+  //       sessionStart={item.sessionStart?.toDate()}
+  //       sessionEnd={item.sessionEnd?.toDate()}
+  //       workoutName={item.workoutName}
+  //       exerciseCount={item.exerciseCount}
+  //       completedExerciseCount={item.completedExercisesCount}
+  //       duration={item.duration}
+  //       />
+  //     )}
+  //     renderSectionHeader={({ section: { title } }) => (
+  //       <Text>{title}</Text>
+  //     )}
+  //     ItemSeparatorComponent={() => {
+  //       return(
+  //         <Spacer mV={8}/>
+  //       )
+  //     }}
+  //     />
+  //   )
+  // }
+
   return (
     <View style={styles.container}>
       {sessions.length > 0 ? <List/> : <Empty/>}
       {/* <Button title='log' onPress={() => {
-        console.log(sessions[0].createdOn.toDate())
-        console.log(sessions[0].sessionStart.toDate())
-        console.log(sessions[1].sessionEnd.toDate())
-        // console.log(sessionStart)
+        console.log(section(sessions))
       }}/> */}
     </View>
   );
