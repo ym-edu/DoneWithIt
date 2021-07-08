@@ -104,7 +104,9 @@ function Workout({ navigation, route: { params: {id, workoutName}}}) {
       <View style={styles.footer}>
         <Spacer mV={8}
         style={{width: '100%', borderTopWidth: 1, borderTopColor: '#383B3B',}}/>
-        <TextButton onPress={() => {
+        <TextButton
+        disabled={exerciseCount <= 0 ? true : false}
+        onPress={() => {
           navigation.navigate("TrainStack", {
             screen: "Train", params: {exercises: exercises, workoutName: workoutName, workoutId: id}
           })
@@ -116,9 +118,19 @@ function Workout({ navigation, route: { params: {id, workoutName}}}) {
     )
   }
 
+  function Empty() {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={styles.message}>Nothing to train with here</Text>
+        <Text style={[styles.message, styles.subMessage]}>Add some exercises to begin training</Text>
+      </View>
+    )
+  }
+
   return (
     <>
     <View style={styles.container}>
+      {invertedExercises.length > 0 ? 
       <FlatList style={styles.flatlist}
         data={invertedExercises}
         keyExtractor={item => item.id.toString()}
@@ -145,6 +157,7 @@ function Workout({ navigation, route: { params: {id, workoutName}}}) {
         ListFooterComponent={() => <WorkoutHeader/>}
         showsVerticalScrollIndicator={false}
       />
+      : <Empty/>}
     </View>
 
     <Footer/>
@@ -176,7 +189,18 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-  }
+  },
+  message: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginHorizontal: 16,
+    textAlign: 'center'
+  },
+  subMessage: {
+    color: '#C0C0B87F',
+    fontSize: 16,
+  },
 })
 
 export default Workout;

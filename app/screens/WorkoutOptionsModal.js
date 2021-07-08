@@ -38,7 +38,9 @@ function WorkoutOptionsModal({navigation, route: { params: {exercises, workoutId
       }}>
         Add Exercises
       </TextButton>
-      <TextButton onPress={() => navigation.navigate("SortChildExercises", {
+      <TextButton
+      disabled={exercises.length > 0 ? false : true}
+      onPress={() => navigation.navigate("SortChildExercises", {
         exercises: exercises,
         workoutId: workoutId,
       })} style={styles.button}>
