@@ -4,9 +4,9 @@ import Media from './Media'
 import Details from './Details'
 import Spacer from './Spacer'
 
-function WorkoutCard({url, title='my workout', subTitle = 0, onPress}) {
+function WorkoutCard({url, title='my workout', subtitle, onPress, main}) {
   function formatSubtitle(data) {
-    return `${data} exercises`
+    return data === 0 || data > 1 ? `${data} exercises` : `${data} exercise`
   }
 
   return (
@@ -14,7 +14,7 @@ function WorkoutCard({url, title='my workout', subTitle = 0, onPress}) {
       <View style={styles.container}>
         <Media source={url} square={true}/>
         <Spacer mH={8}/>
-        <Details title={title} subTitle={formatSubtitle(subTitle)}/>
+        <Details title={title} subtitle={main ? formatSubtitle(subtitle) : null}/>
       </View>
     </TouchableOpacity>
   );

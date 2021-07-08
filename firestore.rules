@@ -54,14 +54,16 @@ service cloud.firestore {
         allow create, read: if isOwner(userId);
         allow update, delete: if isOwner(userId) && notTallyDoc(workoutId);
 
-        match /childExercises/{_tally} {
-          allow update: if incrementsByOne("childExercise_count")
-        || decrementsByOne("childExercise_count");
-        }
+        // match /childExercises/{_tally} {
+        //   allow update: if incrementsByOne("childExercise_count")
+        // || decrementsByOne("childExercise_count");
+        // }
         match /childExercises/{childExerciseId} {//L3 @ /root/users/workouts/childExercises
           allow create, list, get: if isOwner(userId);
-          allow update: if isOwner(userId) && notTallyDoc(childExerciseId) && hasValidFieldUpdates(["weight", "mode", "position"]);
-          allow delete: if isOwner(userId) && notTallyDoc(childExerciseId);
+          allow update: if isOwner(userId) 
+          // && notTallyDoc(childExerciseId) && hasValidFieldUpdates(["weight", "mode", "position"]);
+          allow delete: if isOwner(userId) 
+          // && notTallyDoc(childExerciseId);
         }
       }
 
