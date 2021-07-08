@@ -1,10 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import { useLoop, useLoopUpdate } from '../hooks/useLoop';
 import sizes from '../config/constants/sizes';
 import CustomLabel from '../components/CustomLabel'
-import { useEffect } from 'react/cjs/react.development';
 
 function Slider() {
   const { duration, scrollEnabled, currentTime, values, data } = useLoop();
