@@ -61,7 +61,7 @@ export default function AuthProvider({ children }) {
             firestore().collection("users").doc(token.user.uid).set({
               // userName,
               // userName_std: userName.toLowerCase(),
-              email,
+              email: email.toLowerCase(),
             })
           })
         } catch (error) {

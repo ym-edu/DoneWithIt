@@ -10,6 +10,10 @@ import Spacer from '../components/Spacer';
 import { useDB } from '../hooks/useDB';
 import dayjs from 'dayjs';
 
+import { TestIds, BannerAd, BannerAdSize } from '@react-native-firebase/admob';
+const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-2742026173933447/2734085062';
+
+
 function LogTab() {
   const { workoutSessions } = useDB();
   const [sessions, setSessions] = useState([]);
@@ -32,6 +36,7 @@ function LogTab() {
 
   function List() {
     return (
+      <>
       <FlatList
       data={sessions}
       keyExtractor={item => item.id.toString()}
@@ -51,6 +56,15 @@ function LogTab() {
       ListFooterComponent={() => <Spacer mV={64}/>}
       showsVerticalScrollIndicator={false}
       />
+      <BannerAd
+      unitId={adUnitId}
+      size={BannerAdSize.ADAPTIVE_BANNER}
+      requestOptions={{
+        requestNonPersonalizedAdsOnly: true,
+        keywords: ['fitness', 'exercise'],
+      }}
+      />
+      </>
     )
   }
 

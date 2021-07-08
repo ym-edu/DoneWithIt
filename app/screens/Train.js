@@ -10,6 +10,14 @@ import Spacer from '../components/Spacer';
 import TextButton from '../components/TextButton';
 import { useDB } from '../hooks/useDB';
 // import Rest from './Rest';
+import { InterstitialAd, TestIds, AdEventType } from '@react-native-firebase/admob';
+// ============================================================================
+const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-2742026173933447/1142883362';
+const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+  requestNonPersonalizedAdsOnly: true,
+  keywords: ['fitness', 'exercise'],
+});
+// ============================================================================
 
 const MODES = {
   REPS_FIXED: 'repsFixed',
@@ -167,9 +175,24 @@ function Train({navigation, route:{params:{exercises, workoutName, workoutId}}})
   const {db, parentExercises, workoutSessions, timestamp: TIMESTAMP, increment } = useDB()
 
   const [store, dispatch] = useReducer(reducer, exercises, initializer);
+  const [loaded, setLoaded] = React.useState(false);
 
   useEffect(() => {
     dispatch({ type: 'setTime' })
+
+  // ############################################################################
+    const eventListener = interstitial.onAdEvent(type => {
+      if (type === AdEventType.LOADED) {
+        setLoaded(true);
+      }
+    });
+    // Start loading the interstitial straight away
+    interstitial.load();
+  // ############################################################################
+  // Unsubscribe from events on unmount
+    return () => {
+      eventListener(); // Unsubscribe from ad event listener
+    };
   }, [])
 
   function Buttons() {
@@ -250,6 +273,10 @@ function Train({navigation, route:{params:{exercises, workoutName, workoutId}}})
         <Spacer mV={8} style={styles.line}/>
         <TextButton onPress={() => {
           navigation.navigate("TrainComplete", { items: store.items, workoutName: workoutName, stats: handleSubmit() })
+
+          if (loaded) {
+            interstitial.show();
+          }
         }}>
           finish workout
         </TextButton>
