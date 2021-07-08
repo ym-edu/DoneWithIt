@@ -31,7 +31,7 @@ service cloud.firestore {
     }
 
     match /users/{userId} {//L1 @ /root/users/
-      allow get: if isOwner(userId);
+      allow get, create: if isOwner(userId);
 
       match /parentExercises/{_tally} {//L2 @ /root/users/parentExercises/_tally
         allow update: if incrementsByOne("parentExercise_count")
@@ -70,7 +70,7 @@ service cloud.firestore {
         || decrementsByOne("workoutSession_count");
       }
       match /workoutSessions/{workoutSessionId} {//L2 @ /root/users/workoutSessions
-        allow create: if isOwner(userId) && isPresentTime("createdOn");
+        allow create: if isOwner(userId);
         allow read: if isOwner(userId);
       }
     }
