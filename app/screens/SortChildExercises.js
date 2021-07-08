@@ -2,7 +2,7 @@
  * update() -update- @ childExercises | allow update: if is owner
 */
 import React, { useState, useCallback } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import ExerciseCard from '../components/ExerciseCard';
 import Spacer from '../components/Spacer';
@@ -69,9 +69,19 @@ function SortChildExercises({ navigation, route: { params: { exercises, workoutI
     );
   }, []);
 
+  function Empty() {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={styles.message}>This workout doesn't have any exercises to sort</Text>
+        <Text style={[styles.message, styles.subMessage]}></Text>
+      </View>
+    )
+  }
+
   return (
     <>
      <View style={styles.container}>
+        {data.length > 0 ? 
         <DraggableFlatList style={styles.flatlist}
         data={data}
         keyExtractor={data => data.id.toString()}
@@ -90,6 +100,7 @@ function SortChildExercises({ navigation, route: { params: { exercises, workoutI
         ListFooterComponent={() => <Spacer mV={64}/>}
         showsVerticalScrollIndicator={false}
         />
+        : <Empty/>}
       </View>
       <View style={styles.footer}>
         <Spacer mV={2} style={styles.line}/>
@@ -140,6 +151,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 32,
     paddingVertical: 8
+  },
+  message: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginHorizontal: 16,
+    textAlign: 'center'
+  },
+  subMessage: {
+    color: '#C0C0B87F',
+    fontSize: 16,
   },
 })
 

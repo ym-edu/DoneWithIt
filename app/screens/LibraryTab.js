@@ -69,7 +69,6 @@ function LibraryTab({navigation}) {
               // () => null
             }
             title={item.workoutName}
-            subTitle={item.parentExerciseCount}
             />
           )}
           ItemSeparatorComponent={() => <Spacer mV={8}/>}
@@ -95,8 +94,9 @@ function LibraryTab({navigation}) {
       <View style={styles.header}>
           <WorkoutCard
           title={'Exercises'}
-          subTitle={exerciseCount}
+          subtitle={exerciseCount}
           onPress={() => navigation.navigate('Exercises')}
+          main={true}
           />
           <Spacer mV={32}/>
           <CreateButton icon={'plus'} title='create workout' onPress={

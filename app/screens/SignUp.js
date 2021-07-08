@@ -14,8 +14,8 @@ function SignUp({ navigation }) {
 
   const loginValidationSchema = yup.object().shape({
     userName: yup
-      .string()
-      .required('Username is Required'),
+      .string(),
+      // .required('Username is Required'),
     email: yup
       .string()
       .email("Please enter valid email")
@@ -45,7 +45,7 @@ function SignUp({ navigation }) {
 
             {/* <Text style={{color: 'white', fontWeight: 'bold'}}>Log in to continue</Text> */}
           </View>
-          <Spacer mV={16}/>
+          {/* <Spacer mV={16}/>
           {(errors.userName && touched.userName) &&
           <Text style={{fontSize: 12, color: '#D03050'}}>{errors.userName}</Text>}
           <FormikInput
@@ -54,7 +54,7 @@ function SignUp({ navigation }) {
             value={values.userName}
             label={'UserName'}
             keyboardType='default'
-          />
+          /> */}
           <Spacer mV={16}/>
           {(errors.email && touched.email) &&
           <Text style={{fontSize: 12, color: '#D03050'}}>{errors.email}</Text>}

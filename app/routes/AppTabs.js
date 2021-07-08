@@ -3,7 +3,8 @@ import { Platform } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import { useIcon } from '../layout';
-import { Explore, Log } from '../screens';
+import { Ionicons } from '@expo/vector-icons';
+import { Settings, Log } from '../screens';
 import LibraryStack from './LibraryStack';
 
 
@@ -14,7 +15,7 @@ export default function AppTabs() {
 
   return (
       <Tab.Navigator
-      initialRouteName="Explore"
+      initialRouteName="Library"
       backBehavior="none"
       shifting={true}
       labeled={true}
@@ -25,18 +26,16 @@ export default function AppTabs() {
       barStyle={{ maxHeight: 54 }} //WTF: IDKY ios had thicker height        
       >
         <Tab.Screen
-        name="Explore"
-        component={Explore}
+        name="Library"
+        // component={Library}
+        children={LibraryStack}
         options={{
-          tabBarVisible: false,
-          tabBarLabel: 'Explore',
+          tabBarLabel: 'Library',
           tabBarIcon: ({color}) => (
-            <Icon name="explore" size={24} color={color} style={{marginTop: -12}}/>
+            <Icon name="layer" size={24} color={color} style={{marginTop: -12}}/>
           ),
         }}
         />
-
-
 
         <Tab.Screen
         name="Log"
@@ -49,16 +48,14 @@ export default function AppTabs() {
         }}
         />
 
-
-
         <Tab.Screen
-        name="Library"
-        // component={Library}
-        children={LibraryStack}
+        name="Settings"
+        component={Settings}
         options={{
-          tabBarLabel: 'Library',
+          tabBarVisible: false,
+          tabBarLabel: 'Settings',
           tabBarIcon: ({color}) => (
-            <Icon name="layer" size={24} color={color} style={{marginTop: -12}}/>
+            <Ionicons name="settings-sharp" size={24} color={color} />
           ),
         }}
         />
